@@ -59,6 +59,15 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
+                                <label for="discount">Discount</label>
+                                <div class="input-group">
+                                    <input type="number" name="discount" id="discount" class="form-control" value="{{$data->discount}}"><i class="btn btn-secondary">%</i>
+                                </div>
+                                <span class="error-discount text-danger error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
                                 <label for="diagnostic_type">Type Of Hospital</label>
                                 <select name="diagnostic_type" id="diagnostic_type" class="form-control">
                                     <option value="government" {{$data->diagnostic_type=="government"?"selected":""}}>Government</option>

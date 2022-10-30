@@ -16,8 +16,9 @@
                     </div>
                     <div class="form-group">
                         <input type="file" name="image" class="form-control image mb-2" onchange="document.querySelector('.img').src = window.URL.createObjectURL(this.files[0])">
-                        <div style="border: 1px solid #ffffff00;position: relative;height: 120px; padding:3px 0px;">
-                            <img class="img" style="position: absolute;width: 100%;height: 100%;">
+                        <span class="text-danger">(200 x 200)</span>
+                        <div style="height:150px; position:relative;border:1px solid #bdbdbd;">
+                            <img class="img" src="{{asset('noimage.jpg')}}" style="width: 100%;height:100%;position:absolute;">
                         </div>
                     </div>
                     <div class="form-group text-center pt-2">

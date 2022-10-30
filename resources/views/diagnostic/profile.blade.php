@@ -53,7 +53,16 @@
                                 <span class="error-phone error text-danger"></span>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="discount">Discount</label>
+                                <div class="input-group">
+                                    <input type="number" name="discount" id="discount" class="form-control" value="{{Auth::guard('diagnostic')->user()->discount}}"><i class="btn btn-secondary">%</i>
+                                </div>
+                                <span class="error-discount text-danger error"></span>
+                            </div>
+                        </div> 
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="diagnostic_type">Diagnostic Type</label>
                                 <select name="diagnostic_type" id="diagnostic_type" class="form-control">
@@ -65,7 +74,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="city_id">City</label>
                                 <select name="city_id" id="city_id" class="form-control select2">

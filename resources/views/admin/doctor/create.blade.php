@@ -2,6 +2,14 @@
 
 @section("title", "Doctor Profile")
 
+@push("style")
+<style>
+    .select2-container .select2-selection--single {
+        height: 33px !important;
+    }
+</style>
+@endpush
+
 @section("content")
 
 <div class="row">
@@ -143,19 +151,18 @@
                                 </div>
                             </div>
                             <div id="chamber" class="col-md-8 row d-none">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="chamber_name">Chamber Name</label>
-                                        <input type="text" name="chamber_name" class="form-control" placeholder="Enter Chamber Name">
-                                        <span class="error-chamber_name error text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="address">Address</label>
-                                        <textarea name="address" class="form-control" placeholder="Enter Addresss"></textarea>
-                                        <span class="error-address error text-danger"></span>
-                                    </div>
+                                <div class="col-md-12">
+                                    <table class="table chamberTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Sl</th>
+                                                <th>Chamber Name</th>
+                                                <th>Address</th>
+                                                <th><i class="btn btn-dark ChamberName">+</i></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
                                 </div>
                             </div>
                             <div id="hospital" class="col-md-8 row d-none">
@@ -163,7 +170,6 @@
                                     <div class="form-group">
                                         <label for="hospital_id">Hospital Name</label>
                                         <select multiple name="hospital_id[]" id="hospital_id" class="select1 form-control">
-                                            <option label="Choose Hospital"></option>
                                             @foreach($hospitals as $item)
                                             <option value="{{$item->id}}">{{$item->name}}</option>
                                             @endforeach
@@ -177,7 +183,6 @@
                                     <div class="form-group">
                                         <label for="diagnostic_id">Diagnostic Name</label>
                                         <select multiple name="diagnostic_id[]" id="diagnostic_id" class="select1 form-control">
-                                            <option label="Choose Diagnostic"></option>
                                             @foreach($diagnostics as $item)
                                             <option value="{{$item->id}}">{{$item->name}}</option>
                                             @endforeach
@@ -223,7 +228,7 @@
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Add Speciality</h5>
             </div>
             <form id="formDepartment">
                 <div class="modal-body">
@@ -246,13 +251,13 @@
 @push("js")
 <script>
     $(document).ready(() => {
-        $('.select2').select2();
 
         $(document).on("change", ".changeModule", (event) => {
             if (event.target.value == "chamber") {
                 $("#chamber").removeClass("d-none")
                 $("#hospital").addClass("d-none")
                 $("#diagnostic").addClass("d-none")
+                $('.select1').select2();
             } else if (event.target.value == "hospital") {
                 $("#chamber").addClass("d-none")
                 $("#hospital").removeClass("d-none")
@@ -267,8 +272,42 @@
                 $("#chamber").addClass("d-none")
                 $("#hospital").addClass("d-none")
                 $("#diagnostic").addClass("d-none")
+                $('.select1').select2();
             }
         })
+
+        $(".ChamberName").on("click", (event) => {
+            var count = $(".chamberTable").find("tbody").html();
+            if (count != "") {
+                var totallength = $(".chamberTable").find("tbody tr").length;
+                var row = `
+                <tr class="${totallength+1}">
+                    <td>${totallength+1}</td>
+                    <td><input type="text" name="chamber[]" class="form-control" placeholder="Chamber Name"/></td>
+                    <td><input type="text" name="address[]" class="form-control" placeholder="Chamber Address"/></td>
+                    <td><span data="${totallength+1}"  class="text-danger removeChamber" style="cursor:pointer;">Remove</span></td>
+                </tr>
+            `;
+
+                $(".chamberTable").find("tbody").prepend(row)
+            } else {
+                var row = `
+                <tr class="1">
+                    <td>1</td>
+                    <td><input type="text" name="chamber[]" class="form-control Chamber-Name" placeholder="Chamber Name"/></td>
+                    <td><input type="text" name="address[]" class="form-control Chamber-Address" placeholder="Chamber Address"/></td>
+                    <td><span data="1"  class="text-danger removeChamber" style="cursor:pointer;">Remove</span></td>
+                </tr>
+            `;
+
+                $(".chamberTable").find("tbody").prepend(row)
+            }
+        })
+
+        $(document).on("click", ".removeChamber", event => {
+            $(".chamberTable").find("tbody ."+event.target.attributes[0].value).remove()
+        })
+
         $("#saveDoctor").on("submit", (event) => {
             event.preventDefault()
             var formdata = new FormData(event.target)
@@ -276,7 +315,6 @@
                 url: "{{route('admin.doctor.store')}}",
                 data: formdata,
                 method: "POST",
-                dataType: "JSON",
                 contentType: false,
                 processData: false,
                 beforeSend: () => {
@@ -290,7 +328,7 @@
                     } else {
                         $("#saveDoctor").trigger('reset')
                         $(".img").attr("src", "");
-                        alert(response)
+                        $.notify(response, "success")
                         $('.select1').select2();
                         $("#chamber").addClass("d-none")
                         $("#hospital").addClass("d-none")
@@ -304,32 +342,34 @@
     $(".addDepartment").on("click", event => {
         $("#myModal").modal('show');
     })
+
     $(document).on("submit", "#formDepartment", event => {
         event.preventDefault()
+        var name = $("#formDepartment").find("#name").val()
         var formdata = new FormData(event.target)
         $.ajax({
-                url: "{{route('department.store')}}",
-                data: formdata,
-                method: "POST",
-                dataType: "JSON",
-                contentType: false,
-                processData: false,
-                beforeSend: () => {
-                    $("#formDepartment").find(".error").text("");
-                },
-                success: (response) => {
-                    if (response.error) {
-                        $.each(response.error, (index, value) => {
-                            $("#addDepartment").find(".error-" + index).text(value);
-                        })
-                    } else {
-                        $("#addDepartment").trigger('reset')
-                        alert(response)
-                        $("#myModal").modal('hide');
-                        $('.select2').select2();
-                    }
+            url: "{{route('department.store')}}",
+            data: formdata,
+            method: "POST",
+            contentType: false,
+            processData: false,
+            beforeSend: () => {
+                $("#formDepartment").find(".error").text("");
+            },
+            success: (response) => {
+                if (response.error) {
+                    $.each(response.error, (index, value) => {
+                        $("#addDepartment").find(".error-" + index).text(value);
+                    })
+                } else {
+                    $("#addDepartment").trigger('reset')
+                    $.notify(response.msg, "success")
+                    $("#myModal").modal('hide');
+                    $("#department_id").append(`<option value="${response.id}">${name}</option>`);
+                    $('.select2').select2();
                 }
-            })
+            }
+        })
     })
 </script>
 @endpush

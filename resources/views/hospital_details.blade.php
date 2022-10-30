@@ -31,6 +31,22 @@
         line-height: 29px !important;
         padding-left: 20px !important;
     }
+
+    .hospitalbody .card{
+        position: relative;
+    }
+    .hospitalbody .card .discount {
+        position: absolute;
+        left: 0;
+        background: red;
+        padding: 5px;
+        color: white;
+        border-radius: 100%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+    }
 </style>
 @endpush
 @section("content")
@@ -76,6 +92,9 @@
     </div>
 
     <div class="container">
+        <div class="Loading text-center d-none">
+            <img src="{{asset('loading.gif')}}" width="350px">
+        </div>
         <div class="row d-flex justify-content-center hospitalbody">
             @foreach($data['hospital'] as $item)
             <div class="col-md-6 col-10 col-sm-6 col-lg-4 ">
@@ -96,6 +115,9 @@
                             View Details
                         </div>
                     </a>
+                    @if($item->discount_amount != 0)
+                    <div class="discount">-{{$item->discount_amount}}%</div>
+                    @endif
                 </div>
             </div>
             @endforeach
@@ -159,6 +181,7 @@
                         View Details
                     </div>
                     </a>
+                    ${value.discount_amount!=0?"<div class='discount'>-"+value.discount_amount+"%</div>":""}
                 </div>
             </div>
                 `;
@@ -178,18 +201,19 @@
             $.ajax({
                 url: "{{route('filter.hospital')}}",
                 method: "POST",
-                dataType: "JSON",
                 data: formdata,
                 contentType: false,
                 processData: false,
                 beforeSend: () => {
                     $("#formHospital").find(".error").text("")
+                    $(".Loading").removeClass("d-none")
+                    $(".hospitalbody").html("")
                 },
                 success: (response) => {
                     if (response.error) {
+                        $(".hospitalbody").html(`<div class="bg-dark text-white text-center">No Data Found</div>`)
                         Error(response.error);
                     } else {
-                        $(".hospitalbody").html("")
                         if (response.null) {
                             $(".hospitalbody").html(`<div class="bg-dark text-white text-center">${response.null}</div>`)
                         } else {
@@ -198,6 +222,9 @@
                             })
                         }
                     }
+                },
+                complete: () => {
+                    $(".Loading").addClass("d-none")
                 }
             })
         })

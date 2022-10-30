@@ -8,19 +8,19 @@
 /* width */
 ::-webkit-scrollbar {
     width: 10px;
-  }
-  
-  /* Track */
-  ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px grey; 
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
     border-radius: 10px;
-  }
-   
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: #283290; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #283290;
     border-radius: 10px;
-  }
+}
 
 .min-high {
     min-height: 100px !important;
@@ -87,9 +87,8 @@ p {
 .search select {
     border: none;
     width: 100%;
-    padding: 6px 5px;
+    padding: 7px 5px;
     cursor: pointer;
-    border-radius: 0.25rem;
     outline: none;
     background: #000000d1;
     font-weight: 400;
@@ -169,10 +168,9 @@ nav ul li a {
 
 .carousel-item {
     height: 86vh;
-    min-height: 300px;
     background-repeat: no-repeat !important;
-    background-position: top !important;
-    background-size: cover !important;
+    background-position: center !important;
+    background-size: 100% 100% !important;
 }
 
 .carousel-caption {
@@ -294,9 +292,11 @@ nav ul li a {
         align-items: center;
         gap: 15px !important;
     }
-    .pagination{
+
+    .pagination {
         display: none;
     }
+
     .list ul button {
         font-size: 7px !important;
         font-weight: bold !important;
@@ -492,7 +492,7 @@ nav ul li a {
     position: fixed;
     bottom: 10px;
     right: 10px;
-    background: red;
+    background: #283290;
     padding: 10px;
     display: flex;
     align-items: center;
@@ -715,11 +715,12 @@ nav ul li a {
 }
 
 /* ambulance footer */
-.ambulancebody .card-footer{
+.ambulancebody .card-footer {
     background: #10a7ff !important;
     transition: all ease-in-out;
 }
-.ambulancebody .card-footer:hover{
+
+.ambulancebody .card-footer:hover {
     background: red !important;
     text-decoration: underline;
 }
@@ -730,9 +731,9 @@ nav ul li a {
     position: relative;
     padding: 55px 0;
     box-shadow: 0px 0px 5px 1px #efefef;
-  }
-  
-  #footer:before {
+}
+
+#footer:before {
     content: ' ';
     display: block;
     position: absolute;
@@ -741,13 +742,22 @@ nav ul li a {
     width: 100%;
     height: 100%;
     opacity: 0.4;
-    background: transparent;
-    background-image: url('footer.jpg');
+    background: #0c23ff url(footer.jpg);
+    background-blend-mode: darken;
     background-repeat: no-repeat;
     background-position: 50% 0;
     background-size: cover;
-  }
-  
-  .container {
+    background-color: #041cff;
+}
+
+.container {
     position: relative;
-  }
+}
+
+#doctor .department {
+    transition: all ease-in-out;
+}
+
+#doctor .department:hover {
+    background: linear-gradient(45deg, #0718e7, #00a10c) !important;
+}

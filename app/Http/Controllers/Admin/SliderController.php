@@ -32,7 +32,8 @@ class SliderController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 "title" => "required",
-                "short_text" => "required"
+                "short_text" => "required",
+                "image" => ""
             ]);
             if ($validator->fails()) {
                 return response()->json(["error" => $validator->errors()]);

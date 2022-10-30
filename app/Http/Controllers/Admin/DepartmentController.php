@@ -36,8 +36,9 @@ class DepartmentController extends Controller
             if($validator->fails()){
                 return response()->json(["error" => $validator->errors()]);
             }else{
-                Department::create($request->all());
-                return response()->json("Department added successfully");
+                $dept = Department::create($request->all());
+                $id = $dept->id;
+                return response()->json(["msg"=>"Department added successfully", "id" => $id]);
             }
         }catch(\Throwable $e){
             return response()->json("Something went wrong");

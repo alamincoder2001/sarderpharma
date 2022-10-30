@@ -17,9 +17,9 @@ class DatabaseSeeder extends Seeder
         $this->call(SettingSeederTable::class);
         $this->call(ContactSeederTable::class);
         $this->call(DepartmentSeederTable::class);
-        \App\Models\Hospital::factory(1000)->create();
-        \App\Models\Diagnostic::factory(1000)->create();
-        \App\Models\Ambulance::factory(1000)->create();
-        \App\Models\Doctor::factory(1000)->create();
+        \App\Models\Hospital::factory(500)->create();
+        \App\Models\Diagnostic::factory(500)->create();
+        \App\Models\Ambulance::factory(500)->create();
+        \App\Models\Doctor::factory(500)->create();
     }
 }

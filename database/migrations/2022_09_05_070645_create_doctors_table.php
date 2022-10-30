@@ -24,9 +24,6 @@ class CreateDoctorsTable extends Migration
             $table->bigInteger('department_id')->unsigned();
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
             $table->string("image")->nullable();
-            //chamber
-            $table->string("chamber_name")->nullable();
-            $table->string("address")->nullable();
             //address details
             $table->string("availability");
             $table->string("from");

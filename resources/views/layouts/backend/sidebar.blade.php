@@ -1,8 +1,9 @@
 <div class="page-sidebar">
-    <a class="logo-box" href="{{route('admin.dashboard')}}">
-        <span>{{$setting->name}}</span>
-        <i class="icon-radio_button_unchecked" id="fixed-sidebar-toggle-button"></i>
-        <i class="icon-close" id="sidebar-toggle-button-close"></i>
+    <a class="logo-box d-flex align-items-center" href="{{route('admin.dashboard')}}" style="padding:10px 10px 10px 10px !important;">
+        <img src="{{asset($setting->logo)}}" alt="{{$setting->name}}" width="80%">
+        <!-- <span>{{$setting->name}}</span> -->
+        <!-- <i class="icon-radio_button_unchecked" id="fixed-sidebar-toggle-button"></i> -->
+        <!-- <i class="icon-close" id="sidebar-toggle-button-close"></i> -->
     </a>
     <div class="page-sidebar-inner">
         <div class="page-sidebar-menu">
@@ -48,9 +49,28 @@
                         <li class="{{Route::is('admin.ambulance.create')||Route::is('admin.ambulance.edit')?'active':''}}"><a href="{{route('admin.ambulance.create')}}">Create Ambulance</a></li>
                     </ul>
                 </li>
+                <li class="{{Route::is('admin.privatecar.index')||Route::is('admin.privatecar.create')||Route::is('admin.privatecar.edit')?'active-page':''}}">
+                    <a href="#!" class="{{Route::is('admin.privatecar.index')||Route::is('admin.privatecar.create')||Route::is('admin.privatecar.edit')?'active':''}}">
+                        <i class="menu-icon fa fa-car"></i><span>Privatecar</span><i class="accordion-icon fa fa-angle-left"></i>
+                    </a>
+                    <ul class="{{Route::is('admin.privatecar.index')||Route::is('admin.privatecar.create')||Route::is('admin.privatecar.edit')?'sub-menu':''}}">
+                        <li class="{{Route::is('admin.privatecar.index')?'active':''}}"><a href="{{route('admin.privatecar.index')}}">Manage Privatecar</a></li>
+                        <li class="{{Route::is('admin.privatecar.create')||Route::is('admin.privatecar.edit')?'active':''}}"><a href="{{route('admin.privatecar.create')}}">Create Privatecar</a></li>
+                    </ul>
+                </li>
                 <li class="{{Route::is('department.index')?'active-page':''}}">
                     <a href="{{route('department.index')}}">
                         <i class="menu-icon fa fa-list-alt"></i><span>Department List</span>
+                    </a>
+                </li>
+                <li class="{{Route::is('test.index')?'active-page':''}}">
+                    <a href="{{route('test.index')}}">
+                        <i class="menu-icon fa fa-list-alt"></i><span>Test List</span>
+                    </a>
+                </li>
+                <li class="{{Route::is('admin.blood.donor')?'active-page':''}}">
+                    <a href="{{route('admin.blood.donor')}}" class="d-flex align-items-center">
+                        <img src="{{asset('donor.png')}}" width="18" class="menu-icon"><span style="padding-top: 5px;padding-left: 8px;">Blood Donor</span>
                     </a>
                 </li>
                 <li class="{{Route::is('slider.index')?'active-page':''}}">

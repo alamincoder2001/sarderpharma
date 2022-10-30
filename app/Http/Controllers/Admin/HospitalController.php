@@ -54,6 +54,7 @@ class HospitalController extends Controller
                 $data->password = Hash::make($request->password);
                 $data->hospital_type = $request->hospital_type;
                 $data->phone = $request->phone;
+                $data->discount = $request->discount;
                 $data->city_id = $request->city_id;
                 $data->address = $request->address;
                 if(!empty($request->map_link)){
@@ -105,6 +106,7 @@ class HospitalController extends Controller
                 }
                 $data->hospital_type = $request->hospital_type;
                 $data->phone = $request->phone;
+                $data->discount = $request->discount;
                 $data->city_id = $request->city_id;
                 $data->address = $request->address;
                 if(!empty($request->map_link)){

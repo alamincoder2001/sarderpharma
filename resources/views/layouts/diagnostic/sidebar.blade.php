@@ -26,6 +26,11 @@
                         <i class="menu-icon fas fa-user-plus"></i><span>Patient List</span>
                     </a>
                 </li>
+                <li class="{{Route::is('diagnostic.test.index')?'active-page':''}}">
+                    <a href="{{route('diagnostic.test.index')}}">
+                        <i class="menu-icon fa fa-list-alt"></i><span>Test List</span>
+                    </a>
+                </li>
                 <li class="{{Route::is('diagnostic.contact.index')?'active-page':''}}">
                     <a href="{{route('diagnostic.contact.index')}}">
                         <i class="menu-icon fa fa-question-circle"></i><span>Clients Question</span>

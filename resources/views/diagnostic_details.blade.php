@@ -31,6 +31,21 @@
         line-height: 29px !important;
         padding-left: 20px !important;
     }
+    .diagnosticbody .card{
+        position: relative;
+    }
+    .diagnosticbody .card .discount {
+        position: absolute;
+        left: 0;
+        background: red;
+        padding: 5px;
+        color: white;
+        border-radius: 100%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+    }
 </style>
 @endpush
 @section("content")
@@ -76,6 +91,9 @@
     </div>
 
     <div class="container">
+        <div class="Loading text-center d-none">
+            <img src="{{asset('loading.gif')}}" width="350px">
+        </div>
         <div class="row d-flex justify-content-center diagnosticbody">
             @foreach($data["diagnostic"] as $item)
             <div class="col-md-6 col-10 col-sm-6 col-lg-4">
@@ -96,6 +114,9 @@
                             View Details
                         </div>
                     </a>
+                    @if($item->discount != 0)
+                    <div class="discount">-{{$item->discount}}%</div>
+                    @endif
                 </div>
             </div>
             @endforeach
@@ -159,6 +180,7 @@
                         View Details
                     </div>
                     </a>
+                    ${value.discount!=0?"<div class='discount'>-"+value.discount+"%</div>":""}
                 </div>
             </div>
                 `;
@@ -184,12 +206,14 @@
                 processData: false,
                 beforeSend: () => {
                     $("#filterDiagnostic").find(".error").text("")
+                    $(".Loading").removeClass("d-none")
+                    $(".diagnosticbody").html("")
                 },
                 success: (response) => {
                     if (response.error) {
+                        $(".diagnosticbody").html(`<div class="bg-dark text-white text-center">No Data Found</div>`)
                         Error(response.error);
                     } else {
-                        $(".diagnosticbody").html("")
                         if (response.null) {
                             $(".diagnosticbody").html(`<div class="bg-dark text-white text-center">${response.null}</div>`)
                         } else {
@@ -198,6 +222,9 @@
                             })
                         }
                     }
+                },
+                complete: () => {
+                    $(".Loading").addClass("d-none")
                 }
             })
         })

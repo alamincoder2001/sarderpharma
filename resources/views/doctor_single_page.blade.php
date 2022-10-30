@@ -179,7 +179,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="contact" class="py-2">Contact</label>
-                                        <input type="text" name="contact" id="contact" class="form-control" placeholder="Contact Number">
+                                        <input type="text" name="contact" id="contact" autocomplete="off" class="form-control" placeholder="Contact Number">
                                         <span class="error-contact error text-danger"></span>
                                     </div>
                                 </div>
@@ -206,23 +206,26 @@
                                     <select id="chamber_name" disabled name="chamber_name" class="form-control">
                                         <option value="">Select Chamber</option>
                                     </select>
+                                    <span class="chamber_id text-danger"></span>
                                 </div>
                                 <div class="col-md-5 d-none Hospital_Name">
                                     <label for="hospital_id" class="py-2">Select Hospital Name</label>
                                     <select id="hospital_id" disabled name="hospital_id" class="form-control">
                                         <option value="">Select Hospital</option>
                                     </select>
+                                    <span class="hospital_id text-danger"></span>
                                 </div>
                                 <div class="col-md-5 d-none Diagnostic_Name">
                                     <label for="diagnostic_id" class="py-2">Select Diagnostic Name</label>
                                     <select id="diagnostic_id" disabled name="diagnostic_id" class="form-control">
                                         <option value="">Select Diagnostic</option>
                                     </select>
+                                    <span class="diagnostic_id text-danger"></span>
                                 </div>
                                 <div class="col-md-6 col-6">
                                     <div class="form-group">
                                         <label for="appointment_date" class="py-2">Appointment Date</label>
-                                        <input type="text" readonly name="appointment_date" id="appointment_date" class="form-control" value="{{date('d/m/Y')}}">
+                                        <input type="text" name="appointment_date" id="appointment_date" class="form-control" value="{{date('d/m/Y')}}">
                                         <span class="error-appointment_date error text-danger"></span>
                                     </div>
                                 </div>
@@ -325,8 +328,14 @@
 @endsection
 
 @push("js")
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     $(document).ready(() => {
+        $("#appointment_date").datepicker({
+            dateFormat: "dd/mm/yy",
+            minDate: new Date()
+        })
+
         $(".select2").select2({
             placeholder: "Select City"
         })
@@ -335,7 +344,6 @@
             $.ajax({
                 url: "{{route('filter.singlehospitaldiagnostic')}}",
                 method: "POST",
-                dataType: "JSON",
                 data: {
                     id: id,
                     name: name
@@ -405,7 +413,6 @@
                 $.ajax({
                     url: "{{route('filter.cityappoinment')}}",
                     method: "POST",
-                    dataType: "JSON",
                     data: {
                         id: event.target.value
                     },
@@ -426,16 +433,25 @@
         // appointment send
         $("#Appointment").on("submit", (event) => {
             event.preventDefault();
+
+            var contact = $("#Appointment").find("#contact").val()
+            if(!Number(contact)){
+                $("#Appointment").find(".error-contact").text("Must be a number value")
+                return;
+            }
+            var changeName = $("#Appointment").find("#changeName").val()
             var formdata = new FormData(event.target)
             $.ajax({
                 url: "{{route('appointment')}}",
                 data: formdata,
                 method: "POST",
-                dataType: "JSON",
                 contentType: false,
                 processData: false,
                 beforeSend: () => {
                     $("#Appointment").find(".error").text("");
+                    $("#Appointment").find(".chamber_id").text("");
+                    $("#Appointment").find(".hospital_id").text("");
+                    $("#Appointment").find(".diagnostic_id").text("");
                 },
                 success: (response) => {
                     if (response.error) {
@@ -443,10 +459,21 @@
                             $("#Appointment").find(".error-" + index).text(value);
                         })
                     } else if (response.errors) {
-                        alert(response.errors)
+                        if(changeName === "chamber"){
+                            $("#Appointment").find(".chamber_id").text("Select Chamber Name")
+                        }else if(changeName === "hospital"){
+                            $("#Appointment").find(".hospital_id").text("Select Hospital Name")
+                        }else{
+                            $("#Appointment").find(".diagnostic_id").text("Select Diagnostic Name")
+                        }
                     } else {
                         $("#Appointment").trigger('reset')
                         $.notify(response, "success");
+                        Swal.fire(
+                            'Thanks your Appointment!',
+                            'কিছুক্ষণের মধ্যে আমাদের একজন প্রতিনিধী আপনার সাথে যোগাযোগ করবে।',
+                            'success'
+                        )
                         $(".Chamber_Name").addClass("d-none");
                         $(".Hospital_Name").addClass("d-none");
                         $(".Diagnostic_Name").addClass("d-none");
@@ -459,14 +486,15 @@
         })
         getCity();
         // old patient get details by phone
-        $("#contact").on("change", (event) => {
+        $("#contact").on("input", (event) => {
             var phoneno = "(?:\\+88|88)?(01[3-9]\\d{8})";
             if (event.target.value) {
                 if (event.target.value.match(phoneno)) {
+                    $("#Appointment").find(".error-contact").text("")
+                    $("#Appointment").find("#contact").css({borderBottom:"1px solid #b7b7b7"})
                     $.ajax({
                         url: "{{route('get.patient.details')}}",
                         method: "POST",
-                        dataType: "JSON",
                         data: {
                             number: event.target.value
                         },
@@ -488,9 +516,12 @@
                         }
                     })
                 } else {
-                    alert("Not valid Number")
+                    $("#Appointment").find("#contact").css({borderBottom:"1px solid red"})
+                    $("#Appointment").find(".error-contact").text("Not valid Number")
                 }
             } else {
+                $("#Appointment").find(".error-contact").text("")
+                $("#Appointment").find("#contact").css({borderBottom:"1px solid #b7b7b7"})
                 $("#email").val("")
                 $("#name").val("")
                 $("#age").val("")

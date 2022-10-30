@@ -16,7 +16,6 @@
                             <th>Appointment Date</th>
                             <th>Age</th>
                             <th>Address</th>
-                            <th>Phone</th>
                             <th>Doctor Name</th>
                             <th>Email</th>
                             <th>Action</th>
@@ -30,7 +29,6 @@
                             <td>{{$item->appointment_date}}</td>
                             <td>{{$item->age}}</td>
                             <td>{{$item->upazila->name}}, {{$item->city->name}}</td>
-                            <td>{{$item->contact}}</td>
                             <td>{{$item->doctor->name}}</td>
                             <td>{{$item->email}}</td>
                             <td>
@@ -51,8 +49,6 @@
 
 @push("js")
 <script>
-    $(document).ready(() => {
-        $('#example').DataTable();
-    })
+    $("#example").DataTable();
 </script>
 @endpush

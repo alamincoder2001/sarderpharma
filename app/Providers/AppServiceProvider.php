@@ -3,13 +3,14 @@
 namespace App\Providers;
 
 use App\Models\City;
-use App\Models\Department;
+use App\Models\Test;
 use App\Models\Setting;
+use App\Models\Department;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Devfaysal\BangladeshGeocode\Models\District;
-use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {

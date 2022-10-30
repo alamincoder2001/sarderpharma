@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
@@ -69,7 +70,27 @@ class RegisterController extends Controller
 
     public function userupdate(Request $request)
     {
-        //
+        try{
+            $validator = Validator::make($request->all(), [
+                "name"  => "required",
+                "email" => "required|unique:users,email,".$request->id,
+            ]);
+
+            if($validator->fails()){
+                return response()->json(["error"=>$validator->errors()]);
+            }else{
+                $data = User::find($request->id);
+                $data->name = $request->name;
+                $data->email = $request->email;
+                $data->phone = $request->phone;
+                $data->city_name = $request->city_name;
+                $data->address = $request->address;
+                $data->update();
+                return response()->json("Profile updated successfully");
+            }
+        }catch(\Throwable $e){
+            return response()->json("Something went wrong");
+        }
     }
 
     public function userlogout()

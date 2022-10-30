@@ -49,4 +49,12 @@ class Doctor extends Authenticatable
     {
         return $this->belongsTo(Diagnostic::class,"diagnostic_id");
     }
+    public function chamber()
+    {
+        return $this->hasMany(Chamber::class, "doctor_id", "id");
+    }
+    public static function ChamberName($id)
+    {
+        return Chamber::where("doctor_id", $id)->get();
+    }
 }

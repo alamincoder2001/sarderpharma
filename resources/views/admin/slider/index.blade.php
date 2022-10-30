@@ -20,8 +20,9 @@
                     </div>
                     <div class="form-group">
                         <input type="file" name="image" class="form-control mb-2" onchange="document.querySelector('.img').src = window.URL.createObjectURL(this.files[0])">
-                        <div style="border: 1px solid #ffffff00;position: relative;height: 120px; padding:3px 0px;">
-                            <img class="img" style="position: absolute;width: 100%;height: 100%;">
+                        <span class="text-danger">(1900 x 850)</span>
+                        <div style="height:200px; position:relative;border:1px solid #bdbdbd;">
+                            <img class="img" src="{{asset('noimage.jpg')}}" style="width: 100%;height:100%;position:absolute;">
                         </div>
                     </div>
                     <div class="form-group text-center pt-2">
@@ -42,8 +43,9 @@
                     </div>
                     <div class="form-group">
                         <input type="file" name="image" class="form-control mb-2" onchange="document.querySelector('.image').src = window.URL.createObjectURL(this.files[0])">
-                        <div style="border: 1px solid #ffffff00;position: relative;height: 120px; padding:3px 0px;">
-                            <img class="image" style="position: absolute;width: 100%;height: 100%;">
+                        <span class="text-danger">(1900 x 850)</span>
+                        <div style="height:200px; position:relative;border:1px solid #bdbdbd;">
+                            <img class="image" style="width: 100%;height:100%;position:absolute;">
                         </div>
                     </div>
                     <div class="form-group text-center pt-2">
@@ -78,7 +80,6 @@
         $.ajax({
             url: "{{route('slider.create')}}",
             method: "GET",
-            dataType: "JSON",
             beforeSend: () => {
                 $("tbody").html("")
             },
@@ -110,7 +111,6 @@
         $.ajax({
             url: "{{route('slider.store')}}",
             method: "POST",
-            dataType: "JSON",
             data: formdata,
             contentType: false,
             processData: false,
@@ -125,7 +125,7 @@
                 } else {
                     $("#addSlider").trigger('reset')
                     $.notify(response, "success");
-                    $("#addSlider").find(".img").attr("src", "");
+                    $("#addSlider").find(".img").attr("src", location.origin+"/noimage.jpg");
                     getData()
                 }
             }
@@ -138,7 +138,6 @@
         $.ajax({
             url: "slider/" + event.target.value + "/edit",
             method: "GET",
-            dataType: "JSON",
             beforeSend: () => {
                 $("#updateSlider").find(".error").text("");
             },
@@ -146,7 +145,7 @@
                 $.each(response, (index, value) => {
                     $("#updateSlider").find("#" + index).val(value);
                 })
-                $(".image").prop("src", window.location.origin + "/" + response.image)
+                $(".image").prop("src", location.origin +"/"+ response.image)
             }
         })
 
@@ -157,7 +156,6 @@
         $.ajax({
             url: "{{route('slider.update')}}",
             method: "POST",
-            dataType: "JSON",
             data: formdata,
             contentType: false,
             processData: false,
@@ -174,7 +172,7 @@
                     $("#updateSlider").addClass("d-none")
                     $("#updateSlider").trigger('reset')
                     $.notify(response, "success");
-                    $("#updateSlider").find(".image").attr("src", "");
+                    $("#addSlider").find(".img").attr("src", location.origin+"/noimage.jpg");
                     getData()
                 }
             }
@@ -187,7 +185,6 @@
             $.ajax({
                 url: "{{route('slider.destroy')}}",
                 method: "POST",
-                dataType: "JSON",
                 data: {
                     id: event.target.value
                 },

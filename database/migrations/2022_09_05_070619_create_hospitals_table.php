@@ -21,6 +21,7 @@ class CreateHospitalsTable extends Migration
             $table->string("phone");
             $table->string("email");
             $table->string("password");
+            $table->integer("discount_amount")->default("0");
             $table->text("map_link")->nullable();
             $table->bigInteger('city_id')->unsigned();
             $table->foreign('city_id')->references('id')->on('districts')->onDelete('cascade');

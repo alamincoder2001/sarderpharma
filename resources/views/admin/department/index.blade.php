@@ -94,7 +94,7 @@
                     } else {
                         table.ajax.reload()
                         $("#addDepartment").trigger('reset')
-                        $.notify(response, "success");
+                        $.notify(response.msg, "success");
                     }
                 }
             })

@@ -47,7 +47,7 @@
                                     <select class="rounded-pill city" name="city" id="city">
                                         <option label="Select City"></option>
                                         @foreach($cities as $city)
-                                            <option value="{{$city->id}}">{{$city->name}}</option>
+                                        <option value="{{$city->id}}">{{$city->name}}</option>
                                         @endforeach
                                     </select>
                                     <span class="error-city error text-white"></span>
@@ -76,6 +76,9 @@
     </div>
 
     <div class="container">
+        <div class="Loading text-center d-none">
+            <img src="{{asset('loading.gif')}}" width="350px">
+        </div>
         <div class="row d-flex justify-content-center ambulancebody">
             @foreach($data["ambulance"] as $item)
             <div class="col-md-6 col-10 col-sm-6 col-lg-4 ">
@@ -100,7 +103,7 @@
                 </div>
             </div>
             @endforeach
-            
+
             {{$data['ambulance']->render()}}
         </div>
     </div>
@@ -121,7 +124,6 @@
             $.ajax({
                 url: "{{route('filter.city')}}",
                 method: "POST",
-                dataType: "JSON",
                 data: {
                     id: event.target.value,
                     ambulance: 'ambulance'
@@ -130,8 +132,7 @@
                     $("#ambulance_name").html(`<option value="">Select Ambulance Name</option>`)
                 },
                 success: (response) => {
-                    if (response.null) {
-                    } else {
+                    if (response.null) {} else {
                         $.each(response, (index, value) => {
                             var row = `<option value="${value.name}">${value.name}</option>`;
                             $("#ambulance_name").append(row)
@@ -140,6 +141,7 @@
                 }
             })
         })
+
         function Row(index, value) {
             console.log(value);
             var row = `
@@ -187,12 +189,14 @@
                 processData: false,
                 beforeSend: () => {
                     $("#filterAmbulance").find(".error").text("")
+                    $(".Loading").removeClass("d-none")
+                    $(".ambulancebody").html("")
                 },
                 success: (response) => {
                     if (response.error) {
+                        $(".ambulancebody").html(`<div class="bg-dark text-white text-center">No Data Found</div>`)
                         Error(response.error);
                     } else {
-                        $(".ambulancebody").html("")
                         if (response.null) {
                             $(".ambulancebody").html(`<div class="bg-dark text-white text-center">${response.null}</div>`)
                         } else {
@@ -201,6 +205,9 @@
                             })
                         }
                     }
+                },
+                complete: () => {
+                    $(".Loading").addClass("d-none")
                 }
             })
         })

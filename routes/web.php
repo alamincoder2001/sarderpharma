@@ -10,10 +10,13 @@ use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\HospitalController;
 use App\Http\Controllers\Admin\AmbulanceController;
+use App\Http\Controllers\Admin\CartypeController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\DiagnosticController;
 use App\Http\Controllers\Admin\PartnerController;
+use App\Http\Controllers\Admin\PrivatecarController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\TestController;
 use App\Http\Controllers\Ambulance\AmbulanceController as AmbulanceAmbulanceController;
 use App\Http\Controllers\Ambulance\HireAmbulanceController as AmbulanceHireAmbulanceController;
 use App\Http\Controllers\AppoinmentController;
@@ -31,7 +34,7 @@ use App\Http\Controllers\HireAmbulanceController;
 use App\Http\Controllers\Hospital\AppointmentController;
 use App\Http\Controllers\HospitalDiagnosticController;
 
-Auth::routes(['login'=>false]);
+Auth::routes(['login' => false]);
 // Normal User login
 Route::get("/login", [RegisterController::class, "showlogin"])->name("showlogin")->middleware("user");
 Route::get("/register", [RegisterController::class, "showregister"])->name("showregister")->middleware("user");
@@ -52,6 +55,7 @@ Route::post("/filter-diagnostic", [FilterController::class, "diagnostic"])->name
 Route::post("/filter-ambulance", [FilterController::class, "ambulance"])->name("filter.ambulance");
 Route::get("/get/city/all", [FilterController::class, "cityall"])->name("get.city.all");
 Route::post("/home-filter", [HomeController::class, "filter"])->name("home.filter");
+Route::post("/donor-filter", [FilterController::class, "filterdonor"])->name("filter.donor");
 
 // =========== Frontend route ========= //
 Route::get("/", [HomeController::class, "index"])->name("website");
@@ -120,6 +124,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post("/doctor-update", [DoctorController::class, 'update'])->name("admin.doctor.update");
     Route::post("/doctor-delete", [DoctorController::class, 'destroy'])->name("admin.doctor.destroy");
     Route::get("/doctor/appointment/{id}", [DoctorController::class, 'appointment'])->name("admin.doctor.appointment");
+    // chamber remove
+    Route::get("/doctor/chamber-delete/{id}", [DoctorController::class, 'Chamber_Destroy']);
     // hospital route
     Route::get("/hospital", [HospitalController::class, 'index'])->name("admin.hospital.index");
     Route::get("/hospital-create", [HospitalController::class, 'create'])->name("admin.hospital.create");
@@ -141,6 +147,19 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get("/ambulance-edit/{id}", [AmbulanceController::class, 'edit'])->name("admin.ambulance.edit");
     Route::post("/ambulance-update", [AmbulanceController::class, 'update'])->name("admin.ambulance.update");
     Route::post("/ambulance-delete", [AmbulanceController::class, 'destroy'])->name("admin.ambulance.destroy");
+    // cartype route
+    Route::get("/cartype", [CartypeController::class, "index"])->name("cartype.index");
+    Route::get("/cartype/fetch", [CartypeController::class, "fetch"])->name("cartype.fetch");
+    Route::get("/cartype/{id}/edit", [CartypeController::class, "edit"])->name("cartype.edit");
+    Route::post("/cartype", [CartypeController::class, "store"])->name("cartype.store");
+    Route::post("/cartype/delete", [CartypeController::class, "destroy"])->name("cartype.destroy");
+    // ambulance route
+    Route::get("/privatecar", [PrivatecarController::class, 'index'])->name("admin.privatecar.index");
+    Route::get("/privatecar-create", [PrivatecarController::class, 'create'])->name("admin.privatecar.create");
+    Route::post("/privatecar", [PrivatecarController::class, 'store'])->name("admin.privatecar.store");
+    Route::get("/privatecar-edit/{id}", [PrivatecarController::class, 'edit'])->name("admin.privatecar.edit");
+    Route::post("/privatecar-update", [PrivatecarController::class, 'update'])->name("admin.privatecar.update");
+    Route::post("/privatecar-delete", [PrivatecarController::class, 'destroy'])->name("admin.privatecar.destroy");
     //contact route
     Route::get("/contact", [ContactController::class, "index"])->name("admin.contact.index");
     Route::get("/contact-get", [ContactController::class, "getData"])->name("admin.contact.get");
@@ -162,6 +181,17 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get("/partner/{id}/edit", [PartnerController::class, "edit"])->name("partner.edit");
     Route::post("/partner", [PartnerController::class, "store"])->name("partner.store");
     Route::post("/partner/delete", [PartnerController::class, "destroy"])->name("partner.destroy");
+    // test route
+    Route::get("/test", [TestController::class, "index"])->name("test.index");
+    Route::get("/test/fetch", [TestController::class, "fetch"])->name("test.fetch");
+    Route::post("/test/store", [TestController::class, "store"])->name("test.store");
+    Route::get("/test/edit/{id}", [TestController::class, "edit"])->name("test.edit");
+    Route::post("/test/delete", [TestController::class, "destroy"])->name("test.destroy");
+    // add envestigation
+    Route::post("/investigation", [AdminController::class, "investigation"]);
+    // blood donar add
+    Route::get("/blood-donor/show", [AdminController::class, "blooddonor"])->name("admin.blood.donor");
+    Route::post("/blood-donor/delete", [AdminController::class, "donordestroy"])->name("admin.donor.destroy");
 });
 
 //doctor authentication

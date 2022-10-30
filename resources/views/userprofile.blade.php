@@ -68,10 +68,11 @@
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h4 class="text-right">Profile Settings</h4>
                     </div>
+                <form>
                     <div class="row mt-2">
-                        <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" value="{{Auth::user()->name}}"></div>
-                        <div class="col-md-6"><label class="labels">Email</label><input type="text" class="form-control" value="{{Auth::user()->email}}"></div>
-                        <div class="col-md-6"><label class="labels">Phone</label><input type="text" class="form-control" value="{{Auth::user()->phone}}"></div>
+                        <div class="col-md-6"><label class="labels">Name</label><input type="text" name="name" class="form-control" value="{{Auth::user()->name}}"></div>
+                        <div class="col-md-6"><label class="labels">Email</label><input type="text" name="email" class="form-control" value="{{Auth::user()->email}}"></div>
+                        <div class="col-md-6"><label class="labels">Phone</label><input type="text" name="phone" class="form-control" value="{{Auth::user()->phone}}"></div>
                         <div class="col-md-6">
                             <label class="labels">City</label>
                             <select name="city_name" id="city_name" class="form-control">
@@ -81,11 +82,12 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-12"><label class="labels">Address</label><textarea class="form-control">{{Auth::user()->address}}</textarea></div>
+                        <div class="col-md-12"><label class="labels">Address</label><textarea name="address" class="form-control">{{Auth::user()->address}}</textarea></div>
                     </div>
                     <div class="mt-3 text-center">
-                        <button class="btn btn-primary profile-button" type="button"> Update </button>
+                        <button class="btn btn-primary profile-button" type="submit"> Update </button>
                     </div>
+                </form>
                 </div>
                 <div class="p-3 py-5 d-none second">
                     <div class="row">

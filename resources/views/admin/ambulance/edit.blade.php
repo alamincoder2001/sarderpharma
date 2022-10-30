@@ -100,7 +100,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="image">Diagnostic Image</label>
+                                <label for="image">Ambulance Image</label>
                                 <input type="file" class="form-control" id="image" name="image" onchange="document.querySelector('.img').src = window.URL.createObjectURL(this.files[0])">
                             </div>
                         </div>

@@ -83,6 +83,9 @@
             </div>
         </div>
 
+        <div class="Loading text-center d-none">
+            <img src="{{asset('loading.gif')}}" width="350px">
+        </div>
         <div class="row d-flex justify-content-center doctorbody">
             @foreach($data["doctor"] as $item)
             <div class="col-md-6 col-10 col-sm-6 col-lg-4 mb-4">
@@ -200,18 +203,19 @@
                 $.ajax({
                     url: "{{route('filter.doctor')}}",
                     method: "POST",
-                    dataType: "JSON",
                     data: formdata,
                     contentType: false,
                     processData: false,
                     beforeSend: () => {
                         $("#filterDoctor").find(".error").text("")
+                        $(".doctorbody").html("")
+                        $(".Loading").removeClass("d-none")
+                        $(".doctor_select").html(`<option value="">Select Doctor Name</option>`)
                     },
                     success: (response) => {
                         if (response.error) {
                             Error(response.error);
                         } else {
-                            $(".doctorbody").html("")
                             if (response.null) {
                                 $(".doctorbody").html(`<div class="bg-dark text-white text-center">${response.null}</div>`)
                             } else {
@@ -232,6 +236,9 @@
                                 }
                             }
                         }
+                    },
+                    complete: () => {
+                        $(".Loading").addClass("d-none")
                     }
                 })
             } else {
@@ -248,12 +255,16 @@
                 },
                 beforeSend: () => {
                     $(".doctorbody").html("")
+                    $(".Loading").removeClass("d-none")
                 },
                 success: (response) => {
                     console.log(response);
                     $.each(response, (index, value) => {
                         Row(index, value);
                     })
+                },
+                complete: () => {
+                    $(".Loading").addClass("d-none")
                 }
             })
         })

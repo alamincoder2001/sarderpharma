@@ -1,4 +1,5 @@
 @extends("layouts.master")
+
 @section("content")
 <section id="donorlist" style="padding: 55px 0;">
     <div class="container" style="position: relative;">
@@ -106,29 +107,53 @@
         </div>
     </div>
     <div class="container" style="margin-top: 145px;">
-        <div class="row d-flex justify-content-center">
+        <div class="row d-flex align-items-center justify-content-end">
+            <div class="col-lg-2 col-2 text-end">
+                <div class="form-group">
+                    <select class="GroupwiseDonor" style="width: 80%;box-shadow:none;outline:none;border: 1px solid #061160;padding: 3px;border-bottom: 0;">
+                        <option value="">Filter Donor</option>
+                        <option value="A+">A+</option>
+                        <option value="B+">B+</option>
+                        <option value="O+">O+</option>
+                        <option value="AB+">AB+</option>
+                        <option value="A-">A-</option>
+                        <option value="B-">B-</option>
+                        <option value="O-">O-</option>
+                        <option value="AB-">AB-</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <hr class="mt-0" style="color: #061160;">
+        <div class="Loading text-center d-none">
+            <img src="{{asset('loading.gif')}}" width="350px">
+        </div>
+        <div class="row d-flex justify-content-center groupWiseDonorShow">
             @if($data->count())
-                @foreach($data as $item)
-                    <div class="col-md-2">
-                        <div class="card">
-                            <img style="width: 100%; height:110px;padding:6px;" src="{{asset($item->image?$item->image:'uploads/admin/9171783_632580364bbb9_632584b62489a.png')}}" class="card-img-top">
-                            <div class="card-body pt-1">
-                                <p><span>Name:</span> {{$item->name}}</p>
-                                <p><span>Blood Group:</span> {{$item->blood_group}}</p>
-                                <p><span>Phone:</span> {{$item->phone}}</p>
-                                <p>{{$item->address}}, {{$item->city->name}}</p>
-                            </div>
-                        </div>
+            @foreach($data as $item)
+            <div class="col-md-2">
+                <div class="card">
+                    <img style="width: 100%; height:110px;padding:6px;" src="{{asset($item->image?$item->image:'uploads/admin/9171783_632580364bbb9_632584b62489a.png')}}" class="card-img-top">
+                    <div class="card-body pt-1 pb-0" class="height:145px">
+                        <p><span>Name:</span> {{$item->name}}</p>
+                        <p><span>Blood Group:</span> {{$item->blood_group}}</p>
+                        <p><span>Phone:</span> {{$item->phone}}</p>
+                        <p><span>Gender:</span> {{ucwords($item->gender)}}</p>
                     </div>
-                @endforeach
-            @else
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <p>No Data Found</p>
-                        </div>
+                    <div class="card-footer" style="background: none;border-top: 0;">
+                        <p>{{$item->address}}, {{$item->city->name}}</p>
                     </div>
                 </div>
+            </div>
+            @endforeach
+            @else
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <p>No Data Found</p>
+                    </div>
+                </div>
+            </div>
             @endif
         </div>
     </div>
@@ -174,15 +199,61 @@
                         })
                     } else {
                         $("#formDonor").trigger("reset");
-                        Swal.fire({
-                            position: 'top-end',
-                            icon: 'success',
-                            title: response,
-                            showConfirmButton: false,
-                            timer: 1500
-                        })
-                        window.location.reload()
+                        $.notify(response, "success");
+                        setTimeout(function() {
+                            location.reload();
+                        }, 500)
                     }
+                }
+            })
+        })
+
+        $(".GroupwiseDonor").on("change", event => {
+            $.ajax({
+                url: "{{route('filter.donor')}}",
+                method: "POST",
+                dataType: "JSON",
+                data: {group:event.target.value},
+                beforeSend: () => {
+                    $(".groupWiseDonorShow").html("")
+                    $(".Loading").removeClass("d-none")
+                },
+                success: response => {
+                    if(!response.null){
+                        $.each(response, (index, value) => {
+                            let row = `
+                            <div class="col-md-2">
+                                <div class="card">
+                                    <img style="width: 100%; height:110px;padding:6px;" src="${value.image?window.location.origin+'/'+value.image:window.location.origin+'/uploads/admin/9171783_632580364bbb9_632584b62489a.png'}" class="card-img-top">
+                                    <div class="card-body pt-1 pb-0">
+                                        <p><span>Name:</span> ${value.name}</p>
+                                        <p><span>Blood Group:</span> ${value.blood_group}</p>
+                                        <p><span>Phone:</span> ${value.phone}</p>
+                                        <p><span>Gender:</span> ${value.gender}</p>
+                                        </div>
+                                    <div class="card-footer" style="background: none;border-top: 0;">    
+                                        <p>${value.address}, ${value.city.name}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            `;
+                            $(".groupWiseDonorShow").append(row)
+                        })
+                    }else{
+                        let row = `
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <p>${response.null}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        $(".groupWiseDonorShow").html(row)
+                    }
+                },
+                complete: () => {
+                    $(".Loading").addClass("d-none")
                 }
             })
         })

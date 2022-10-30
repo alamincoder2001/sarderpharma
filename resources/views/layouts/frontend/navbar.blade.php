@@ -13,9 +13,10 @@
 
 
 <nav class="navbar navbar-expand-lg sticky-top min-high">
-    <div class="container">
+    <div class="container p-0">
         <a class="navbar-brand" href="{{url('/')}}">
-            <img src="{{asset('frontend')}}/img/logo.png" width="100" style="min-width: 230px;" />
+            <img src="{{asset($setting->logo)}}" width="100" style="min-width: 230px;" />
+            <!-- <img src="{{asset($setting->logo)}}" width="100" style="min-width: 230px;" /> -->
         </a>
         <button style="outline: 0;box-shadow: none;background: #fff;" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -48,5 +49,6 @@
                 </li>
             </ul>
         </div>
+        <div id="google_translate_element" style="margin-left: 8px;"></div>
     </div>
 </nav>

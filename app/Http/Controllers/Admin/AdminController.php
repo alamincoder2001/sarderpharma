@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Admin;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\Ambulance;
-use App\Models\Diagnostic;
+use Carbon\Carbon;
+use App\Models\Test;
+use App\Models\Donor;
 use App\Models\Doctor;
 use App\Models\Hospital;
-use Carbon\Carbon;
+use App\Models\Ambulance;
+use App\Models\Diagnostic;
+use Illuminate\Http\Request;
+use App\Models\Investigation;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Intervention\Image\Facades\Image;
 
 class AdminController extends Controller
 {
@@ -90,31 +91,77 @@ class AdminController extends Controller
 
     public function passwordChange(Request $request)
     {
-        try{
+        try {
             $validator = Validator::make($request->all(), [
                 "password" => "required",
                 "new_password" => "required",
                 "confirm_password" => "required|same:new_password"
-            ],[
+            ], [
                 "new_password.required" => "New password required",
                 "confirm_password.required" => "Confirm password required"
             ]);
 
-            if($validator->fails()){
-                return response()->json(["error" => $validator->errors()]);                
-            }else{
+            if ($validator->fails()) {
+                return response()->json(["error" => $validator->errors()]);
+            } else {
                 $admin = Auth::guard("admin")->user();
                 $hash_password = $admin->password;
-                if(Hash::check($request->password, $hash_password)){
+                if (Hash::check($request->password, $hash_password)) {
                     $admin->password = Hash::make($request->new_password);
                     $admin->update();
                     return response()->json("Password Change Successfully");
-                }else{
-                    return response()->json(["errors"=>"Current password does not match"]);
+                } else {
+                    return response()->json(["errors" => "Current password does not match"]);
                 }
             }
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return response()->json("something went wrong");
+        }
+    }
+
+    // blood donor
+    public function blooddonor()
+    {
+        $data = Donor::latest()->get();
+        return view("admin.donor.index", compact("data"));
+    }
+
+    public function donordestroy(Request $request)
+    {
+        try {
+            $data = Donor::find($request->id);
+            $old = $data->image;
+            if (File::exists($old)) {
+                File::delete($old);
+            }
+            $data->delete();
+            return response()->json("Donor delete successfully");
+        } catch (\Throwable $e) {
+            return response()->json("Something went wrong");
+        }
+    }
+
+
+    // send investigation
+
+    public function investigation(Request $request)
+    {
+        try {
+            foreach ($request->test_id as $id) {
+                $data = new Investigation();
+                $test = Test::find($id);
+                $data->appointment_id = $request->appointment_id;
+                $data->admin_id = Auth::guard("admin")->user()->id;
+                $data->test_id = $id;
+                $data->date = date("d-m-Y");
+                $data->unit_amount = $test->amount;
+                $data->discount = $request->discount;
+                $data->total_amount = $request->total;
+                $data->save();
+            }
+            return "Successfully investigation send";
+        } catch (\Throwable $e) {
+            return "Opps! something went wrong";
         }
     }
 }

@@ -153,6 +153,9 @@
 <!-- service section -->
 <div id="show">
     <div class="container">
+        <div class="Loading text-center d-none">
+            <img src="{{asset('loading.gif')}}" width="350px">
+        </div>
         <div class="row main-show d-flex justify-content-center">
 
         </div>
@@ -231,6 +234,9 @@
                     </ul>
                 </div>
             </div>
+        </div>
+        <div class="Loading1 text-center d-none">
+            <img src="{{asset('loading.gif')}}" width="350px">
         </div>
         <div class="row d-flex justify-content-center addDepartment mt-3">
 
@@ -417,7 +423,6 @@
                 $.ajax({
                     url: "{{route('filter.city')}}",
                     method: "POST",
-                    dataType: "JSON",
                     data: {
                         id: $("#city").val(),
                         service: $(".service").val()
@@ -487,30 +492,25 @@
         })
 
         function Filter(formdata, url, city) {
-            console.log(city);
             $.ajax({
                 url: url,
                 method: "POST",
                 data: formdata,
                 beforeSend: () => {
+                    ClearAll()
                     $("#fillterWebsite").find(".error").text("")
                     $(".error-city").text("")
                     $(".error-service").text("")
                     $(".main-show").html("");
+                    $(".Loading").removeClass("d-none")
                 },
                 success: (response) => {
                     if (response.error) {
                         $(".error-city").text(response.error.city)
                     } else {
                         if (response.null) {
-                            console.log(response.null);
+                            $(".main-show").html(`<p>${response.null}</p>`);
                         } else {
-                            $("#service").addClass("d-none")
-                            $("#doctor").addClass("d-none")
-                            $("#facilities").addClass("d-none")
-                            $("#testmonial").addClass("d-none")
-                            $("#corporate").addClass("d-none")
-
                             $.each(response, (index, value) => {
                                 $(".main-show").css({
                                     padding: "55px 0"
@@ -527,6 +527,9 @@
                             })
                         }
                     }
+                },
+                complete: () => {
+                    $(".Loading").addClass("d-none")
                 }
             })
         }
@@ -543,12 +546,12 @@
             $.ajax({
                 url: "{{route('home.filter')}}",
                 method: "POST",
-                dataType: "JSON",
                 data: {
                     department_id: event.target.value
                 },
                 beforeSend: () => {
                     $(".addDepartment").html("")
+                    $(".Loading1").removeClass("d-none")
                 },
                 success: response => {
                     $.each(response, (index, value) => {
@@ -567,6 +570,9 @@
                                 `;
                         $(".addDepartment").append(row)
                     })
+                },
+                complete: () =>{
+                    $(".Loading1").addClass("d-none")
                 }
             })
         })
@@ -641,6 +647,7 @@
                         View Details
                     </div>
                     </a>
+                    ${value.discount_amount!=0?"<div class='discount'>-"+value.discount_amount+"%</div>":""}
                 </div>
             </div>
         `;
@@ -667,6 +674,7 @@
                             View Details
                         </div>
                         </a>
+                        ${value.discount_amount!=0?"<div class='discount'>-"+value.discount_amount+"%</div>":""}
                     </div>
                 </div>
         `;
@@ -698,6 +706,14 @@
             </div>
         `;
         $(".main-show").append(row)
+    }
+
+    function ClearAll() {
+        $("#service").addClass("d-none")
+        $("#doctor").addClass("d-none")
+        $("#facilities").addClass("d-none")
+        $("#testmonial").addClass("d-none")
+        $("#corporate").addClass("d-none")
     }
 </script>
 @endpush

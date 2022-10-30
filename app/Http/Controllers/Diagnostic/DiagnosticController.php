@@ -55,6 +55,7 @@ class DiagnosticController extends Controller
                 $data->email = $request->email;
                 $data->diagnostic_type = $request->diagnostic_type;
                 $data->phone = $request->phone;
+                $data->discount = $request->discount;
                 $data->city_id = $request->city_id;
                 $data->address = $request->address;
                 if (!empty($request->map_link)) {

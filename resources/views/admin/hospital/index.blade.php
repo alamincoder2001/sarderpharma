@@ -60,11 +60,6 @@
 <script>
     $(document).ready(() => {
         $("#example").DataTable();
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
 
         $(document).on("click", ".deleteadminHospital",(event) => {
             if (confirm("Are you sure want to delete this data!")) {
@@ -77,7 +72,9 @@
                     dataType: "JSON",
                     success: (response) => {
                         $.notify(response, "success");
-                        window.location.href = "{{route('admin.hospital.index')}}"
+                        setTimeout(() => {
+                            location.reload()
+                        }, 500);
                     }
                 })
             }

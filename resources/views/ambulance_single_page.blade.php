@@ -210,13 +210,7 @@
                         })
                     } else {
                         $("#addAmbulance").trigger('reset')
-                        Swal.fire({
-                            position: 'top-end',
-                            icon: 'success',
-                            title: response,
-                            showConfirmButton: false,
-                            timer: 1500
-                        })
+                        $.notify(response, "success");
                     }
                 }
             })

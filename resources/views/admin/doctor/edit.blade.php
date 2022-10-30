@@ -142,20 +142,28 @@
                                     </select>
                                 </div>
                             </div>
-                            <div id="chamber" class="col-md-8 row {{$data->chamber_name?'':'d-none'}}">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="chamber_name">Chamber Name</label>
-                                        <input type="text" name="chamber_name" class="form-control" value="{{$data->chamber_name}}">
-                                        <span class="error-chamber_name error text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="address">Address</label>
-                                        <textarea name="address" class="form-control">{{$data->address}}</textarea>
-                                        <span class="error-address error text-danger"></span>
-                                    </div>
+                            <div id="chamber" class="col-md-8 row {{$data->chamber?'':'d-none'}}">
+                                <div class="col-md-12">
+                                    <table class="table chamberTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Sl</th>
+                                                <th>Chamber Name</th>
+                                                <th>Address</th>
+                                                <th><i class="btn btn-dark ChamberName">+</i></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach(App\Models\Doctor::ChamberName($data->id) as $key => $item)
+                                            <tr class="{{$key+1}}">
+                                                <td>{{$key+1}}</td>
+                                                <td><input type="text" name="chamber[]" class="form-control" value="{{$item->name}}" /></td>
+                                                <td><input type="text" name="address[]" class="form-control" value="{{$item->address}}" /></td>
+                                                <td><span data="{{$key+1}}" data-id="{{$item->id}}" class="text-danger removeChamber" style="cursor:pointer;">Remove</span></td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                             <div id="hospital" class="col-md-8 row {{$data->hospital_id?'':'d-none'}}">
@@ -165,8 +173,8 @@
                                         <select multiple name="hospital_id[]" id="hospital_id" class="select1 form-control">
                                             <option label="Choose Hospital"></option>
                                             @php
-                                                $hosparr = explode(",",$data->hospital_id);
-                                                $diagarr = explode(",",$data->diagnostic_id);
+                                            $hosparr = explode(",",$data->hospital_id);
+                                            $diagarr = explode(",",$data->diagnostic_id);
                                             @endphp
                                             @foreach($hospitals as $item)
                                             <option value="{{$item->id}}" {{in_array($item->id, $hosparr)?"selected":""}}>{{$item->name}}</option>
@@ -229,10 +237,50 @@
         $('.select1').select2();
 
         $("#Showpassword").on("click", (event) => {
-            if(event.target.checked){
+            if (event.target.checked) {
                 $("#password").attr("disabled", false)
-            }else{
+            } else {
                 $("#password").attr("disabled", true)
+            }
+        })
+
+        $(".ChamberName").on("click", (event) => {
+            var count = $(".chamberTable").find("tbody").html();
+            if (count != "") {
+                var totallength = $(".chamberTable").find("tbody tr").length;
+                var row = `
+                <tr class="${totallength+1}">
+                    <td>${totallength+1}</td>
+                    <td><input type="text" name="chamber[]" class="form-control" placeholder="Chamber Name"/></td>
+                    <td><input type="text" name="address[]" class="form-control" placeholder="Chamber Address"/></td>
+                    <td><span data="${totallength+1}"  class="text-danger removeChamber" style="cursor:pointer;">Remove</span></td>
+                </tr>
+            `;
+
+                $(".chamberTable").find("tbody").prepend(row)
+            } else {
+                var row = `
+                <tr class="1">
+                    <td>1</td>
+                    <td><input type="text" name="chamber[]" class="form-control Chamber-Name" placeholder="Chamber Name"/></td>
+                    <td><input type="text" name="address[]" class="form-control Chamber-Address" placeholder="Chamber Address"/></td>
+                    <td><span data="1"  class="text-danger removeChamber" style="cursor:pointer;">Remove</span></td>
+                </tr>
+            `;
+
+                $(".chamberTable").find("tbody").prepend(row)
+            }
+        })
+
+        $(document).on("click", ".removeChamber", event => {
+            if(confirm("Are you sure !")){
+                $.ajax({
+                    url: location.origin+"/admin/doctor/chamber-delete/"+event.target.attributes[1].value,
+                    method: "GET",
+                    success: res => {
+                        $(".chamberTable").find("tbody ." + event.target.attributes[0].value).remove()
+                    }
+                })
             }
         })
 
@@ -257,7 +305,7 @@
                 $("#diagnostic").addClass("d-none")
             }
         })
-        
+
         $("#updateDoctor").on("submit", (event) => {
             event.preventDefault()
             var formdata = new FormData(event.target)

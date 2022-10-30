@@ -6,6 +6,7 @@ use App\Models\Doctor;
 use App\Models\Hospital;
 use App\Models\Ambulance;
 use App\Models\Diagnostic;
+use App\Models\Donor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Devfaysal\BangladeshGeocode\Models\Upazila;
@@ -18,7 +19,7 @@ class FilterController extends Controller
     {
         try {
             $data = Upazila::where("district_id", $request->id)->orderBy('name')->get();
-            if (!empty($data)) {
+            if (count($data) !== 0) {
                 return response()->json($data);
             } else {
                 return response()->json(["null" => "Not Found Data"]);
@@ -192,5 +193,24 @@ class FilterController extends Controller
     {
         $data = District::all();
         return response()->json($data);
+    }
+
+    // donor filter
+    public function filterdonor(Request $request)
+    {
+        try {
+            if($request->group){
+                $data = Donor::with('city')->where("blood_group", $request->group)->orderBy('name')->get();
+            }else{
+                $data = Donor::with('city')->latest()->get();
+            }
+            if (count($data) !== 0) {
+                return response()->json($data);
+            } else {
+                return response()->json(["null" => "Not Found Data"]);
+            }
+        } catch (\Throwable $e) {
+            return response()->json("Something went wrong");
+        }
     }
 }

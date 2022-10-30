@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Hospital;
 
+use App\Models\Test;
 use App\Models\Doctor;
 use App\Models\Hospital;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
-use App\Models\HospitalContact;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Validator;
 
 class HospitalController extends Controller
@@ -57,6 +56,7 @@ class HospitalController extends Controller
                 $data->email = $request->email;
                 $data->hospital_type = $request->hospital_type;
                 $data->phone = $request->phone;
+                $data->discount = $request->discount;
                 $data->city_id = $request->city_id;
                 $data->address = $request->address;
                 if (!empty($request->map_link)) {
