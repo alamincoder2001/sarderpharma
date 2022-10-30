@@ -275,7 +275,7 @@
         $(document).on("click", ".removeChamber", event => {
             if(confirm("Are you sure !")){
                 $.ajax({
-                    url: location.origin+"/admin/doctor/chamber-delete/"+event.target.attributes[1].value,
+                    url: location.origin+"/admin/doctor/chamber-delete/"+event.target.attributes[0].value,
                     method: "GET",
                     success: res => {
                         $(".chamberTable").find("tbody ." + event.target.attributes[0].value).remove()
