@@ -34,7 +34,7 @@
                                 <td>{{$item->email}}</td>
                                 <td>{{$item->phone}}</td>
                                 <td>
-                                    <span>{{App\Models\Privatecar::cartype($item->cartype_id)}}</span>
+                                    {{$item->cartype_id}}
                                 </td>
                                 <td>{{$item->address}}</td>
                                 <td>

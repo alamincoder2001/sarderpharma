@@ -192,9 +192,7 @@ class DoctorController extends Controller
     }
 
     public function Chamber_Destroy($id)
-    {
-        return $id;
-        
+    {       
         Chamber::find($id)->delete();
         return "delete";
     }

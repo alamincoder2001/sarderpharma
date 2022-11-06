@@ -12,6 +12,7 @@ use App\Models\Diagnostic;
 use Illuminate\Http\Request;
 use App\Models\Investigation;
 use App\Http\Controllers\Controller;
+use App\Models\Prescription;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -141,27 +142,9 @@ class AdminController extends Controller
         }
     }
 
-
-    // send investigation
-
-    public function investigation(Request $request)
+    public function showprescription()
     {
-        try {
-            foreach ($request->test_id as $id) {
-                $data = new Investigation();
-                $test = Test::find($id);
-                $data->appointment_id = $request->appointment_id;
-                $data->admin_id = Auth::guard("admin")->user()->id;
-                $data->test_id = $id;
-                $data->date = date("d-m-Y");
-                $data->unit_amount = $test->amount;
-                $data->discount = $request->discount;
-                $data->total_amount = $request->total;
-                $data->save();
-            }
-            return "Successfully investigation send";
-        } catch (\Throwable $e) {
-            return "Opps! something went wrong";
-        }
+        $data = Prescription::latest()->get();
+        return view("admin.prescription.index", compact("data"));
     }
 }

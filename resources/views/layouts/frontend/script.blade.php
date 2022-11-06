@@ -93,11 +93,12 @@
     $(document).scroll(function() {
         if ($(window).scrollTop() > 10) {
             $("nav").addClass('scroll-hieght')
-            // .css("background", "red")
+            $(".ShowSearchBtn").css({top:"82px"})
+            $(".SearchBtn").css({height:"35px"})
 
         } else {
             $("nav").removeClass('scroll-hieght')
-            // .css("background", "linear-gradient(303deg, rgb(40 44 175), #00e5e5f7)")
+            $(".SearchBtn").css({height:"36px"})
         }
         if ($(window).scrollTop() > 400) {
             $(".positionabsolute").css('display', "block")

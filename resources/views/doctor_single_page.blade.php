@@ -117,6 +117,13 @@
         line-height: 29px !important;
         padding-left: 10px !important;
     }
+
+    .goog-te-menu-value span {
+        display: none;
+        margin: 6px !important;
+    }
+
+
 </style>
 
 @section("content")
@@ -357,13 +364,9 @@
                     if (response.null) {} else {
                         $.each(response, (index, value) => {
                             if (value.null == 0) {
-                                $(selector).append(`<option value="${value.id}">${value.chamber_name}</option>`)
+                                $(selector).append(`<option value="${value.id}">${value.name}</option>`)
                             } else {
-                                if (value.chamber_name) {
-                                    $(selector).append(`<option value="${value.id}">${value.chamber_name}</option>`)
-                                } else {
-                                    $(selector).append(`<option value="${value.id}">${value.name}</option>`)
-                                }
+                                $(selector).append(`<option value="${value.id}">${value.name}</option>`)
                             }
                         })
                     }

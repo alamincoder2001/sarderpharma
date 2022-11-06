@@ -68,6 +68,11 @@
                         <i class="menu-icon fa fa-list-alt"></i><span>Test List</span>
                     </a>
                 </li>
+                <li class="{{Route::is('investigation.index')?'active-page':''}}">
+                    <a href="{{route('investigation.index')}}">
+                        <i class="menu-icon fa fa-list-alt"></i><span>Investigation</span>
+                    </a>
+                </li>
                 <li class="{{Route::is('admin.blood.donor')?'active-page':''}}">
                     <a href="{{route('admin.blood.donor')}}" class="d-flex align-items-center">
                         <img src="{{asset('donor.png')}}" width="18" class="menu-icon"><span style="padding-top: 5px;padding-left: 8px;">Blood Donor</span>
@@ -83,9 +88,9 @@
                         <i class="menu-icon fas fa-handshake"></i><span>Corporate Partner</span>
                     </a>
                 </li>
-                <li class="{{Route::is('admin.contact.index')?'active-page':''}}">
-                    <a href="{{route('admin.contact.index')}}">
-                        <i class="menu-icon fa fa-phone-square"></i><span>Contact Page Setting</span>
+                <li class="{{Route::is('admin.prescription.index')?'active-page':''}}">
+                    <a href="{{route('admin.prescription.index')}}">
+                        <i class="menu-icon fa fa-list-alt"></i><span>Prescription</span>
                     </a>
                 </li>
                 <li class="{{Route::is('admin.contactcompany.index')?'active-page':''}}">
@@ -97,6 +102,11 @@
                 <li class="{{Route::is('setting.index')?'active-page':''}}">
                     <a href="{{route('setting.index')}}">
                         <i class="menu-icon fas fa-cog"></i><span>Setting</span>
+                    </a>
+                </li>
+                <li class="{{Route::is('admin.contact.index')?'active-page':''}}">
+                    <a href="{{route('admin.contact.index')}}">
+                        <i class="menu-icon fa fa-phone-square"></i><span>Contact Page Setting</span>
                     </a>
                 </li>
             </ul>

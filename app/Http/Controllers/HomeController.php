@@ -7,11 +7,13 @@ use App\Models\Slider;
 use App\Models\Partner;
 use App\Models\Hospital;
 use App\Models\Ambulance;
+use App\Models\Chamber;
 use App\Models\Department;
 use App\Models\Diagnostic;
+use App\Models\Prescription;
+use App\Models\Privatecar;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
 {
@@ -50,6 +52,12 @@ class HomeController extends Controller
         $data['ambulance'] = Ambulance::latest("id")->paginate(15);
         return view('ambulance_details', compact("data"));
     }
+    //ambulance
+    public function privatecar()
+    {
+        $data['privatecar'] = Privatecar::latest("id")->paginate(15);
+        return view('privatecar_details', compact("data"));
+    }
 
 
     // single doctor
@@ -77,13 +85,7 @@ class HomeController extends Controller
                     $data[$key] = Diagnostic::where("id", $d)->first();
                 }
             } else {
-                $doctor =  Doctor::find($request->id);
-                if (!empty($doctor->chamber_name)) {
-                    $d = ["id" => $doctor->id, "chamber_name" => $doctor->chamber_name, "address" => $doctor->address];
-                    $data = ["0" => $d];
-                } else {
-                    $data = ["null" => 0];
-                }
+                return Chamber::where("doctor_id", $request->id)->get();
             }
             if ($data[0] !== null) {
                 return response()->json($data);
@@ -116,6 +118,18 @@ class HomeController extends Controller
         $data = Ambulance::find($id);
         return view("ambulance_single_page", compact("data"));
     }
+    // single ambulance
+    public function singleprivatecar($id = null)
+    {
+        $data = Privatecar::find($id);
+        return view("privatecar_single_page", compact("data"));
+    }
+
+    public function pathology()
+    {
+        return view("pathology");
+    }
+
 
     // home filter
     public function filter(Request $request)
@@ -128,7 +142,26 @@ class HomeController extends Controller
             }
             return response()->json($data);
         } catch (\Throwable $e) {
-            return response()->json("Something went wrong" . $e->getMessage());
+            return response()->json("Something went wrong");
+        }
+    }
+
+    public function prescription(Request $request)
+    {
+        try{
+            $validator = Validator::make($request->all(), [
+                "image" => "required|mimes:jpg,png,pdf"
+            ]);
+
+            if($validator->fails()){
+                return response()->json(["error" => $validator->errors()]);
+            }
+            $data = new Prescription();
+            $data->image = $this->imageUpload($request, 'image', 'uploads/patient') ?? '';
+            $data->save();
+            return "Prescription send successfully";
+        }catch(\Throwable $e){
+            return "Opps! something went wrong";
         }
     }
 }

@@ -31,7 +31,7 @@ class HospitalController extends Controller
 
     public function store(Request $request)
     {
-        try{
+        try {
             $validator = Validator::make($request->all(), [
                 "name" => "required",
                 "username" => "required|unique:hospitals",
@@ -39,13 +39,14 @@ class HospitalController extends Controller
                 "password" => "required",
                 "phone" => "required|min:11|max:15",
                 "city_id" => "required",
+                "discount_amount" => "required",
                 "hospital_type" => "required",
                 "address" => "required",
             ]);
 
-            if($validator->fails()){
-                return response()->json(["error"=>$validator->errors()]);
-            }else{
+            if ($validator->fails()) {
+                return response()->json(["error" => $validator->errors()]);
+            } else {
                 $data = new Hospital;
                 $data->image = $this->imageUpload($request, 'image', 'uploads/hospital') ?? '';
                 $data->name = $request->name;
@@ -54,16 +55,14 @@ class HospitalController extends Controller
                 $data->password = Hash::make($request->password);
                 $data->hospital_type = $request->hospital_type;
                 $data->phone = $request->phone;
-                $data->discount = $request->discount;
+                $data->discount_amount = $request->discount_amount;
                 $data->city_id = $request->city_id;
                 $data->address = $request->address;
-                if(!empty($request->map_link)){
-                    $data->map_link = $request->map_link;
-                }
+                $data->map_link = $request->map_link;
                 $data->save();
                 return response()->json("Hospital added successfully");
             }
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return response()->json("something went wrong");
         }
     }
@@ -76,24 +75,25 @@ class HospitalController extends Controller
 
     public function update(Request $request)
     {
-        try{
+        try {
             $validator = Validator::make($request->all(), [
                 "name" => "required",
-                "username" => "required|unique:hospitals,username,".$request->id,
+                "username" => "required|unique:hospitals,username," . $request->id,
                 "email" => "required|email",
                 "phone" => "required|min:11|max:15",
                 "city_id" => "required",
+                "discount_amount" => "required",
                 "hospital_type" => "required",
                 "address" => "required",
             ]);
 
-            if($validator->fails()){
-                return response()->json(["error"=>$validator->errors()]);
-            }else{
+            if ($validator->fails()) {
+                return response()->json(["error" => $validator->errors()]);
+            } else {
                 $data = Hospital::find($request->id);
                 $old = $data->image;
                 if ($request->hasFile('image')) {
-                    if(File::exists($old)){
+                    if (File::exists($old)) {
                         File::delete($old);
                     }
                     $data->image = $this->imageUpload($request, 'image', 'uploads/hospital') ?? '';
@@ -101,28 +101,27 @@ class HospitalController extends Controller
                 $data->name = $request->name;
                 $data->username = $request->username;
                 $data->email = $request->email;
-                if(!empty($request->password)){
+                if (!empty($request->password)) {
                     $data->password = Hash::make($request->password);
                 }
                 $data->hospital_type = $request->hospital_type;
                 $data->phone = $request->phone;
-                $data->discount = $request->discount;
+                $data->discount_amount = $request->discount_amount;
                 $data->city_id = $request->city_id;
                 $data->address = $request->address;
-                if(!empty($request->map_link)){
-                    $data->map_link = $request->map_link;
-                }
+                $data->map_link = $request->map_link;
+
                 $data->update();
                 return response()->json("Hospital updated successfully");
             }
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return response()->json("something went wrong");
         }
     }
 
     public function destroy(Request $request)
     {
-        try{
+        try {
             $data = Hospital::find($request->id);
             $old = $data->image;
             if (File::exists($old)) {
@@ -130,7 +129,7 @@ class HospitalController extends Controller
             }
             $data->delete();
             return response()->json("Hospital Deleted successfully");
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return response()->json("something went wrong");
         }
     }

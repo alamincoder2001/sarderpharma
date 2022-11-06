@@ -1,11 +1,14 @@
+@php
+$contact = \App\Models\Contact::first();
+@endphp
 <section class="top-header">
     <div class="container">
         <div class="row d-flex align-item-center">
             <div class="col-md-6 col-4">
-                <p>Address: Mirpur-10, Dhaka</p>
+                <p>Address: {{ucfirst($contact->address)}}</p>
             </div>
             <div class="col-md-6 col-8">
-                <p class="text-end"><span>Opening Hours:</span> Monday to Saturday - 8am to 10pm, <span>Contact: </span> +880 1737 484046</p>
+                <p class="text-end"><span>Opening Hours:</span> Monday to Saturday - 8am to 10pm, <span>Contact: </span> +880 {{str_replace('0','', $contact->phone)}}</p>
             </div>
         </div>
     </div>
@@ -39,6 +42,12 @@
                     <a class="nav-link text-uppercase {{Route::is('ambulance.details')?'activ':''}}" href="{{route('ambulance.details')}}">Ambulance</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link text-uppercase {{Route::is('privatecar.details')?'activ':''}}" href="{{route('privatecar.details')}}">Privatecar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-uppercase {{Route::is('pathology')?'activ':''}}" href="{{route('pathology')}}">Pathology</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link text-uppercase {{Route::is('donor')?'activ':''}}" href="{{route('donor')}}">Blood Donor</a>
                 </li>
                 <li class="nav-item">
@@ -48,7 +57,32 @@
                     <a class="nav-link text-uppercase {{Route::is('contactus')?'activ':''}}" href="{{route('contactus')}}">Contact Us</a>
                 </li>
             </ul>
+            <div id="google_translate_element" style="margin-left: 8px;"></div>
         </div>
-        <div id="google_translate_element" style="margin-left: 8px;"></div>
+        <button type="button" value="0" class="SearchBtn btn btn-dark py-1 fa fa-search" style="box-shadow: none;"></button>
     </div>
 </nav>
+<div class="ShowSearchBtn d-none">
+    <div class="container p-0">
+        <form class="d-flex" onsubmit="searchSubmit(event)">
+            <div style="width: 30%;">
+                <select name="service" id="services" style="width: 100%;padding: 11px;border: 0;outline: none;">
+                    <option value="">Select Service Name</option>
+                    <option value="Doctor">Doctor</option>
+                    <option value="Hospital">Hospital</option>
+                    <option value="Diagnostic">Diagnostic</option>
+                    <option value="Ambulance">Ambulance</option>
+                    <option value="Privatecar">Private Car</option>
+                </select>
+                <span class="error-service error text-danger"></span>
+            </div>
+            <div style="width: 55%">
+                <input type="text" name="name" placeholder="Name" autocomplete="off" style="width: 100%;padding: 10px;border: none;border-left: 1px solid gray;outline: none;">
+                <span class="error-name error text-danger"></span>
+            </div>
+            <div style="width: 15%">
+                <button style="width: 100%;padding: 10px;background: #197e00;border: none;color: white;">Search</button>
+            </div>
+        </form>
+    </div>
+</div>

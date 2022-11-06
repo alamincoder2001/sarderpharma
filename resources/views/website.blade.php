@@ -79,10 +79,10 @@
     <div class="carousel-inner">
         @foreach($data["slider"] as $key => $item)
         <div class="carousel-item {{$key==0?'active':''}}" ata-bs-interval="10000" style="background: url('{{asset($item->image)}}');">
-            <div class="carousel-caption d-md-block">
+            <!-- <div class="carousel-caption d-md-block">
                 <h5>{{$item->title}}</h5>
                 <p>{{$item->short_text}}</p>
-            </div>
+            </div> -->
         </div>
         @endforeach
     </div>
@@ -169,10 +169,10 @@
         <div class="row d-flex justify-content-center">
             <div class="col-md-10 col-10 col-sm-10 col-lg-3 mb-5">
                 <div class="service-body">
-                    <h6 class="text-uppercase mt-2">Meet Our Doctors</h6>
+                    <h6 class="text-uppercase mt-2">Find Your Doctors</h6>
                     <h5>BOOK YOUR APPOINTMENT</h5>
                     <p class="mb-3">Search doctors by name, city, specialty, expertise to book an appointment</p>
-                    <a href="{{route('doctor.details')}}" class="btn text-white text-uppercase">meet doctor</a>
+                    <a href="{{route('doctor.details')}}" class="btn text-white text-uppercase">Find doctor</a>
                     <div class="servic-icon">
                         <i class="fa fa-user-md"></i>
                     </div>
@@ -408,7 +408,7 @@
         });
 
         $("#city").on("change", (event) => {
-            var arr = ["Doctor", "Hospital", "Diagnostic", "Ambulance"]
+            var arr = ["Doctor", "Hospital", "Diagnostic", "Ambulance", "Privatecar"]
             $(".service").html(`<option value="">Select Service</option>`)
             $("#Name").html("")
             $(".Name").html(`<option value="">Select Name</option>`)
@@ -475,6 +475,13 @@
                             diagnostic_name: $(".Name").val()
                         }
                         Filter(formdata, url, city)
+                    } else if (city == "Privatecar") {
+                        var url = "{{route('filter.privatecar')}}"
+                        var formdata = {
+                            city: ci,
+                            privatecar_name: $(".Name").val()
+                        }
+                        Filter(formdata, url, city)
                     } else {
                         var url = "{{route('filter.ambulance')}}"
                         var formdata = {
@@ -521,6 +528,8 @@
                                     Diagnostic(index, value)
                                 } else if (city == "Hospital") {
                                     Hospital(index, value)
+                                } else if (city == "Privatecar") {
+                                    Privatecar(index, value)
                                 } else {
                                     Ambulance(index, value)
                                 }
@@ -571,7 +580,7 @@
                         $(".addDepartment").append(row)
                     })
                 },
-                complete: () =>{
+                complete: () => {
                     $(".Loading1").addClass("d-none")
                 }
             })
@@ -706,6 +715,34 @@
             </div>
         `;
         $(".main-show").append(row)
+    }
+
+    function Privatecar(index, value) {
+        var row = `
+            <div class="col-md-6 col-10 col-sm-6 col-lg-4 privatecarbody">
+                <div class="card border-0 mb-4" style="background: #ffffff;box-shadow:0px 0px 7px 2px #c1c1c1;">
+                    <div class="img card-img-top m-auto mt-2 w-50 overflow-hidden d-flex justify-content-center border border-2">
+                        <img src="${value.image}" style="width: 100%; height:160px;">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-center" style="font-size: 15px;">${value.name}</h5>
+                        <p class="card-text text-primary text-center mb-2"><span>${value.cartype_id.replaceAll(",", " | ")}</span></p>
+                        <ul style="list-style: none;padding:0 0 0 5px;">
+                            <li><i style="width: 15px;height:15px;" class="fa fa-phone text-info"></i> <span style="font-size: 13px;">+880 ${value.phone.substr(1)}</span></li>
+                            <li><i style="width: 15px;height:15px;" class="fa fa-map-marker text-info"></i> <span style="font-size: 13px;">${value.address}, ${value.city.name}</span></li>
+                            <li><i style="width: 15px;height:15px;font-size:13px;" class="fa fa-envelope-o text-info"></i> <span style="font-size: 13px;">${value.email}</span></li>
+                        </ul>
+                    </div>
+                    <a href="${'single-details-privatecar/'+value.id}" target="_blank" class="text-uppercase text-white text-decoration-none text-center">
+                        <div class="card-footer border-0 py-3">
+                            View Details
+                        </div>
+                    </a>
+                </div>
+            </div>
+            `;
+        $(".main-show").append(row)
+
     }
 
     function ClearAll() {

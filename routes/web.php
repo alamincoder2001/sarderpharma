@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\AmbulanceController;
 use App\Http\Controllers\Admin\CartypeController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\DiagnosticController;
+use App\Http\Controllers\Admin\InvestigationController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\PrivatecarController;
 use App\Http\Controllers\Admin\SliderController;
@@ -45,6 +46,7 @@ Route::delete("/logout", [RegisterController::class, "userlogout"])->name("logou
 
 // Filter route
 Route::post("/singlehospitaldiagnostic", [HomeController::class, "SingleHospitalDignostic"])->name("filter.singlehospitaldiagnostic");
+Route::post("/filtersingleservice", [FilterController::class, "filtersingleservice"])->name("filtersingleservice"); 
 Route::post("/city", [FilterController::class, "cityappointment"])->name("filter.cityappoinment");
 Route::post("/filter-city", [FilterController::class, "City"])->name("filter.city");
 Route::post("/filter-hospital", [FilterController::class, "hospital"])->name("filter.hospital");
@@ -53,6 +55,7 @@ Route::post("/filter-doctor", [FilterController::class, "doctor"])->name("filter
 Route::post("/filter-doctorsinglechange", [FilterController::class, "doctorsinglechange"])->name("filter.doctorsinglechange");
 Route::post("/filter-diagnostic", [FilterController::class, "diagnostic"])->name("filter.diagnostic");
 Route::post("/filter-ambulance", [FilterController::class, "ambulance"])->name("filter.ambulance");
+Route::post("/filter-privatecar", [FilterController::class, "privatecar"])->name("filter.privatecar");
 Route::get("/get/city/all", [FilterController::class, "cityall"])->name("get.city.all");
 Route::post("/home-filter", [HomeController::class, "filter"])->name("home.filter");
 Route::post("/donor-filter", [FilterController::class, "filterdonor"])->name("filter.donor");
@@ -63,10 +66,14 @@ Route::get("/doctor-details", [HomeController::class, "doctor"])->name("doctor.d
 Route::get("/hospital-details", [HomeController::class, "hospital"])->name("hospital.details");
 Route::get("/diagnostic-details", [HomeController::class, "diagnostic"])->name("diagnostic.details");
 Route::get("/ambulance-details", [HomeController::class, "ambulance"])->name("ambulance.details");
+Route::get("/privatecar-details", [HomeController::class, "privatecar"])->name("privatecar.details");
 Route::get("/single-details-doctor/{id}", [HomeController::class, "singledoctor"])->name("singlepagedoctor");
 Route::get("/single-details-hospital/{id}", [HomeController::class, "singlehospital"])->name("singlepagehospital");
 Route::get("/single-details-diagnostic/{id}", [HomeController::class, "singlediagnostic"])->name("singlepagediagnostic");
 Route::get("/single-details-ambulance/{id}", [HomeController::class, "singleambulance"])->name("singlepageambulance");
+Route::get("/single-details-privatecar/{id}", [HomeController::class, "singleprivatecar"])->name("singlepageprivatecar");
+Route::get("/pathology", [HomeController::class, "pathology"])->name("pathology");
+Route::post("/send-prescription", [HomeController::class, "prescription"]);
 Route::get("/donor-list", [DonorController::class, "index"])->name("donor");
 Route::post("/donor-store", [DonorController::class, "store"])->name("donor.store");
 
@@ -87,9 +94,12 @@ Route::post("/appointment", [AppoinmentController::class, "appointment"])->name(
 Route::post("/get-patient-details", [AppoinmentController::class, "getDetails"])->name("get.patient.details");
 // Hire Ambulance
 Route::post("/hire-ambulance", [HireAmbulanceController::class, "store"])->name("hire.ambulance");
+// Hire Ambulance
+Route::post("/hire-privatecar", [HireAmbulanceController::class, "privatecar"])->name("hire.privatecar");
 // company contact route
 Route::get("/admin/companycontact", [CompanyContactController::class, "index"])->name("admin.contactcompany.index");
 Route::post("/companycontact/store", [CompanyContactController::class, "store"])->name("companycontact");
+Route::get("admin/delete_companycontact/{id}", [CompanyContactController::class, "destroy"]);
 // hospital && diagnostic contact send route
 Route::post("/hospitaldiagnosticcontact/contact", [CompanyContactController::class, "hospitaldiagnosticcontact"])->name("hospitaldiagnosticcontact");
 // hospital contact index route
@@ -187,11 +197,17 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post("/test/store", [TestController::class, "store"])->name("test.store");
     Route::get("/test/edit/{id}", [TestController::class, "edit"])->name("test.edit");
     Route::post("/test/delete", [TestController::class, "destroy"])->name("test.destroy");
-    // add envestigation
-    Route::post("/investigation", [AdminController::class, "investigation"]);
+    // add investigation
+    Route::get("/investigation", [InvestigationController::class, "index"])->name("investigation.index");
+    Route::get("/fetch-investigation", [InvestigationController::class, "fetchInvestigation"]);
+    Route::post("/investigation", [InvestigationController::class, "investigation"]);
+    Route::get("/investigation-delete/{id}", [InvestigationController::class, "destroy"]);
+    Route::get("/investigation-show/{id}", [InvestigationController::class, "show"]);
     // blood donar add
     Route::get("/blood-donor/show", [AdminController::class, "blooddonor"])->name("admin.blood.donor");
     Route::post("/blood-donor/delete", [AdminController::class, "donordestroy"])->name("admin.donor.destroy");
+    //prescription
+    Route::get("/prescription", [AdminController::class, "showprescription"])->name("admin.prescription.index");
 });
 
 //doctor authentication

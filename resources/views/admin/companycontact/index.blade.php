@@ -27,7 +27,7 @@
                             <td>{{$item->phone}}</td>
                             <td>{{$item->message}}</td>
                             <td>
-                                Action
+                                <button onclick="deleteContact(event)" value="{{$item->id}}" class="btn btn-danger btn-sm">Delete</button>
                             </td>
                         </tr>
                         @endforeach
@@ -39,7 +39,21 @@
 </div>
 @endsection
 @push("js")
-    <script>
-        $("#example").DataTable();
-    </script>
+<script>
+    $("#example").DataTable();
+    function deleteContact(event){
+        if(confirm("Are you sure want to delete this")){
+            $.ajax({
+                url: location.origin+"/admin/delete_companycontact/"+event.target.value,
+                method: "GET",
+                success: res => {
+                    $.notify(res, "success")
+                    setInterval(() => {
+                        location.reload()
+                    }, 500)
+                }
+            })
+        }
+    }
+</script>
 @endpush

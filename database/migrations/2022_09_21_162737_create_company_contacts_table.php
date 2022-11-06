@@ -19,6 +19,7 @@ class CreateCompanyContactsTable extends Migration
             $table->string("email");
             $table->text("message");
             $table->string("phone");
+            $table->string("image");
             $table->timestamps();
         });
     }

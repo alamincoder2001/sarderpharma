@@ -1,8 +1,6 @@
 <div class="page-sidebar">
-    <a class="logo-box" href="{{route('hospital.dashboard')}}">
-        <span>{{$setting->name}}</span>
-        <i class="icon-radio_button_unchecked" id="fixed-sidebar-toggle-button"></i>
-        <i class="icon-close" id="sidebar-toggle-button-close"></i>
+    <a class="logo-box d-flex align-items-center" href="{{route('hospital.dashboard')}}" style="padding:10px 10px 10px 10px !important;">
+        <img src="{{asset($setting->logo)}}" alt="{{$setting->name}}" width="80%">
     </a>
     <div class="page-sidebar-inner">
         <div class="page-sidebar-menu">
@@ -24,11 +22,6 @@
                 <li class="{{Route::is('hospital.appointment.index')?'active-page':''}}">
                     <a href="{{route('hospital.appointment.index')}}">
                         <i class="menu-icon fas fa-user-plus"></i><span>Patient List</span>
-                    </a>
-                </li>
-                <li class="{{Route::is('hospital.test.index')?'active-page':''}}">
-                    <a href="{{route('hospital.test.index')}}">
-                        <i class="menu-icon fa fa-list-alt"></i><span>Test List</span>
                     </a>
                 </li>
                 <li class="{{Route::is('hospital.contact.index')?'active-page':''}}">

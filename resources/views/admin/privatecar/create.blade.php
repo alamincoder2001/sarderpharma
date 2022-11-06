@@ -54,7 +54,7 @@
                                 <div class="input-group">
                                     <select multiple name="cartype_id[]" id="cartype_id" class="form-control select2">
                                         @foreach(App\Models\Cartype::latest()->get() as $item)
-                                            <option value="{{$item->id}}">{{$item->name}}</option>
+                                            <option value="{{$item->name}}">{{$item->name}}</option>
                                         @endforeach
                                     </select>
                                     <span onclick="PrivateCar(event)" class="btn btn-dark">+</span>
@@ -189,7 +189,7 @@
                     $("#myModal").modal("hide")
                     $.notify(res.msg, "success")
                     $("#formPrivatecar").trigger('reset')
-                    $("#cartype_id").append(`<option value="${res.id}">${name}</option>`);
+                    $("#cartype_id").append(`<option value="${res.name}">${name}</option>`);
                 }
             }
         })

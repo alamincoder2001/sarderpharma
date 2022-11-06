@@ -9,4 +9,9 @@ class Investigation extends Model
 {
     use HasFactory;
     protected $fillable = ["*"];
+
+    public function investigationDetails()
+    {
+        return $this->hasMany(InvestigationDetails::class, "investigation_id", "id");
+    }
 }

@@ -289,12 +289,12 @@
                     </div>
                     <div class="card-body" style="padding-top: 8px;">
                         <div class="location mb-1 d-flex justify-content-start align-item-center gap-2">
-                            ${value.chamber_name?'<i class="fa fa-home"></i> <span class="text-uppercase">'+value.chamber_name+'</span>':value.hospital_id?'<i class="fa fa-hospital-o"></i> <span class="text-uppercase">'+value.hospital.name+'</span>':'<i class="fa fa-plus-square"></i> <span class="text-uppercase">'+value.diagnostic.name+'</span>'}
+                            ${value.chamber?'<i class="fa fa-home"></i> <span class="text-uppercase">'+value.chamber+'</span>':value.hospital_id?'<i class="fa fa-hospital-o"></i> <span class="text-uppercase">'+value.hospital.name+'</span>':'<i class="fa fa-plus-square"></i> <span class="text-uppercase">'+value.diagnostic.name+'</span>'}
                         </div>
                         <div class="location d-flex justify-content-start align-item-center gap-2">
                             <i class="fa fa-map-marker"></i>
                             <span>
-                            ${value.chamber_name?value.address+", "+value.city.name:value.hospital_id?value.hospital.address+", "+value.city.name:value.diagnostic.address+", "+value.city.name}
+                            ${value.chamber?value.address+", "+value.city.name:value.hospital_id?value.hospital.address+", "+value.city.name:value.diagnostic.address+", "+value.city.name}
                             </span>
                         </div>
                         <div class="available">

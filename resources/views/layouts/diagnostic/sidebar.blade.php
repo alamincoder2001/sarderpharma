@@ -1,8 +1,6 @@
 <div class="page-sidebar">
-    <a class="logo-box" href="{{route('diagnostic.dashboard')}}">
-        <span>{{$setting->name}}</span>
-        <i class="icon-radio_button_unchecked" id="fixed-sidebar-toggle-button"></i>
-        <i class="icon-close" id="sidebar-toggle-button-close"></i>
+    <a class="logo-box d-flex align-items-center" href="{{route('diagnostic.dashboard')}}" style="padding:10px 10px 10px 10px !important;">
+        <img src="{{asset($setting->logo)}}" alt="{{$setting->name}}" width="80%">
     </a>
     <div class="page-sidebar-inner">
         <div class="page-sidebar-menu">

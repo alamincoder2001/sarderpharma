@@ -114,8 +114,8 @@
                             View Details
                         </div>
                     </a>
-                    @if($item->discount != 0)
-                    <div class="discount">-{{$item->discount}}%</div>
+                    @if($item->discount_amount != 0)
+                    <div class="discount">-{{$item->discount_amount}}%</div>
                     @endif
                 </div>
             </div>
@@ -180,7 +180,7 @@
                         View Details
                     </div>
                     </a>
-                    ${value.discount!=0?"<div class='discount'>-"+value.discount+"%</div>":""}
+                    ${value.discount_amount!=0?"<div class='discount'>-"+value.discount_amount+"%</div>":""}
                 </div>
             </div>
                 `;

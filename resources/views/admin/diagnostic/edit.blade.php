@@ -59,11 +59,11 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="discount">Discount</label>
+                                <label for="discount_amount">Discount</label>
                                 <div class="input-group">
-                                    <input type="number" name="discount" id="discount" class="form-control" value="{{$data->discount}}"><i class="btn btn-secondary">%</i>
+                                    <input type="number" name="discount_amount" id="discount_amount" class="form-control" value="{{$data->discount_amount}}"><i class="btn btn-secondary">%</i>
                                 </div>
-                                <span class="error-discount text-danger error"></span>
+                                <span class="error-discount_amount text-danger error"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -160,7 +160,6 @@
                             $("#updateDiagnostic").find(".error-" + index).text(value);
                         })
                     } else {
-                        $("#updateDiagnostic").trigger('reset')
                         $.notify(response, "success");
                         window.location.href = "{{route('admin.diagnostic.index')}}"
                     }

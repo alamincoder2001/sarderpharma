@@ -143,7 +143,6 @@
         })
 
         function Row(index, value) {
-            console.log(value);
             var row = `
             <div class="col-md-6 col-10 col-sm-6 col-lg-4 ">
                 <div class="card border-0 mb-4" style="background: #ffffff;box-shadow:0px 0px 7px 2px #c1c1c1;">

@@ -7,6 +7,7 @@ use App\Models\DiagnosticContact;
 use App\Models\HospitalContact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
 class CompanyContactController extends Controller
@@ -16,6 +17,18 @@ class CompanyContactController extends Controller
         if (Auth::guard("admin")->check()) {
             $data = CompanyContact::latest()->get();
             return view("admin.companycontact.index", compact("data"));
+        }
+    }
+
+    public function destroy($id){
+        if(Auth::guard("admin")->check()){
+            $data = CompanyContact::find($id);
+            $old = $data->image;
+            if(File::exists($old)){
+                File::delete($old);
+            }
+            $data->delete();
+            return "Contact delete successfull";
         }
     }
     public function store(Request $request)
@@ -30,7 +43,12 @@ class CompanyContactController extends Controller
             if ($validator->fails()) {
                 return response()->json(['error' => $validator->errors()]);
             } else {
-                CompanyContact::create($request->all());
+                $data = new CompanyContact;
+                $data->name = $request->message;
+                $data->email = $request->email;
+                $data->phone = $request->phone;
+                $data->message = $request->message;
+                $data->save();
                 return "Successfully send message";
             }
         } catch (\Throwable $e) {

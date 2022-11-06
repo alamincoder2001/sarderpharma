@@ -98,8 +98,8 @@ $data = App\Models\Contact::first();
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group py-2 py-md-3">
-                                    <button type="submit" class="btn btn-outline-success">Send Message</button>
                                     <button type="reset" class="btn btn-danger">Reset</button>
+                                    <button type="submit" class="btn btn-outline-success">Send Message</button>
                                 </div>
                             </div>
                         </div>
@@ -142,6 +142,7 @@ $data = App\Models\Contact::first();
                 } else {
                     $(".addContact").trigger("reset")
                     $.notify(response, "success");
+                    $(".addContact").find(".img").prop("src", location.origin+"/noimage.jpg")
                 }
             }
         })

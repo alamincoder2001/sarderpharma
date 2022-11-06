@@ -160,20 +160,6 @@
                                     <span class="error-diagnostic_id error text-danger"></span>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="chamber_name">Chamber Name</label>
-                                    <input type="text" id="chamber_name" class="form-control" name="chamber_name" value="{{Auth::guard('doctor')->user()->chamber_name?Auth::guard('doctor')->user()->chamber_name:''}}">
-                                    <span class="error-chamber_name error text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="addreess">Address</label>
-                                    <textarea name="address" id="address" class="form-control">{{Auth::guard('doctor')->user()->address?Auth::guard('doctor')->user()->address:""}}</textarea>
-                                    <span class="error-address error text-danger"></span>
-                                </div>
-                            </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="availability">Availability Day</label>

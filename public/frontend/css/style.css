@@ -724,6 +724,16 @@ nav ul li a {
     background: red !important;
     text-decoration: underline;
 }
+/* ambulance footer */
+.privatecarbody .card-footer {
+    background: #10a7ff !important;
+    transition: all ease-in-out;
+}
+
+.privatecarbody .card-footer:hover {
+    background: red !important;
+    text-decoration: underline;
+}
 
 
 /* footer style */
