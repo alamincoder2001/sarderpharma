@@ -771,3 +771,28 @@ nav ul li a {
 #doctor .department:hover {
     background: linear-gradient(45deg, #0718e7, #00a10c) !important;
 }
+
+.hospitalbody .card .discount{
+    position: absolute;
+    left: 0;
+    background: red;
+    padding: 5px;
+    color: white;
+    border-radius: 100%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+.diagnosticbody .card .discount{
+    position: absolute;
+    left: 0;
+    background: red;
+    padding: 5px;
+    color: white;
+    border-radius: 100%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+}

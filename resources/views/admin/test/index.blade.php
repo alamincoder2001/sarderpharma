@@ -3,6 +3,11 @@
 @section("title", "Admin Test Page")
 
 @section("content")
+@php
+$access = App\Models\UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+->pluck('permissions')
+->toArray();
+@endphp
 <div class="row d-flex justify-content-center">
     <div class="col-md-4">
         <div class="card mb-0">
@@ -29,6 +34,7 @@
     <div class="col-md-8">
         <div class="card">
             <div class="card-body">
+                @if(in_array("test.index", $access))
                 <table id="example" class="table">
                     <thead>
                         <tr>
@@ -40,6 +46,7 @@
                     </thead>
                     <tbody></tbody>
                 </table>
+                @endif
             </div>
         </div>
     </div>
@@ -48,9 +55,11 @@
 
 @push("js")
 <script>
+    var editaccess = "{{in_array('test.edit', $access)}}"
+    var deleteaccess = "{{in_array('test.destroy', $access)}}"
     $(document).ready(() => {
         var table = $('#example').DataTable({
-            ajax: location.origin+"/admin/test/fetch",
+            ajax: location.origin + "/admin/test/fetch",
             columns: [{
                     data: 'id',
                 },
@@ -64,8 +73,8 @@
                     data: null,
                     render: (data) => {
                         return `
-                            <button type="button" class="btn btn-primary btn-sm editTest" value="${data.id}">Edit</button>
-                            <button type="button" class="btn btn-danger btn-sm deleteTest" value="${data.id}">Delete</button>
+                            ${editaccess?'<button type="button" class="btn btn-primary btn-sm editTest" value="'+data.id+'">Edit</button>':''}
+                            ${deleteaccess?'<button type="button" class="btn btn-danger btn-sm deleteTest" value="'+data.id+'">Delete</button>':''}
                         `;
                     }
                 }
@@ -75,7 +84,7 @@
             event.preventDefault()
             var formdata = new FormData(event.target)
             $.ajax({
-                url: location.origin+"/admin/test/store",
+                url: location.origin + "/admin/test/store",
                 data: formdata,
                 method: "POST",
                 contentType: false,
@@ -102,7 +111,7 @@
         $(document).on("click", ".editTest", (event) => {
             $("button[type='submit']").text("Update").addClass("btn-primary").removeClass("btn-success");
             $.ajax({
-                url: location.origin+"/admin/test/edit/"+event.target.value,
+                url: location.origin + "/admin/test/edit/" + event.target.value,
                 method: "GET",
                 beforeSend: () => {
                     $("#addTest").find("span").text("");
@@ -115,11 +124,11 @@
                 }
             })
         })
-         // delete department
-         $(document).on("click", ".deleteTest", (event) => {
+        // delete department
+        $(document).on("click", ".deleteTest", (event) => {
             if (confirm("Are you sure want to delete this data!")) {
                 $.ajax({
-                    url: location.origin+"/admin/test/delete",
+                    url: location.origin + "/admin/test/delete",
                     method: "POST",
                     data: {
                         id: event.target.value

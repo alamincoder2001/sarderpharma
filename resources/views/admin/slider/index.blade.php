@@ -3,6 +3,11 @@
 @section("title", "Admin Slider Page")
 
 @section("content")
+@php
+$access = App\Models\UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+->pluck('permissions')
+->toArray();
+@endphp
 <div class="row">
     <div class="col-md-5">
         <div class="card">
@@ -57,6 +62,7 @@
     </div>
     <div class="col-md-7">
         <div class="card">
+            @if(in_array("slider.index", $access))
             <table class="table">
                 <thead>
                     <tr>
@@ -69,6 +75,7 @@
                 </thead>
                 <tbody></tbody>
             </table>
+            @endif
         </div>
     </div>
 </div>
@@ -76,6 +83,9 @@
 
 @push("js")
 <script>
+    var editaccess = "{{in_array('slider.edit', $access)}}"
+    var deleteaccess = "{{in_array('slider.destroy', $access)}}"
+
     function getData() {
         $.ajax({
             url: "{{route('slider.create')}}",
@@ -94,8 +104,8 @@
                                     <img width="40" src="${window.location.origin+"/"}${value.image}">
                                 </td>
                                 <td>
-                                    <button value="${value.id}" class="fa fa-edit text-primary editSlider border-0" style="background:none;"></button>
-                                    <button value="${value.id}" class="fa fa-trash text-danger deleteSlider border-0" style="background:none;"></button>
+                                    ${editaccess?'<button type="button" class="btn btn-primary btn-sm editSlider border-0" value="'+data.id+'">Edit</button>':''}
+                                    ${deleteaccess?'<button type="button" class="btn btn-danger btn-sm deleteSlider border-0" value="'+data.id+'">Delete</button>':''}
                                 </td>
                             </tr>
                         `
@@ -125,7 +135,7 @@
                 } else {
                     $("#addSlider").trigger('reset')
                     $.notify(response, "success");
-                    $("#addSlider").find(".img").attr("src", location.origin+"/noimage.jpg");
+                    $("#addSlider").find(".img").attr("src", location.origin + "/noimage.jpg");
                     getData()
                 }
             }
@@ -145,7 +155,7 @@
                 $.each(response, (index, value) => {
                     $("#updateSlider").find("#" + index).val(value);
                 })
-                $(".image").prop("src", location.origin +"/"+ response.image)
+                $(".image").prop("src", location.origin + "/" + response.image)
             }
         })
 
@@ -172,7 +182,7 @@
                     $("#updateSlider").addClass("d-none")
                     $("#updateSlider").trigger('reset')
                     $.notify(response, "success");
-                    $("#addSlider").find(".img").attr("src", location.origin+"/noimage.jpg");
+                    $("#addSlider").find(".img").attr("src", location.origin + "/noimage.jpg");
                     getData()
                 }
             }

@@ -3,9 +3,15 @@
 @section("title", "Admin Department Page")
 
 @section("content")
+@php
+$access = App\Models\UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+->pluck('permissions')
+->toArray();
+@endphp
 <div class="row d-flex justify-content-center">
     <div class="col-md-4">
         <div class="card mb-0">
+            @if(in_array("department.edit", $access))
             <div class="card-body">
                 <form id="addDepartment">
                     <div class="form-group">
@@ -29,11 +35,13 @@
                     </div>
                 </form>
             </div>
+            @endif
         </div>
     </div>
     <div class="col-md-8">
         <div class="card">
             <div class="card-body">
+                @if(in_array("department.index", $access))
                 <table id="example" class="table">
                     <thead>
                         <tr>
@@ -44,14 +52,19 @@
                     </thead>
                     <tbody></tbody>
                 </table>
+                @endif
             </div>
         </div>
     </div>
 </div>
+
 @endsection
 
 @push("js")
 <script>
+    var editaccess = "{{in_array('department.edit', $access)}}"
+    var deleteaccess = "{{in_array('department.destroy', $access)}}"
+
     $(document).ready(() => {
         var table = $('#example').DataTable({
             // processing: true,
@@ -66,13 +79,14 @@
                     data: null,
                     render: (data) => {
                         return `
-                            <button type="button" class="btn btn-primary btn-sm editDepartment" value="${data.id}">Edit</button>
-                            <button type="button" class="btn btn-danger btn-sm deleteDepartment" value="${data.id}">Delete</button>
+                            ${editaccess?'<button type="button" class="btn btn-primary btn-sm editDepartment" value="'+data.id+'">Edit</button>':''}            
+                            ${deleteaccess?'<button type="button" class="btn btn-danger btn-sm deleteDepartment" value="'+data.id+'">Delete</button>':''}
                         `;
                     }
                 }
             ],
         });
+
         $("#addDepartment").on("submit", (event) => {
             event.preventDefault()
             var formdata = new FormData(event.target)
@@ -149,8 +163,8 @@
                 }
             })
         })
-         // delete department
-         $(document).on("click", ".deleteDepartment", (event) => {
+        // delete department
+        $(document).on("click", ".deleteDepartment", (event) => {
             if (confirm("Are you sure want to delete this data!")) {
                 $.ajax({
                     url: "{{route('department.destroy')}}",

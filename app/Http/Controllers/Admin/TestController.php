@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Test;
+use App\Models\UserAccess;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -17,6 +18,13 @@ class TestController extends Controller
 
     public function index()
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("test.index", $access)) {
+            return view("admin.unauthorize");
+        }
+        
         return view("admin.test.index");
     }
 
@@ -66,6 +74,13 @@ class TestController extends Controller
 
     public function destroy(Request $request)
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("user.destroy", $access)) {
+            return view("admin.unauthorize");
+        }
+
         try {
             Test::find($request->id)->delete();
             return "Test successfully deleted";

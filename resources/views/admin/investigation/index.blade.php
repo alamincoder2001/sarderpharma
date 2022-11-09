@@ -3,6 +3,11 @@
 @section("title", "Admin Investigation Page")
 
 @section("content")
+@php
+$access = App\Models\UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+->pluck('permissions')
+->toArray();
+@endphp
 <div class="row">
     <div class="col-5">
         <div class="card bodyInvestigation">
@@ -81,6 +86,7 @@
                 </div>
             </div>
             <div class="card-body">
+                @if(in_array("investigation.index", $access))
                 <table class="table Example">
                     <thead>
                         <tr>
@@ -93,6 +99,7 @@
                     </thead>
                     <tbody></tbody>
                 </table>
+                @endif
             </div>
         </div>
     </div>
@@ -102,6 +109,8 @@
 
 @push("js")
 <script>
+    var editaccess = "{{in_array('investigation.edit', $access)}}"
+    var deleteaccess = "{{in_array('investigation.destroy', $access)}}"
     // get test
     function TestName(event) {
         $(".bodyInvestigation").find(".test" + event.target.value).addClass("text-danger")
@@ -236,7 +245,7 @@
             {
                 data: null,
                 render: (data) => {
-                    return data.total*data.discount/100 + " tk" + " (" + Number(data.discount) + "%)"
+                    return data.total * data.discount / 100 + " tk" + " (" + Number(data.discount) + "%)"
                 }
             },
             {
@@ -249,7 +258,7 @@
                 data: null,
                 render: (data) => {
                     return `
-                            <button type="button" class="btn btn-danger btn-sm deleteInvestigation" value="${data.id}">Delete</button>
+                            ${deleteaccess?'<button type="button" class="btn btn-danger btn-sm deleteInvestigation" value="'+data.id+'">Delete</button>':''}
                             <a href="/admin/investigation-show/${data.id}" class="btn btn-success btn-sm" value="${data.id}">Show Investigation</a>
                         `;
                 }
@@ -258,7 +267,7 @@
     });
 
     //delete investigation
-    $(document).on("click",".deleteInvestigation", event => {
+    $(document).on("click", ".deleteInvestigation", event => {
         if (confirm("Are you sure want to delete this")) {
             $.ajax({
                 url: location.origin + "/admin/investigation-delete/" + event.target.value,
@@ -270,6 +279,5 @@
             })
         }
     })
-
 </script>
 @endpush

@@ -321,7 +321,8 @@
                             <div class="clearfix my-2" style="border-bottom:1px solid #ddd"></div>
                             <div class="consultancy">
                                 <h6>Consultancy Fee:</h6>
-                                <p><span>New Visit:</span> {{$data->second_fee}} Tk</p>
+                                <p><span>New Visit:</span> {{$data->first_fee}} Tk</p>
+                                <p><span>Second Visit:</span> {{$data->second_fee}} Tk</p>
                                 <p><span>Report Show:</span> Published soon</p>
                             </div>
                         </div>

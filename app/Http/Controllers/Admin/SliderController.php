@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Slider;
+use App\Models\UserAccess;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Validator;
@@ -18,6 +20,13 @@ class SliderController extends Controller
 
     public function index()
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("slider.index", $access)) {
+            return view("admin.unauthorize");
+        }
+
         return view("admin.slider.index");
     }
 
@@ -86,6 +95,13 @@ class SliderController extends Controller
 
     public function destroy(Request $request)
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("slider.destroy", $access)) {
+            return view("admin.unauthorize");
+        }
+
         try {
             $data = Slider::find($request->id);
             $old = $data->image;

@@ -3,37 +3,38 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\DonorController;
+use App\Http\Controllers\FilterController;
+use App\Http\Controllers\Admin\TestController;
+use App\Http\Controllers\AppoinmentController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\DoctorController;
-use App\Http\Controllers\Admin\ContactController;
-use App\Http\Controllers\Admin\SettingController;
-use App\Http\Controllers\Admin\HospitalController;
-use App\Http\Controllers\Admin\AmbulanceController;
+use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\CartypeController;
+use App\Http\Controllers\Admin\ContactController;
+use App\Http\Controllers\Admin\PartnerController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\HireAmbulanceController;
+use App\Http\Controllers\Admin\HospitalController;
+use App\Http\Controllers\CompanyContactController;
+use App\Http\Controllers\Admin\AmbulanceController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\DiagnosticController;
-use App\Http\Controllers\Admin\InvestigationController;
-use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\PrivatecarController;
-use App\Http\Controllers\Admin\SliderController;
-use App\Http\Controllers\Admin\TestController;
-use App\Http\Controllers\Ambulance\AmbulanceController as AmbulanceAmbulanceController;
-use App\Http\Controllers\Ambulance\HireAmbulanceController as AmbulanceHireAmbulanceController;
-use App\Http\Controllers\AppoinmentController;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\CompanyContactController;
-use App\Http\Controllers\Diagnostic\AppointmentController as DiagnosticAppointmentController;
+use App\Http\Controllers\Admin\UserAccessController;
+use App\Http\Controllers\HospitalDiagnosticController;
+use App\Http\Controllers\Admin\InvestigationController;
+use App\Http\Controllers\Hospital\AppointmentController;
 use App\Http\Controllers\Doctor\DoctorController as DoctorDoctorController;
 use App\Http\Controllers\Hospital\DoctorController as HospitalDoctorController;
-use App\Http\Controllers\Hospital\HospitalController as HospitalHospitalController;
-use App\Http\Controllers\Diagnostic\DiagnosticController as DiagnosticDiagnosticController;
 use App\Http\Controllers\Diagnostic\DoctorController as DiagnosticDoctorController;
-use App\Http\Controllers\DonorController;
-use App\Http\Controllers\FilterController;
-use App\Http\Controllers\HireAmbulanceController;
-use App\Http\Controllers\Hospital\AppointmentController;
-use App\Http\Controllers\HospitalDiagnosticController;
+use App\Http\Controllers\Hospital\HospitalController as HospitalHospitalController;
+use App\Http\Controllers\Ambulance\AmbulanceController as AmbulanceAmbulanceController;
+use App\Http\Controllers\Diagnostic\DiagnosticController as DiagnosticDiagnosticController;
+use App\Http\Controllers\Diagnostic\AppointmentController as DiagnosticAppointmentController;
+use App\Http\Controllers\Ambulance\HireAmbulanceController as AmbulanceHireAmbulanceController;
 
 Auth::routes(['login' => false]);
 // Normal User login
@@ -208,6 +209,16 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post("/blood-donor/delete", [AdminController::class, "donordestroy"])->name("admin.donor.destroy");
     //prescription
     Route::get("/prescription", [AdminController::class, "showprescription"])->name("admin.prescription.index");
+
+    //user permission
+    Route::get('/user', [UserAccessController::class, 'create'])->name('admin.user.create');
+    Route::get('/user-fetch', [UserAccessController::class, 'fetch'])->name('admin.user.fetch');
+    Route::get('/user/edit/{id}', [UserAccessController::class, 'edit'])->name('admin.user.edit');
+    Route::post('/user/store', [UserAccessController::class, 'store'])->name('admin.user.store');
+    Route::post('/user/delete', [UserAccessController::class, 'destroy'])->name('admin.user.destroy');
+    Route::get('/user/permission/{id}', [UserAccessController::class, 'permission_edit'])->name('user.permission');
+    Route::post('/store-permission', [UserAccessController::class, 'store_permission'])->name('store.permission');
+
 });
 
 //doctor authentication

@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Test;
 use App\Models\Doctor;
+use App\Models\Chamber;
+use App\Models\UserAccess;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\Chamber;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -24,11 +25,25 @@ class DoctorController extends Controller
 
     public function index()
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("doctor.index", $access)) {
+            return view("admin.unauthorize");
+        }
+
         $doctors = Doctor::with("department")->latest()->get();
         return view("admin.doctor.index", compact('doctors'));
     }
     public function create()
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("doctor.create", $access)) {
+            return view("admin.unauthorize");
+        }
+
         $hospitals = DB::table("hospitals")->orderBy("id", "DESC")->get();
         $departments = DB::table("departments")->orderBy("id", "DESC")->get();
         $diagnostics = DB::table("diagnostics")->orderBy("id", "DESC")->get();
@@ -37,7 +52,12 @@ class DoctorController extends Controller
 
     public function store(Request $request)
     {
-
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("doctor.store", $access)) {
+            return view("admin.unauthorize");
+        }
         try {
             $validator = Validator::make($request->all(), [
                 'name' => "required|max:255",
@@ -100,6 +120,13 @@ class DoctorController extends Controller
 
     public function edit($id)
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("doctor.edit", $access)) {
+            return view("admin.unauthorize");
+        }
+
         $data = Doctor::with("chamber")->find($id);
         $avail = explode(",", $data->availability);
         $hospitals = DB::table("hospitals")->orderBy("id", "DESC")->get();
@@ -178,6 +205,13 @@ class DoctorController extends Controller
 
     public function destroy(Request $request)
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("doctor.destroy", $access)) {
+            return view("admin.unauthorize");
+        }
+
         try {
             $data = Doctor::find($request->id);
             $old = $data->image;
@@ -192,7 +226,7 @@ class DoctorController extends Controller
     }
 
     public function Chamber_Destroy($id)
-    {       
+    {
         Chamber::find($id)->delete();
         return "delete";
     }

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Hospital;
+use App\Models\UserAccess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Intervention\Image\Facades\Image;
@@ -20,17 +22,36 @@ class HospitalController extends Controller
 
     public function index()
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("hospital.index", $access)) {
+            return view("admin.unauthorize");
+        }
+
         $hospital = DB::table("hospitals")->orderBy("id", 'DESC')->get();
         return view("admin.hospital.index", compact("hospital"));
     }
 
     public function create()
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("hospital.create", $access)) {
+            return view("admin.unauthorize");
+        }
         return view("admin.hospital.create");
     }
 
     public function store(Request $request)
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("hospital.store", $access)) {
+            return view("admin.unauthorize");
+        }
         try {
             $validator = Validator::make($request->all(), [
                 "name" => "required",
@@ -69,6 +90,13 @@ class HospitalController extends Controller
 
     public function edit($id)
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("hospital.edit", $access)) {
+            return view("admin.unauthorize");
+        }
+
         $data = Hospital::find($id);
         return view("admin.hospital.edit", compact('data'));
     }
@@ -121,6 +149,13 @@ class HospitalController extends Controller
 
     public function destroy(Request $request)
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("hospital.destroy", $access)) {
+            return view("admin.unauthorize");
+        }
+
         try {
             $data = Hospital::find($request->id);
             $old = $data->image;

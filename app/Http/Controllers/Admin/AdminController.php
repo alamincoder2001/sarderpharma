@@ -3,16 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
-use App\Models\Test;
 use App\Models\Donor;
 use App\Models\Doctor;
 use App\Models\Hospital;
 use App\Models\Ambulance;
 use App\Models\Diagnostic;
-use Illuminate\Http\Request;
-use App\Models\Investigation;
-use App\Http\Controllers\Controller;
+use App\Models\UserAccess;
 use App\Models\Prescription;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\Admin;
+use App\Models\Department;
+use App\Models\Investigation;
+use App\Models\Privatecar;
+use App\Models\Slider;
+use App\Models\Test;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -27,10 +32,24 @@ class AdminController extends Controller
 
     public function index()
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("dashboard.index", $access)) {
+            return view("admin.unauthorize");
+        }
+
         $data['doctor'] = Doctor::all();
         $data['hospital'] = Hospital::all();
         $data['diagnostic'] = Diagnostic::all();
         $data['ambulance'] = Ambulance::all();
+        $data['privatecar'] = Privatecar::all();
+        $data['department'] = Department::all();
+        $data['test'] = Test::all();
+        $data['investigation'] = Investigation::all();
+        $data['slider'] = Slider::all();
+        $data['donor'] = Donor::all();
+        $data['user'] = Admin::where("id", "!=", 1)->get();
         return view("admin.dashboard", compact("data"));
     }
 
@@ -123,12 +142,24 @@ class AdminController extends Controller
     // blood donor
     public function blooddonor()
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("blood-donor.index", $access)) {
+            return view("admin.unauthorize");
+        }
         $data = Donor::latest()->get();
         return view("admin.donor.index", compact("data"));
     }
 
     public function donordestroy(Request $request)
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("blood-donor.destroy", $access)) {
+            return view("admin.unauthorize");
+        }
         try {
             $data = Donor::find($request->id);
             $old = $data->image;

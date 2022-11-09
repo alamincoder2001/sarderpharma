@@ -3,6 +3,11 @@
 @section("title", "Admin Partner Page")
 
 @section("content")
+@php
+$access = App\Models\UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+->pluck('permissions')
+->toArray();
+@endphp
 <div class="row">
     <div class="col-md-5">
         <div class="card">
@@ -30,6 +35,7 @@
     </div>
     <div class="col-md-7">
         <div class="card">
+            @if(in_array("partner.index", $access))
             <table class="table">
                 <thead>
                     <tr>
@@ -41,6 +47,7 @@
                 </thead>
                 <tbody></tbody>
             </table>
+            @endif
         </div>
     </div>
 </div>
@@ -48,6 +55,9 @@
 
 @push("js")
 <script>
+    var editaccess = "{{in_array('partner.edit', $access)}}"
+    var deleteaccess = "{{in_array('partner.destroy', $access)}}"
+
     function getData() {
         $.ajax({
             url: "{{route('partner.fetch')}}",

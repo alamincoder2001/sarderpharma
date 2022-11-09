@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Privatecar;
+use App\Models\UserAccess;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -18,6 +20,13 @@ class PrivatecarController extends Controller
 
     public function index()
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("privatecar.index", $access)) {
+            return view("admin.unauthorize");
+        }
+
         $privatecars = Privatecar::latest()->get();
         return view("admin.privatecar.index", compact("privatecars"));
     }
@@ -107,6 +116,13 @@ class PrivatecarController extends Controller
 
     public function destroy(Request $request)
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("privatecar.destroy", $access)) {
+            return view("admin.unauthorize");
+        }
+
         try {
             $data = Privatecar::find($request->id);
             $old = $data->image;

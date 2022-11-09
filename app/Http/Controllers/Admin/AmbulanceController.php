@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Ambulance;
+use App\Models\UserAccess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -19,18 +21,38 @@ class AmbulanceController extends Controller
 
     public function index()
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("ambulance.index", $access)) {
+            return view("admin.unauthorize");
+        }
+
         $ambulances = DB::table("ambulances")->orderBy("id", 'DESC')->get();
         return view("admin.ambulance.index", compact("ambulances"));
     }
 
     public function create()
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("ambulance.create", $access)) {
+            return view("admin.unauthorize");
+        }
         return view("admin.ambulance.create");
     }
 
     public function store(Request $request)
     {
-        try{
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("ambulance.store", $access)) {
+            return view("admin.unauthorize");
+        }
+
+        try {
             $validator = Validator::make($request->all(), [
                 "name" => "required",
                 "username" => "required|unique:ambulances",
@@ -42,42 +64,50 @@ class AmbulanceController extends Controller
                 "address" => "required",
             ]);
 
-            if($validator->fails()){
-                return response()->json(["error"=>$validator->errors()]);
-            }else{
+            if ($validator->fails()) {
+                return response()->json(["error" => $validator->errors()]);
+            } else {
                 $data = new Ambulance;
                 $data->image = $this->imageUpload($request, 'image', 'uploads/ambulance') ?? '';
                 $data->name = $request->name;
                 $data->username = $request->username;
                 $data->email = $request->email;
                 $data->password = Hash::make($request->password);
-                $data->ambulance_type =implode(",",$request->ambulance_type);
+                $data->ambulance_type = implode(",", $request->ambulance_type);
                 $data->phone = $request->phone;
                 $data->city_id = $request->city_id;
                 $data->address = $request->address;
-                if(!empty($request->map_link)){
+                if (!empty($request->map_link)) {
                     $data->map_link = $request->map_link;
                 }
                 $data->save();
                 return response()->json("ambulance added successfully");
             }
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return response()->json("something went wrong");
         }
     }
 
     public function edit($id)
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("ambulance.edit", $access)) {
+            return view("admin.unauthorize");
+        }
+
         $data = Ambulance::find($id);
         return view("admin.ambulance.edit", compact('data'));
     }
 
     public function update(Request $request)
     {
-        try{
+        
+        try {
             $validator = Validator::make($request->all(), [
                 "name" => "required",
-                "username" => "required|unique:ambulances,username,".$request->id,
+                "username" => "required|unique:ambulances,username," . $request->id,
                 "email" => "required|email",
                 "phone" => "required|min:11|max:15",
                 "city_id" => "required",
@@ -85,9 +115,9 @@ class AmbulanceController extends Controller
                 "address" => "required",
             ]);
 
-            if($validator->fails()){
-                return response()->json(["error"=>$validator->errors()]);
-            }else{
+            if ($validator->fails()) {
+                return response()->json(["error" => $validator->errors()]);
+            } else {
                 $data = Ambulance::find($request->id);
                 $old = $data->image;
                 if ($request->hasFile('image')) {
@@ -99,27 +129,34 @@ class AmbulanceController extends Controller
                 $data->name = $request->name;
                 $data->username = $request->username;
                 $data->email = $request->email;
-                if(!empty($request->password)){
+                if (!empty($request->password)) {
                     $data->password = Hash::make($request->password);
                 }
-                $data->ambulance_type =implode(",",$request->ambulance_type);
+                $data->ambulance_type = implode(",", $request->ambulance_type);
                 $data->phone = $request->phone;
                 $data->city_id = $request->city_id;
                 $data->address = $request->address;
-                if(!empty($request->map_link)){
+                if (!empty($request->map_link)) {
                     $data->map_link = $request->map_link;
                 }
                 $data->update();
                 return response()->json("Ambulance updated successfully");
             }
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return response()->json("something went wrong");
         }
     }
 
     public function destroy(Request $request)
     {
-        try{
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("ambulance.destroy", $access)) {
+            return view("admin.unauthorize");
+        }
+
+        try {
             $data = Ambulance::find($request->id);
             $old = $data->image;
             if (File::exists($old)) {
@@ -127,7 +164,7 @@ class AmbulanceController extends Controller
             }
             $data->delete();
             return response()->json("Ambulance Deleted successfully");
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return response()->json("something went wrong");
         }
     }

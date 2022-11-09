@@ -43,7 +43,7 @@
 
         .ShowSearchBtn {
             background: #24486c;
-            padding: 12px;
+            padding: 5px;
             position: sticky;
             top: 128px;
             width: 100%;
@@ -59,6 +59,9 @@
             align-items: center;
             border: none;
             border-radius: 0;
+        }
+        .select2-container--open .select2-dropdown--below{
+            margin-top: 5px !important;
         }
     </style>
 
@@ -91,6 +94,7 @@
             if (event.target.value == 0) {
                 $(".SearchBtn").prop("value", 1)
                 $(".ShowSearchBtn").removeClass("d-none")
+                $("#select2").select2()
             } else {
                 $(".SearchBtn").prop("value", 0)
                 $(".ShowSearchBtn").addClass("d-none")
@@ -99,9 +103,22 @@
     </script>
 
     <script>
-        function changeService(event){
-            
+        function changeService(event) {
+            $.ajax({
+                url: location.origin+"/filtersingleservice",
+                method: "POST",
+                data: {service: event.target.value},
+                beforeSend: () => {
+                    $(".ShowSearchBtn").find(".searchName").html(`<option value="">Select Name</option>`)
+                },
+                success: res => {
+                    $.each(res, (index, value) => {
+                        $(".ShowSearchBtn").find(".searchName").append(`<option value="${value.id}">${value.name}</option>`)
+                    })
+                }
+            })
         }
+
         function searchSubmit(event) {
             event.preventDefault();
             var formdata = new FormData(event.target)
@@ -163,7 +180,7 @@
                         </div>
                         <div class="card-body" style="padding-top: 8px;">
                             <div class="location mb-1 d-flex justify-content-start align-item-center gap-2">
-                                ${value.chamber.length != 0?'<i class="fa fa-home"></i> <span class="text-uppercase">'+value.chamber+'</span>':value.hospital_id?'<i class="fa fa-hospital-o"></i> <span class="text-uppercase">'+value.hospital.name+'</span>':'<i class="fa fa-plus-square"></i> <span class="text-uppercase">'+value.diagnostic.name+'</span>'}
+                                ${value.chamber.length != 0?'<i class="fa fa-home"></i> <span class="text-uppercase">'+value.chamber+'</span>':'<i class="fa fa-hospital-o"></i> <span class="text-uppercase">'+value.hospital.name+'</span>'}
                             </div>
                             <div class="location d-flex justify-content-start align-item-center gap-2">
                                 <i class="fa fa-map-marker"></i>

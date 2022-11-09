@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Partner;
+use App\Models\UserAccess;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
@@ -17,6 +19,13 @@ class PartnerController extends Controller
 
     public function index()
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("partner.index", $access)) {
+            return view("admin.unauthorize");
+        }
+
         return view("admin.partner.index");
     }
 
@@ -35,25 +44,25 @@ class PartnerController extends Controller
             if ($validator->fails()) {
                 return response()->json(["error" => $validator->errors()]);
             } else {
-                if($request->partner_id == null){
+                if ($request->partner_id == null) {
                     $data = new Partner();
-                }else{
+                } else {
                     $data = Partner::find($request->partner_id);
                     $old = $data->image;
                 }
                 $data->name = $request->name;
-                if($request->hasFile("image")){
-                    if(isset($old)){
-                        if(File::exists($old)){
+                if ($request->hasFile("image")) {
+                    if (isset($old)) {
+                        if (File::exists($old)) {
                             File::delete($old);
                         }
                     }
                     $data->image = $this->imageUpload($request, 'image', 'uploads/partner') ?? '';
                 }
                 $data->save();
-                if($request->partner_id){
+                if ($request->partner_id) {
                     return response()->json("Partner updated successfully");
-                }else{
+                } else {
                     return response()->json("Partner added successfully");
                 }
             }

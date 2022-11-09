@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
 use App\Models\Department;
+use App\Models\UserAccess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class DepartmentController extends Controller
@@ -18,68 +20,75 @@ class DepartmentController extends Controller
 
     public function index()
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("department.index", $access)) {
+            return view("admin.unauthorize");
+        }
+
         return view("admin.department.index");
     }
 
     public function getData()
     {
         $data = Department::latest()->get();
-        return response()->json(["data"=>$data]);
+        return response()->json(["data" => $data]);
     }
 
     public function store(Request $request)
     {
-        try{
+        try {
             $validator = Validator::make($request->all(), [
                 "name" => "required"
-            ],["name.required" => "Department name required"]);
-            if($validator->fails()){
+            ], ["name.required" => "Department name required"]);
+            if ($validator->fails()) {
                 return response()->json(["error" => $validator->errors()]);
-            }else{
+            } else {
                 $dept = Department::create($request->all());
                 $id = $dept->id;
-                return response()->json(["msg"=>"Department added successfully", "id" => $id]);
+                return response()->json(["msg" => "Department added successfully", "id" => $id]);
             }
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return response()->json("Something went wrong");
         }
     }
     public function edit(Request $request)
     {
-        try{
+        try {
             $data = DB::table("departments")->where("id", $request->id)->first();
             return response()->json($data);
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return response()->json("something went wrong");
         }
     }
 
     public function update(Request $request)
     {
-        try{
+        try {
             $validator = Validator::make($request->all(), [
                 "name" => "required"
-            ],["name.required" => "Department name required"]);
-            if($validator->fails()){
-                return response()->json(["error"=>$validator->errors()]);
-            }else{
+            ], ["name.required" => "Department name required"]);
+            if ($validator->fails()) {
+                return response()->json(["error" => $validator->errors()]);
+            } else {
                 $data = Department::find($request->id);
                 $data->name = $request->name;
                 $data->updated_at = Carbon::now();
                 $data->update();
                 return response()->json("Department updated successfully");
             }
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return response()->json("something went wrong");
         }
     }
 
     public function destroy(Request $request)
     {
-        try{
+        try {
             Department::find($request->id)->delete();
             return response()->json("Department delete successfully");
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return response()->json("something went wrong");
         }
     }

@@ -106,23 +106,23 @@
                     </div>
                     <div class="card-body" style="padding-top: 8px;">
                         <div class="location mb-1 d-flex justify-content-start align-item-center gap-1">
-                            @if($item->chamber_name)
-                            <i class="fa fa-home"></i> <span class="text-uppercase">{{$item->chamber_name}}</span>
+                            @if($item->chamber)
+                                <i class="fa fa-home"></i> <span class="text-uppercase">{{$item->chamber}}</span>
                             @else
-                            @if($item->hospital_id || $item->diagnostic_id)
-                            <i class="fa {{$item->hospital_id?'fa-hospital-o':'fa-plus-square'}}"></i> <span class="text-uppercase">{{$item->hospital_id?$item->hospital->name:$item->diagnostic->name}}</span>
-                            @endif
+                                @if($item->hospital_id || $item->diagnostic_id)
+                                <i class="fa {{$item->hospital_id?'fa-hospital-o':'fa-plus-square'}}"></i> <span class="text-uppercase">{{$item->hospital_id?$item->hospital->name:$item->diagnostic->name}}</span>
+                                @endif
                             @endif
                         </div>
                         <div class="location d-flex justify-content-start align-item-center gap-1">
                             <i class="fa fa-map-marker"></i>
                             <span style="padding-left: 3px;">
-                                @if($item->chamber_name)
-                                {{$item->address}}, {{$item->city->name}}
+                                @if($item->chamber)
+                                    {{$item->address}}, {{$item->city->name}}
                                 @else
-                                @if($item->hospital_id || $item->diagnostic_id)
-                                {{$item->hospital_id ? $item->hospital->address:$item->diagnostic->address}}, {{$item->hospital_id ? $item->hospital->city->name:$item->diagnostic->city->name}}
-                                @endif
+                                    @if($item->hospital_id || $item->diagnostic_id)
+                                        {{$item->hospital_id ? $item->hospital->address:$item->diagnostic->address}}, {{$item->hospital_id ? $item->hospital->city->name:$item->diagnostic->city->name}}
+                                    @endif
                                 @endif
                             </span>
                         </div>

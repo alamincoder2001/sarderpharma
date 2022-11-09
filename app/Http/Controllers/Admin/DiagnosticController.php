@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Diagnostic;
+use App\Models\UserAccess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Intervention\Image\Facades\Image;
@@ -20,17 +22,38 @@ class DiagnosticController extends Controller
 
     public function index()
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("diagnostic.index", $access)) {
+            return view("admin.unauthorize");
+        }
+        
         $diagnostic = DB::table("diagnostics")->orderBy("id", 'DESC')->get();
         return view("admin.diagnostic.index", compact("diagnostic"));
     }
 
     public function create()
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("diagnostic.create", $access)) {
+            return view("admin.unauthorize");
+        }
+
         return view("admin.diagnostic.create");
     }
 
     public function store(Request $request)
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("diagnostic.store", $access)) {
+            return view("admin.unauthorize");
+        }
+
         try {
             $validator = Validator::make($request->all(), [
                 "name" => "required",
@@ -69,6 +92,13 @@ class DiagnosticController extends Controller
 
     public function edit($id)
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("diagnostic.edit", $access)) {
+            return view("admin.unauthorize");
+        }
+
         $data = Diagnostic::find($id);
         return view("admin.diagnostic.edit", compact('data'));
     }
@@ -121,6 +151,13 @@ class DiagnosticController extends Controller
 
     public function destroy(Request $request)
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("diagnostic.destroy", $access)) {
+            return view("admin.unauthorize");
+        }
+
         try {
             $data = Diagnostic::find($request->id);
             $old = $data->image;

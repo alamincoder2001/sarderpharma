@@ -3,15 +3,22 @@
 @section("title", "Admin Ambulance Create Page")
 
 @section("content")
+@php
+$access = App\Models\UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+->pluck('permissions')
+->toArray();
+@endphp
 
 <div class="row d-flex justify-content-center">
 
     <div class="col-md-10">
         <div class="card">
             <div class="card-heading text-end">
+                @if(in_array("ambulance.index", $access))
                 <div class="card-title">
                     <a href="{{route('admin.ambulance.index')}}" class="btn btn-danger px-3">Back To Home</a>
                 </div>
+                @endif
             </div>
             <div class="card-body p-3">
                 <form id="addAmbulance">
@@ -117,7 +124,7 @@
     $(document).ready(() => {
 
         $('.select2').select2();
-        
+
         $("#addAmbulance").on("submit", (event) => {
             event.preventDefault()
             var formdata = new FormData(event.target)

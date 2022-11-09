@@ -140,7 +140,7 @@ class FilterController extends Controller
             return response()->json("Something went wrong");
         }
     }
-    
+
     public function privatecar(Request $request)
     {
         try {
@@ -246,27 +246,47 @@ class FilterController extends Controller
     // single doctor,diagnostic,hospital,privatecar,ambulance
     public function filtersingleservice(Request $request)
     {
-        try{
+        try {
             $validator = Validator::make($request->all(), [
                 "service" => "required",
-                "name"    => "required"
+                // "name"    => "required"
             ]);
-            if($validator->fails()){
+            if ($validator->fails()) {
                 return response()->json(['error' => $validator->errors()]);
             }
 
-            if($request->service == "Doctor"){
-                return Doctor::with("city", "department", "hospital", "diagnostic", "chamber")->where('name', 'LIKE', "%{$request->name}%")->get();
-            }else if($request->service == "Hospital"){
-                return Hospital::with("city")->where('name', 'LIKE', "%{$request->name}%")->get();
-            }else if($request->service == "Diagnostic"){
-                return Diagnostic::with("city")->where('name', 'LIKE', "%{$request->name}%")->get();
-            }else if($request->service == "Ambulance"){
-                return Ambulance::with("city")->where('name', 'LIKE', "%{$request->name}%")->get();
-            }else{
-                return Privatecar::with("city")->where('name', 'LIKE', "%{$request->name}%")->get();
+            if ($request->service == "Doctor") {
+                if ($request->service == "Doctor" && $request->name) {
+                    return Doctor::with("city", "department", "hospital", "chamber")->where("id", $request->name)->get();
+                } else {
+                    return Doctor::with("city", "department", "hospital", "chamber")->get();
+                }
+            } else if ($request->service == "Hospital") {
+                if ($request->service == "Hospital" && $request->name) {
+                    return Hospital::with("city")->where("id", $request->name)->get();
+                } else {
+                    return Hospital::with("city")->get();
+                }
+            } else if ($request->service == "Diagnostic") {
+                if ($request->service == "Diagnostic" && $request->name) {
+                    return Diagnostic::with("city")->where("id", $request->name)->get();
+                } else {
+                    return Diagnostic::with("city")->get();
+                }
+            } else if ($request->service == "Ambulance") {
+                if ($request->service == "Ambulance" && $request->name) {
+                    return Ambulance::with("city")->where("id", $request->name)->get();
+                } else {
+                    return Ambulance::with("city")->get();
+                }
+            } else {
+                if ($request->service == "Privatecar" && $request->name) {
+                    return Privatecar::with("city")->where("id", $request->name)->get();
+                } else {
+                    return Privatecar::with("city")->get();
+                }
             }
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return "Opps! something went wrong";
         }
     }

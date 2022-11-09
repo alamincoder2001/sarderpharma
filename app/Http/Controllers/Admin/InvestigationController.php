@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Test;
+use App\Models\UserAccess;
 use Illuminate\Http\Request;
 use App\Models\Investigation;
 use App\Http\Controllers\Controller;
 use App\Models\InvestigationDetails;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 
 class InvestigationController extends Controller
 {
@@ -19,6 +19,12 @@ class InvestigationController extends Controller
 
     public function index()
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("investigation.index", $access)) {
+            return view("admin.unauthorize");
+        }
         $tests = Test::orderBy("name")->get();
         return view("admin.investigation.index", compact("tests"));
     }
@@ -67,6 +73,12 @@ class InvestigationController extends Controller
 
     public function show($id)
     {
+        $access = UserAccess::where('user_id', Auth::guard('admin')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("investigation.index", $access)) {
+            return view("admin.unauthorize");
+        }
         $data = Investigation::with('investigationDetails')->find($id);
         return view("admin.investigation.show", compact("data"));
     }

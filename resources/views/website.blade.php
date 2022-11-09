@@ -211,6 +211,28 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-10 col-10 col-sm-10 col-lg-3 mb-5">
+                <div class="service-body">
+                    <h6 class="text-uppercase mt-2">Find Privatecar Service</h6>
+                    <h5>15 MINUTES QUICK SERVICE</h5>
+                    <p class="mb-3">Get any types of privatecar to reach any hospitals or any corner of Bangladesh</p>
+                    <a href="{{route('privatecar.details')}}" class="btn text-white text-uppercase">Find Privatecar</a>
+                    <div class="servic-icon">
+                        <i class="fa fa-car"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-10 col-10 col-sm-10 col-lg-3 mb-5">
+                <div class="service-body">
+                    <h6 class="text-uppercase mt-2">Find Pathology Service</h6>
+                    <h5>15 MINUTES QUICK SERVICE</h5>
+                    <p class="mb-3">Search pathology and take service</p>
+                    <a href="{{route('pathology')}}" class="btn text-white text-uppercase">Find Pathology</a>
+                    <div class="servic-icon">
+                        <i class="fa fa-stethoscope"></i>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
