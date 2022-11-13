@@ -43,7 +43,7 @@
                             <div class="form-group">
                                 <label for="phone">Phone</label>
                                 <div class="input-group">
-                                    <i class="btn btn-secondary">+88</i><input type="text" name="phone" id="phone" class="form-control" placeholder="01737484046">
+                                    <i class="btn btn-secondary">+88</i><input type="text" name="phone" id="phone" class="form-control">
                                 </div>
                                 <span class="error-phone text-danger error"></span>
                             </div>
@@ -86,6 +86,34 @@
                                 <label for="map_link">Map Link</label>
                                 <textarea name="map_link" id="map_link" class="form-control"></textarea>
                                 <span class="error-map_link text-danger error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="car_license">Privatecar License</label>
+                                <input type="text" name="car_license" id="car_license" class="form-control">
+                                <span class="error-car_license text-danger error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="driver_license">Driving License</label>
+                                <input type="text" name="driver_license" id="driver_license" class="form-control">
+                                <span class="error-driver_license text-danger error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="driver_nid">Driver NID</label>
+                                <input type="text" name="driver_nid" id="driver_nid" class="form-control">
+                                <span class="error-driver_nid text-danger error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="driver_address">Driver Address</label>
+                                <input type="text" name="driver_address" id="driver_address" class="form-control">
+                                <span class="error-driver_address text-danger error"></span>
                             </div>
                         </div>
                         <div class="col-md-4">

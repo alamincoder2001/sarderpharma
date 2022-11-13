@@ -158,7 +158,7 @@ class AdminController extends Controller
             ->pluck('permissions')
             ->toArray();
         if (!in_array("blood-donor.destroy", $access)) {
-            return view("admin.unauthorize");
+            return response()->json(["unauthorize" => "Unauthorized page! Sorry you have no access!"]);
         }
         try {
             $data = Donor::find($request->id);

@@ -132,7 +132,7 @@
         <div class="doctordetail-header rounded" style="background: #fff; border:2px solid #1b6c93ba !important;">
             <div class="row">
                 <div class="col-md-3 text-center">
-                    <img src="{{asset($data->image?$data->image:'frontend/img/doctor1.png')}}" width="150" style="max-height: 170px;" class="rounded border border-1 p-2" alt="">
+                    <img src="{{asset($data->image?$data->image:'frontend/nodoctorimage.png')}}" width="150" style="max-height: 170px;" class="rounded border border-1 p-2" alt="">
                 </div>
                 <div class="col-md-4 d-flex align-items-center text-center justify-content-md-start justify-content-center">
                     <div class="d-flex align-items-center" style="flex-direction:column;">
@@ -142,7 +142,11 @@
                 </div>
                 <div class="col-md-5">
                     <div class="border-start p-2">
-                        <h6>{{$data->department->name}}</h6>
+                        <h6>
+                            @foreach($data->department as $dept)
+                            {{$dept->specialist->name}},
+                            @endforeach
+                        </h6>
                         <p>
                             <span class="fs-5" style="font-size: 15px !important;font-weight: 500;">Address:</span>
                             @if($data->chamber_name)
@@ -161,9 +165,11 @@
                             @endforeach
                         </ul>
                         </p>
-                        <small>{{date("h:i a",strtotime($data->from))}}- {{date("h:i a",strtotime($data->to))}}</small>
+                        @foreach($data->time as $t)
+                            <small>{{date("h:i a",strtotime($t->from))}}- {{date("h:i a",strtotime($t->to))}}, </small>
+                        @endforeach
                         <br />
-                        <small>Contact: +880 {{substr($data->phone, 1)}}</small>
+                        <small>Contact: +88 {{$data->phone}}</small>
                     </div>
 
                 </div>
@@ -291,32 +297,30 @@
                             <h4 class="fs-6 text-uppercase">Info</h4>
                         </div>
                         <div class="card-body">
-                            <h6>Consultant. Department of {{$data->department->name}}</h6>
+                            <h6>Consultant. Department of 
+                                @foreach($data->department as $dept)
+                                {{$dept->specialist->name}},
+                                @endforeach
+                            </h6>
                             <h5>
-                                @if($data->chamber_name)
-                                {{$data->chamber_name}}
+                                @if(count($data->chamber) != 0)
+                                    @foreach($data->chamber->take(1) as $chamber)
+                                        {{$chamber->name}}
+                                    @endforeach
                                 @else
-                                @if($data->hospital_id || $data->diagnostic_id)
-                                {{$data->hospital_id?$data->hospital->name:$data->diagnostic->name}}
-                                @endif
+                                    @if($data->hospital_id || $data->diagnostic_id)
+                                    {{$data->hospital_id?$data->hospital->name:$data->diagnostic->name}}
+                                    @endif
                                 @endif
                             </h5>
                             <div class="clearfix mb-2" style="border-bottom:1px solid #ddd"></div>
                             <div class="details-status">
-                                <h6>Nutrition Dept.:</h6>
-                                <p>Nutrition is about eating a healthy and balanced diet. Food and drink provide the energy and nutrients you need to be healthy. Nutritionists provide nutritional counseling, meal planning, and nutrition education programs.</p>
+                                <span style="text-align: justify;">{!!$data->description!!}</span>
                             </div>
                             <div class="clearfix my-2" style="border-bottom:1px solid #ddd"></div>
                             <div class="concentration">
                                 <h6>Field of Concentration:</h6>
-                                <ul>
-                                    <li style="font-size: 12px;">PCOD Diet Counselling</li>
-                                    <li style="font-size: 12px;">PCOD Diet Counselling</li>
-                                    <li style="font-size: 12px;">PCOD Diet Counselling</li>
-                                    <li style="font-size: 12px;">PCOD Diet Counselling</li>
-                                    <li style="font-size: 12px;">PCOD Diet Counselling</li>
-                                    <li style="font-size: 12px;">PCOD Diet Counselling</li>
-                                </ul>
+                                <span style="font-size: 13px;">{!!$data->concentration!!}</span>
                             </div>
                             <div class="clearfix my-2" style="border-bottom:1px solid #ddd"></div>
                             <div class="consultancy">

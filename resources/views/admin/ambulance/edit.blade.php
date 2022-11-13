@@ -2,6 +2,14 @@
 
 @section("title", "Admin Ambulance Edit Page")
 
+@push("style")
+    <style>
+        .select2-container .select2-selection--single{
+            height: 34px !important;
+        }
+    </style>
+@endpush
+
 @section("content")
 @php
 $access = App\Models\UserAccess::where('user_id', Auth::guard('admin')->user()->id)
@@ -59,8 +67,8 @@ $access = App\Models\UserAccess::where('user_id', Auth::guard('admin')->user()->
                                 <label for="phone">Phone</label>
                                 <div class="input-group">
                                     <p class="btn btn-secondary m-0">+88</p><input type="text" name="phone" id="phone" class="form-control" value="{{$data->phone}}">
-                                    <span class="error-phone text-danger error"></span>
                                 </div>
+                                <span class="error-phone text-danger error"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -102,6 +110,34 @@ $access = App\Models\UserAccess::where('user_id', Auth::guard('admin')->user()->
                                 <label for="map_link">Map Link</label>
                                 <textarea name="map_link" id="map_link" class="form-control">{{$data->map_link}}</textarea>
                                 <span class="error-map_link text-danger error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="car_license">Car License</label>
+                                <input type="text" name="car_license" id="car_license" class="form-control" value="{{$data->car_license}}">
+                                <span class="error-car_license text-danger error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="driver_license">Driving License</label>
+                                <input type="text" name="driver_license" id="driver_license" class="form-control" value="{{$data->driver_license}}">
+                                <span class="error-driver_license text-danger error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="driver_nid">Driver NID</label>
+                                <input type="text" name="driver_nid" id="driver_nid" class="form-control" value="{{$data->driver_nid}}">
+                                <span class="error-driver_nid text-danger error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="driver_address">Driver Address</label>
+                                <input type="text" name="driver_address" id="driver_address" class="form-control" value="{{$data->driver_address}}">
+                                <span class="error-driver_address text-danger error"></span>
                             </div>
                         </div>
                         <div class="col-md-4">

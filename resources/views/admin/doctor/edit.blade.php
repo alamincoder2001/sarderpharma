@@ -45,13 +45,6 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <label for="phone">Phone<small class="text-danger">*</small></label>
-                                <div class="input-group">
-                                    <i class="btn btn-secondary">+88</i><input type="text" id="phone" name="phone" class="form-control" value="{{$data->phone}}">
-                                </div>
-                                <span class="error-phone error text-danger"></span>
-                            </div>
-                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="education">Education<small class="text-danger">*</small></label>
                                     <input type="text" name="education" class="form-control" value="{{$data->education}}">
@@ -60,23 +53,11 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="department_id">Specialist<small class="text-danger">*</small></label>
-                                    <select name="department_id" id="department_id" class="form-control select2">
-                                        <option value="">Choose a Speciality</option>
-                                        @foreach($departments as $department)
-                                        <option value="{{$department->id}}" {{$department->id==$data->department_id?"selected":""}}>{{$department->name}}</option>
-                                        @endforeach
-                                    </select>
-                                    <span class="error-department_id error text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
                                     <label for="city_id">City Name<small class="text-danger">*</small></label>
                                     <select name="city_id" id="city_id" class="form-control select2">
                                         <option value="">Choose a city name</option>
                                         @foreach($cities as $city)
-                                        <option value="{{$city->id}}" {{$city->id==$data->city_id?"selected":""}}>{{$city->name}}</option>
+                                        <option value="{{$city->id}}" {{$data->city_id == $city->id?"selected":""}}>{{$city->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -92,12 +73,6 @@
                                 <input type="number" id="second_fee" name="second_fee" class="form-control" value="{{$data->second_fee}}">
                                 <span class="error-second_fee error text-danger"></span>
                             </div>
-                        </div>
-                    </div>
-                    <div class="personal-info px-3 mb-3">
-                        <h5>Availability</h5>
-                        <hr>
-                        <div class="row">
                             <div class="col-md-8">
                                 <div class="form-group">
                                     <label for="availability">Availability Day <small class="text-danger">*</small></label>
@@ -113,15 +88,51 @@
                                     <span class="error-availability error text-danger"></span>
                                 </div>
                             </div>
-                            <div class="col-md-2">
-                                <label for="from">From<small class="text-danger">*</small></label>
-                                <input type="time" id="from" name="from" class="form-control" value="{{$data->from}}">
-                                <span class="error-from error text-danger"></span>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    @php
+                                    $specialist = App\Models\Specialist::where("doctor_id", $data->id)->pluck("department_id")->toArray();
+                                    @endphp
+
+                                    <label for="department_id">Specialist<small class="text-danger">*</small></label>
+                                    <div class="input-group">
+                                        <select multiple name="department_id[]" id="department_id" class="form-control select2">
+                                            @foreach($departments as $department)
+                                            <option value="{{$department->id}}" {{in_array($department->id, $specialist)?"selected":""}}>{{$department->name}}</option>
+                                            @endforeach
+                                        </select>
+                                        <i class="btn btn-secondary addDepartment">+</i>
+                                    </div>
+                                    <span class="error-department_id error text-danger"></span>
+                                </div>
                             </div>
-                            <div class="col-md-2">
-                                <label for="to">To<small class="text-danger">*</small></label>
-                                <input type="time" id="to" name="to" class="form-control" value="{{$data->to}}">
-                                <span class="error-to error text-danger"></span>
+                            <div class="col-4">
+                                <label for="">Time <i class="fa fa-plus" onclick="TimeAdd()"></i></label>
+                                <div class="timeadd">
+                                    @foreach($data->time as $item)
+                                    <div class="input-group">
+                                        <input type="time" id="from" name="from[]" class="form-control" value="{{$item->from}}">
+                                        <input type="time" id="to" name="to[]" class="form-control" value="{{$item->to}}">
+                                        <button type="button" class="btn btn-danger removeTime">remove</button>
+                                    </div>
+                                    @endforeach
+                                </div>
+                                <span class="error-time error text-danger"></span>
+                            </div>
+                            <div class="col-4">
+                                <label for="phone">Phone <i class="fa fa-plus" onclick="phoneAdd()"></i></label>
+                                <div class="phoneadd">
+                                    @php
+                                    $phone = explode(",", $data->phone);
+                                    @endphp
+                                    @foreach($phone as $item)
+                                    <div class="input-group">
+                                        <input type="text" id="phone" name="phone[]" class="form-control" value="{{$item}}">
+                                        <button type="button" class="btn btn-danger removePhone">remove</button>
+                                    </div>
+                                    @endforeach
+                                </div>
+                                <span class="error-phone error text-danger"></span>
                             </div>
                         </div>
                     </div>
@@ -154,7 +165,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach(App\Models\Doctor::ChamberName($data->id) as $key => $item)
+                                            @foreach($data->chamber as $key => $item)
                                             <tr class="{{$key+1}}">
                                                 <td>{{$key+1}}</td>
                                                 <td><input type="text" name="chamber[]" class="form-control" value="{{$item->name}}" /></td>
@@ -201,6 +212,17 @@
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="concentration">Concentration</label>
+                            <textarea name="concentration" id="concentration">{{$data->concentration}}</textarea>
+                        </div>
+                        <div class="col-12">
+                            <label for="description">Description</label>
+                            <textarea name="description" id="description">{{$data->description}}</textarea>
+                        </div>
+                    </div>
+
                     <div class="img-info px-3">
                         <hr>
                         <div class="row d-flex align-items-center">
@@ -232,9 +254,12 @@
 @endsection
 
 @push("js")
+<script src="https://cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>
 <script>
+    CKEDITOR.replace('description');
+    CKEDITOR.replace('concentration');
     $(document).ready(() => {
-        $('.select1').select2();
+        $('.select2').select2();
 
         $("#Showpassword").on("click", (event) => {
             if (event.target.checked) {
@@ -273,15 +298,7 @@
         })
 
         $(document).on("click", ".removeChamber", event => {
-            if(confirm("Are you sure !")){
-                $.ajax({
-                    url: location.origin+"/admin/doctor/chamber-delete/"+event.target.attributes[0].value,
-                    method: "GET",
-                    success: res => {
-                        $(".chamberTable").find("tbody ." + event.target.attributes[0].value).remove()
-                    }
-                })
-            }
+            $(".chamberTable").find("tbody ." + event.target.attributes[0].value).remove()
         })
 
         $(document).on("change", ".changeModule", (event) => {
@@ -308,7 +325,13 @@
 
         $("#updateDoctor").on("submit", (event) => {
             event.preventDefault()
+            var description = CKEDITOR.instances.description.getData();
+            var concentration = CKEDITOR.instances.concentration.getData();
+
             var formdata = new FormData(event.target)
+            formdata.append("description", description)
+            formdata.append("concentration", concentration)
+
             $.ajax({
                 url: "{{route('admin.doctor.update')}}",
                 data: formdata,
@@ -331,6 +354,35 @@
                 }
             })
         })
+    })
+
+    function TimeAdd() {
+        var row = `
+            <div class="input-group">
+                <input type="time" id="from" name="from[]" class="form-control">
+                <input type="time" id="to" name="to[]" class="form-control">
+                <button type="button" class="btn btn-danger removeTime">remove</button>
+            </div>
+        `
+        $(".timeadd").append(row)
+    }
+
+    function phoneAdd() {
+        var row = `
+            <div class="input-group">
+                <input type="text" id="phone" name="phone[]" class="form-control">
+                <button type="button" class="btn btn-danger removePhone">remove</button>
+            </div>
+        `
+        $(".phoneadd").append(row)
+    }
+
+    $(document).on("click", ".removeTime", event => {
+        event.target.offsetParent.remove();
+    })
+
+    $(document).on("click", ".removePhone", event => {
+        event.target.offsetParent.remove();
     })
 </script>
 @endpush

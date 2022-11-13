@@ -10,7 +10,7 @@
                 </div>
                 <div class="card-body" style="position: relative;">
                     <div class="imghospital" style="width: 150px !important;position: absolute;top: -100px;">
-                        <img src="{{asset($data->image?$data->image:'frontend/img/diagnostic.jpg')}}" class="border rounded" style="width: 100%; height:150px;">
+                        <img src="{{asset($data->image)}}" class="border rounded" style="width: 100%; height:150px;">
                     </div>
                     <div class="hospital-body" style="margin-top: 55px;">
                         <div class="row">
@@ -133,10 +133,7 @@
                 $.ajax({
                     url: "{{route('filter.hospitaldiagnosticdoctor')}}",
                     method: "POST",
-                    dataType: "JSON",
                     data: {
-                        id: id,
-                        name: "diagnostic_id",
                         department: event.target.value
                     },
                     success: (response) => {
@@ -145,23 +142,25 @@
                         } else {
                             $(".showDoctor").html("")
                             $.each(response, (index, value) => {
-                                var row = `
-                                        <div class="col-md-4 mb-3">
-                                            <div class="card mt-3 border-bottom">
-                                                <div class="card-body d-flex gap-2">
-                                                    <img src="${document.location.origin+"/"+value.image}" width="100" height="100" style="border: 1px solid gray;padding:3px;">
-                                                    <div class="body">
-                                                        <h6>${value.name}</h6>
-                                                        <p>${value.education}</p>
-                                                    </div>                                        
-                                                </div>
-                                                <div class="card-footer text-end">
-                                                    <a href="/single-details-doctor/${value.id}" target="_blank" class="btn btn-info btn-sm">Appointment</a>
+                                if (value.doctor.diagnostic_id == id) {
+                                    var row = `
+                                            <div class="col-md-4 mb-3">
+                                                <div class="card mt-3 border-bottom">
+                                                    <div class="card-body d-flex gap-2">
+                                                        <img src="${document.location.origin+"/"+value.doctor.image}" width="100" height="100" style="border: 1px solid gray;padding:3px;">
+                                                        <div class="body">
+                                                            <h6>${value.doctor.name}</h6>
+                                                            <p>${value.doctor.education}</p>
+                                                        </div>                                        
+                                                    </div>
+                                                    <div class="card-footer text-end">
+                                                        <a href="/single-details-doctor/${value.doctor.id}" target="_blank" class="btn btn-info btn-sm">Appointment</a>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    `;
-                                $(".showDoctor").append(row)
+                                        `;
+                                    $(".showDoctor").append(row)
+                                }
                             })
                         }
                     }

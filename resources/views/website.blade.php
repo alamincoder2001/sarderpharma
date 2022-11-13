@@ -243,14 +243,13 @@
     <div class="container">
         <div class="doctor-header">
             <h2 class="text-uppercase text-center">Doctors</h2>
-            <p class="text-center mb-5" style="font-size: 13px;">Ea melius ceteros oportere quo, pri habeo viderer facilisi ei</p>
         </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="list">
                     <ul>
                         <button style="background: #002a68;" class="department item departments">All</button>
-                        @foreach($departments as $item)
+                        @foreach($departments->take(8) as $item)
                         <button style="background: #002a68;" value="{{$item->id}}" class="department item{{$item->id}}">{{$item->name}}</button>
                         @endforeach
                     </ul>
@@ -262,14 +261,16 @@
         </div>
         <div class="row d-flex justify-content-center addDepartment mt-3">
 
-            @foreach($data["doctor"] as $item)
+            @foreach($data["specialist"] as $item)
             <div class="col-md-6 mb-3 col-10 col-sm-10 col-lg-3">
-                <a class="text-decoration-none" href="{{route('singlepagedoctor', $item->id)}}">
+                <a class="text-decoration-none" href="{{route('singlepagedoctor', $item->doctor->id)}}">
                     <div class="card border-0" style="border-radius: 0;box-shadow:0px 0px 15px 0px #c5c1c1;">
-                        <img src="{{asset($item->image)}}" class="card-img-top" alt="...">
+                        <img src="{{asset($item->doctor->image)}}" class="card-img-top" alt="...">
                         <div class="card-body text-center">
-                            <p style="color:#f59217;font-size: 15px;font-weight: 500;">{{$item->name}}</p>
-                            <h5 class="card-title">{{$item->department->name}}</h5>
+                            <p style="color:#f59217;font-size: 15px;font-weight: 500;">{{$item->doctor->name}}</p>
+                            <h5 class="card-title">
+                                {{$item->specialist->name}}
+                            </h5>
                         </div>
                     </div>
                 </a>
@@ -588,12 +589,12 @@
                     $.each(response, (index, value) => {
                         let row = `
                                 <div class="col-md-6 mb-3 col-10 col-sm-10 col-lg-3">
-                                    <a class="text-decoration-none" href="/single-details-doctor/${value.id}">
+                                    <a class="text-decoration-none" href="/single-details-doctor/${value.doctor.id}">
                                     <div class="card border-0" style="border-radius: 0;box-shadow:0px 0px 15px 0px #c5c1c1;">
-                                            <img src="${window.location.protocol+"/"+value.image}" class="card-img-top" alt="...">
+                                            <img src="${window.location.protocol+"/"+value.doctor.image}" class="card-img-top" alt="...">
                                             <div class="card-body text-center">
-                                                <p style="color:#f59217;font-size: 15px;font-weight: 500;">${value.name}</p>
-                                                <h5 class="card-title">${value.department.name}</h5>
+                                                <p style="color:#f59217;font-size: 15px;font-weight: 500;">${value.doctor.name}</p>
+                                                <h5 class="card-title">${value.specialist.name}</h5>
                                             </div>
                                         </div>
                                     </a>
@@ -621,7 +622,7 @@
                                 <div class="col-md-7 col-7 mt-md-2 pe-md-0">
                                     <h5 class="text-uppercase">${value.name}</h5>
                                     <div class="speciality">
-                                        <span>${value.department.name}</span>
+                                        <span>${value.department.length !=0?value.department[0].specialist.name:""}</span>
                                     </div>
                                     <h6 class="text-capitalize">${value.education}</h6>
                                 </div>
@@ -629,12 +630,12 @@
                         </div>
                         <div class="card-body" style="padding-top: 8px;">
                             <div class="location mb-1 d-flex justify-content-start align-item-center gap-2">
-                                ${value.chamber_name?'<i class="fa fa-home"></i> <span class="text-uppercase">'+value.chamber_name+'</span>':value.hospital_id?'<i class="fa fa-hospital-o"></i> <span class="text-uppercase">'+value.hospital.name+'</span>':'<i class="fa fa-plus-square"></i> <span class="text-uppercase">'+value.diagnostic.name+'</span>'}
+                                ${value.chamber.length!=0?'<i class="fa fa-home"></i> <span class="text-uppercase">'+value.chamber[0].name+'</span>':value.hospital_id?'<i class="fa fa-hospital-o"></i> <span class="text-uppercase">'+value.hospital.name+'</span>':'<i class="fa fa-plus-square"></i> <span class="text-uppercase">'+value.diagnostic.name+'</span>'}
                             </div>
                             <div class="location d-flex justify-content-start align-item-center gap-2">
                                 <i class="fa fa-map-marker"></i>
                                 <span>
-                                ${value.chamber_name?value.address+", "+value.city.name:value.hospital_id?value.hospital.address+", "+value.city.name:value.diagnostic.address+", "+value.city.name}
+                                ${value.chamber.length!=0?value.chamber[0].address+", "+value.city.name:value.hospital_id?value.hospital.address+", "+value.city.name:value.diagnostic.address+", "+value.city.name}
                                 </span>
                             </div>
                             <div class="available">
@@ -645,7 +646,7 @@
                                 <ul>
                                     <li>${value.availability.replaceAll(",", " ").toUpperCase()}</li>
                                 </ul>
-                                <small class="text-uppercase" style="margin-left: 16px;">${moment(value.from, "h:m A").format('LT')} - ${moment(value.to, "h:m A").format('LT')}</small>
+                                <small class="text-uppercase" style="margin-left: 16px;">${moment(value.time.length!=0?value.time[0].from:"", "h:m A").format('LT')} - ${moment(value.time.length!=0?value.time[0].to:"", "h:m A").format('LT')}</small>
                             </div>
                         </div>
                         <div class="card-footer d-flex gap-2">

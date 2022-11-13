@@ -12,6 +12,7 @@ use App\Models\Department;
 use App\Models\Diagnostic;
 use App\Models\Prescription;
 use App\Models\Privatecar;
+use App\Models\Specialist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -24,13 +25,13 @@ class HomeController extends Controller
         $data['department'] = Department::all();
         $data['slider'] = Slider::latest()->limit(4)->get();
         $data['partner'] = Partner::latest()->get();
-        $data["doctor"] = Doctor::with("city", "hospital", "diagnostic", "department")->latest()->limit(8)->get();
+        $data["specialist"] = Specialist::with("doctor", "specialist")->groupBy("doctor_id")->latest()->limit(8)->get();
         return view('website', compact("data"));
     }
     //doctor
     public function doctor()
     {
-        $data['doctor'] = Doctor::latest("id")->paginate(15);
+        $data['doctor'] = Doctor::with("time", "chamber")->latest("id")->paginate(15);
         $data['department'] = Department::all();
         return view('doctor_details', compact("data"));
     }
@@ -63,7 +64,7 @@ class HomeController extends Controller
     // single doctor
     public function singledoctor($id = null)
     {
-        $data = Doctor::find($id);
+        $data = Doctor::with("time", "chamber")->find($id);
         return view("doctor_single_page", compact("data"));
     }
     // get hospital and diagnostic by doctor id
@@ -136,9 +137,9 @@ class HomeController extends Controller
     {
         try {
             if ($request->department_id) {
-                $data = Doctor::with("city", "hospital", "diagnostic", "department")->where("department_id", $request->department_id)->get();
+                $data = Specialist::with("doctor", "specialist")->where("department_id", $request->department_id)->get();
             } else {
-                $data = Doctor::with("city", "hospital", "diagnostic", "department")->latest()->limit(8)->get();
+                $data = Specialist::with("doctor", "specialist")->groupBy("doctor_id")->latest()->limit(8)->get();
             }
             return response()->json($data);
         } catch (\Throwable $e) {

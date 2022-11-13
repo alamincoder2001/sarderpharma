@@ -50,32 +50,10 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <label for="phone">Phone<small class="text-danger">*</small></label>
-                                <div class="input-group">
-                                    <i class="btn btn-secondary">+88</i><input type="text" id="phone" name="phone" class="form-control" placeholder="01737 484046">
-                                </div>
-                                <span class="error-phone error text-danger"></span>
-                            </div>
-                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="education">Education<small class="text-danger">*</small></label>
                                     <input type="text" name="education" class="form-control" placeholder="Ex: MPH In Public Health Nutrition (NUB)">
                                     <span class="error-education error text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="department_id">Specialist<small class="text-danger">*</small></label>
-                                    <div class="input-group">
-                                        <select name="department_id" id="department_id" class="form-control select2">
-                                            <option value="">Choose a speciality</option>
-                                            @foreach($departments as $department)
-                                            <option value="{{$department->id}}">{{$department->name}}</option>
-                                            @endforeach
-                                        </select>
-                                        <i class="btn btn-secondary addDepartment">+</i>
-                                    </div>
-                                    <span class="error-department_id error text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -100,12 +78,6 @@
                                 <input type="number" id="second_fee" name="second_fee" class="form-control" placeholder="Ex: 800 Tk">
                                 <span class="error-second_fee error text-danger"></span>
                             </div>
-                        </div>
-                    </div>
-                    <div class="personal-info px-3 mb-3">
-                        <h5>Availability</h5>
-                        <hr>
-                        <div class="row">
                             <div class="col-md-8">
                                 <div class="form-group">
                                     <label for="availability">Availability Day <small class="text-danger">*</small></label>
@@ -121,88 +93,120 @@
                                     <span class="error-availability error text-danger"></span>
                                 </div>
                             </div>
-                            <div class="col-md-2">
-                                <label for="from">From<small class="text-danger">*</small></label>
-                                <input type="time" id="from" name="from" class="form-control">
-                                <span class="error-from error text-danger"></span>
-                            </div>
-                            <div class="col-md-2">
-                                <label for="to">To<small class="text-danger">*</small></label>
-                                <input type="time" id="to" name="to" class="form-control">
-                                <span class="error-to error text-danger"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- hospital && diagnostic && chamber -->
-                    <div class="chamber-info px-3">
-                        <h5>Select Chamber Or Hospital Or Diagnostic</h5>
-                        <hr>
-                        <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-4">
                                 <div class="form-group">
-                                    <label for="">Choose a module</label>
-                                    <select class="form-control changeModule">
-                                        <option value="">Select Chamber Or Hospital Or Diagnostic</option>
-                                        <option value="chamber">Chamber</option>
-                                        <option value="hospital">Hospital</option>
-                                        <option value="diagnostic">Diagnostic</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div id="chamber" class="col-md-8 row d-none">
-                                <div class="col-md-12">
-                                    <table class="table chamberTable">
-                                        <thead>
-                                            <tr>
-                                                <th>Sl</th>
-                                                <th>Chamber Name</th>
-                                                <th>Address</th>
-                                                <th><i class="btn btn-dark ChamberName">+</i></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div id="hospital" class="col-md-8 row d-none">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="hospital_id">Hospital Name</label>
-                                        <select multiple name="hospital_id[]" id="hospital_id" class="select1 form-control">
-                                            @foreach($hospitals as $item)
-                                            <option value="{{$item->id}}">{{$item->name}}</option>
+                                    <label for="department_id">Specialist<small class="text-danger">*</small></label>
+                                    <div class="input-group">
+                                        <select multiple name="department_id[]" id="department_id" class="form-control select2">
+                                            @foreach($departments as $department)
+                                            <option value="{{$department->id}}">{{$department->name}}</option>
                                             @endforeach
                                         </select>
-                                        <span class="error-hospital_id error text-danger"></span>
+                                        <i class="btn btn-secondary addDepartment">+</i>
+                                    </div>
+                                    <span class="error-department_id error text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <label for="">Time <i class="fa fa-plus" onclick="TimeAdd()"></i></label>
+                                <div class="timeadd">
+                                    <div class="input-group">
+                                        <input type="time" id="from" name="from[]" class="form-control">
+                                        <input type="time" id="to" name="to[]" class="form-control">
+                                        <button type="button" class="btn btn-danger">remove</button>
                                     </div>
                                 </div>
+                                <span class="error-time error text-danger"></span>
                             </div>
-                            <div id="diagnostic" class="col-md-8 d-none row">
-                                <div class="col-md-6">
+                            <div class="col-4">
+                                <label for="phone">Phone <i class="fa fa-plus" onclick="phoneAdd()"></i></label>
+                                <div class="phoneadd">
+                                    <div class="input-group">
+                                        <input type="text" id="phone" name="phone[]" class="form-control">
+                                        <button type="button" class="btn btn-danger">remove</button>
+                                    </div>
+                                </div>
+                                <span class="error-phone error text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- hospital && diagnostic && chamber -->
+                        <div class="chamber-info">
+                            <h5>Select Chamber Or Hospital Or Diagnostic</h5>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="diagnostic_id">Diagnostic Name</label>
-                                        <select multiple name="diagnostic_id[]" id="diagnostic_id" class="select1 form-control">
-                                            @foreach($diagnostics as $item)
-                                            <option value="{{$item->id}}">{{$item->name}}</option>
-                                            @endforeach
+                                        <label for="">Choose a module</label>
+                                        <select class="form-control changeModule">
+                                            <option value="">Select Chamber Or Hospital Or Diagnostic</option>
+                                            <option value="chamber">Chamber</option>
+                                            <option value="hospital">Hospital</option>
+                                            <option value="diagnostic">Diagnostic</option>
                                         </select>
-                                        <span class="error-diagnostic_id error text-danger"></span>
+                                    </div>
+                                </div>
+                                <div id="chamber" class="col-md-8 row d-none">
+                                    <div class="col-md-12">
+                                        <table class="table chamberTable">
+                                            <thead>
+                                                <tr>
+                                                    <th>Sl</th>
+                                                    <th>Chamber Name</th>
+                                                    <th>Address</th>
+                                                    <th><i class="btn btn-dark ChamberName">+</i></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div id="hospital" class="col-md-8 row d-none">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="hospital_id">Hospital Name</label>
+                                            <select multiple name="hospital_id[]" id="hospital_id" class="select1 form-control">
+                                                @foreach($hospitals as $item)
+                                                <option value="{{$item->id}}">{{$item->name}}</option>
+                                                @endforeach
+                                            </select>
+                                            <span class="error-hospital_id error text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="diagnostic" class="col-md-8 d-none row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="diagnostic_id">Diagnostic Name</label>
+                                            <select multiple name="diagnostic_id[]" id="diagnostic_id" class="select1 form-control">
+                                                @foreach($diagnostics as $item)
+                                                <option value="{{$item->id}}">{{$item->name}}</option>
+                                                @endforeach
+                                            </select>
+                                            <span class="error-diagnostic_id error text-danger"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="img-info px-3">
-                        <hr>
-                        <div class="row d-flex align-items-center">
-                            <div class="col-md-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="concentration">Concentration</label>
+                                <textarea name="concentration" id="concentration"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label for="description">Description</label>
+                                <textarea name="description" id="description"></textarea>
+                            </div>
+                        </div>
+                        <div class="row px-3">
+                            <hr>
+                            <div class="col-md-1 col-1">
                                 <div class="image">
                                     <img width="100" class="img" height="100">
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4 col-3">
                                 <div class="form-group">
                                     <label for="image">Doctor Image</label>
                                     <input type="file" class="form-control" id="image" name="image" onchange="document.querySelector('.img').src = window.URL.createObjectURL(this.files[0])">
@@ -210,13 +214,10 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-
-                    <div class="form-group text-center mt-3">
-                        <hr>
-                        <button type="submit" class="btn btn-success text-white text-uppercase px-3">Save</button>
-                    </div>
+                        <div class="form-group text-center mt-3">
+                            <hr>
+                            <button type="submit" class="btn btn-success text-white text-uppercase px-3">Save</button>
+                        </div>
                 </form>
             </div>
         </div>
@@ -249,8 +250,13 @@
 @endsection
 
 @push("js")
+<script src="https://cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>
 <script>
+    CKEDITOR.replace('description');
+    CKEDITOR.replace('concentration');
+
     $(document).ready(() => {
+        $(".select2").select2()
 
         $(document).on("change", ".changeModule", (event) => {
             if (event.target.value == "chamber") {
@@ -305,12 +311,17 @@
         })
 
         $(document).on("click", ".removeChamber", event => {
-            $(".chamberTable").find("tbody ."+event.target.attributes[0].value).remove()
+            $(".chamberTable").find("tbody ." + event.target.attributes[0].value).remove()
         })
 
         $("#saveDoctor").on("submit", (event) => {
             event.preventDefault()
+            var description = CKEDITOR.instances.description.getData();
+            var concentration = CKEDITOR.instances.concentration.getData();
+
             var formdata = new FormData(event.target)
+            formdata.append("description", description)
+            formdata.append("concentration", concentration)
             $.ajax({
                 url: "{{route('admin.doctor.store')}}",
                 data: formdata,
@@ -370,6 +381,35 @@
                 }
             }
         })
+    })
+
+    function TimeAdd() {
+        var row = `
+            <div class="input-group">
+                <input type="time" id="from" name="from[]" class="form-control">
+                <input type="time" id="to" name="to[]" class="form-control">
+                <button type="button" class="btn btn-danger removeTime">remove</button>
+            </div>
+        `
+        $(".timeadd").append(row)
+    }
+
+    function phoneAdd() {
+        var row = `
+            <div class="input-group">
+                <input type="text" id="phone" name="phone[]" class="form-control">
+                <button type="button" class="btn btn-danger removePhone">remove</button>
+            </div>
+        `
+        $(".phoneadd").append(row)
+    }
+
+    $(document).on("click", ".removeTime", event => {
+        event.target.offsetParent.remove();
+    })
+
+    $(document).on("click", ".removePhone", event => {
+        event.target.offsetParent.remove();
     })
 </script>
 @endpush

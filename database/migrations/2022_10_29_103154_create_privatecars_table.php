@@ -23,6 +23,10 @@ class CreatePrivatecarsTable extends Migration
             $table->bigInteger('city_id')->unsigned();
             $table->foreign('city_id')->references('id')->on('districts')->onDelete('cascade');
             $table->string("address");
+            $table->string("car_license")->nullable();
+            $table->string("driver_license")->nullable();
+            $table->string("driver_nid")->nullable();
+            $table->string("driver_address")->nullable();
             $table->string("image")->nullable();
             $table->longText("details")->nullable(); 
             $table->timestamps();

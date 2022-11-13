@@ -100,7 +100,7 @@
             <div class="col-md-6 col-10 col-sm-6 col-lg-4 ">
                 <div class="card border-0 mb-4" style="background: #ffffff;box-shadow:0px 0px 7px 2px #c1c1c1;">
                     <div class="img card-img-top m-auto mt-2 w-50 overflow-hidden d-flex justify-content-center border border-2">
-                        <img style="width: 100%; height:160px;" src="{{asset($item->image?$item->image:'frontend/img/hospital.jpg')}}">
+                        <img style="width: 100%; height:160px;" src="{{asset($item->image)}}">
                     </div>
                     <div class="card-body">
                         <h5 class="card-title text-center" style="font-size: 15px;">{{$item->name}}</h5>
@@ -166,7 +166,7 @@
                 <div class="col-md-6 col-10 col-sm-6 col-lg-4 ">
                 <div class="card border-0 mb-4" style="background: #ffffff;box-shadow:0px 0px 7px 2px #c1c1c1;">
                     <div class="img card-img-top m-auto mt-2 w-50 overflow-hidden d-flex justify-content-center border border-2">
-                        <img src="${value.image?value.image:'frontend/img/hospital.jpg'}" style="width: 100%; height:160px;">
+                        <img src="${value.image}" style="width: 100%; height:160px;">
                     </div>
                     <div class="card-body">
                         <h5 class="card-title text-center" style="font-size: 15px;">${value.name}</h5>

@@ -35,26 +35,27 @@ class Doctor extends Authenticatable
 
     public function department()
     {
-        return $this->belongsTo(Department::class,"department_id");
+        return $this->hasMany(Specialist::class)->with("specialist");
     }
     public function city()
     {
-        return $this->belongsTo(District::class,"city_id");
+        return $this->belongsTo(District::class,"city_id", "id");
     }
     public function hospital()
     {
-        return $this->belongsTo(Hospital::class,"hospital_id");
+        return $this->belongsTo(Hospital::class, "hospital_id", "id");
     }
     public function diagnostic()
     {
-        return $this->belongsTo(Diagnostic::class,"diagnostic_id");
+        return $this->belongsTo(Diagnostic::class, "diagnostic_id", "id");
     }
     public function chamber()
     {
-        return $this->hasMany(Chamber::class, "doctor_id", "id");
+        return $this->hasMany(Chamber::class);
     }
-    public static function ChamberName($id)
+
+    public function time()
     {
-        return Chamber::where("doctor_id", $id)->get();
+        return $this->hasMany(Sittime::class);
     }
 }

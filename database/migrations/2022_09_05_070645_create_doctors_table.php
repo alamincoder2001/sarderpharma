@@ -21,18 +21,15 @@ class CreateDoctorsTable extends Migration
             $table->string("email");
             $table->string('password');
             $table->text("education");
-            $table->bigInteger('department_id')->unsigned();
-            $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
+            $table->text("concentration");
+            $table->text("description")->nullable();
             $table->string("image")->nullable();
             //address details
             $table->string("availability");
-            $table->string("from");
-            $table->string("to");
             $table->string("phone");
             $table->string("first_fee");
             $table->string("second_fee");
-            $table->bigInteger('city_id')->unsigned()->nullable();
-            $table->foreign('city_id')->references('id')->on('districts')->onDelete('cascade');
+            $table->foreignId('city_id')->constrained("districts", "id")->onDelete("cascade")->nullable();
             $table->string('hospital_id')->nullable();
             $table->string('diagnostic_id')->nullable();
             $table->timestamps();

@@ -2,6 +2,14 @@
 
 @section("title", "Admin Ambulance Create Page")
 
+@push("style")
+    <style>
+        .select2-container .select2-selection--single{
+            height: 34px !important;
+        }
+    </style>
+@endpush
+
 @section("content")
 @php
 $access = App\Models\UserAccess::where('user_id', Auth::guard('admin')->user()->id)
@@ -55,16 +63,15 @@ $access = App\Models\UserAccess::where('user_id', Auth::guard('admin')->user()->
                             <div class="form-group">
                                 <label for="phone">Phone</label>
                                 <div class="input-group">
-                                    <i class="btn btn-secondary">+88</i><input type="text" name="phone" id="phone" class="form-control" placeholder="01737484046">
-                                    <span class="error-phone text-danger error"></span>
+                                    <i class="btn btn-secondary">+88</i><input type="text" name="phone" id="phone" class="form-control">
                                 </div>
+                                <span class="error-phone text-danger error"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="ambulance_type">Type Of Ambulance</label>
                                 <select multiple name="ambulance_type[]" id="ambulance_type" class="form-control select2">
-                                    <option label="Choose ambulance type"></option>
                                     <option value="ICU">ICU Ambulance</option>
                                     <option value="NICU">Non ICU Ambulance</option>
                                     <option value="Freezing">Freezing Ambulance</option>
@@ -101,6 +108,34 @@ $access = App\Models\UserAccess::where('user_id', Auth::guard('admin')->user()->
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
+                                <label for="car_license">Car License</label>
+                                <input type="text" name="car_license" id="car_license" class="form-control">
+                                <span class="error-car_license text-danger error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="driver_license">Driving License</label>
+                                <input type="text" name="driver_license" id="driver_license" class="form-control">
+                                <span class="error-driver_license text-danger error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="driver_nid">Driver NID</label>
+                                <input type="text" name="driver_nid" id="driver_nid" class="form-control">
+                                <span class="error-driver_nid text-danger error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="driver_address">Driver Address</label>
+                                <input type="text" name="driver_address" id="driver_address" class="form-control">
+                                <span class="error-driver_address text-danger error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
                                 <label for="image">Ambulance Image</label>
                                 <input type="file" class="form-control" id="image" name="image" onchange="document.querySelector('.img').src = window.URL.createObjectURL(this.files[0])">
                             </div>
@@ -130,9 +165,8 @@ $access = App\Models\UserAccess::where('user_id', Auth::guard('admin')->user()->
             var formdata = new FormData(event.target)
             $.ajax({
                 url: "{{route('admin.ambulance.store')}}",
-                data: formdata,
                 method: "POST",
-                dataType: "JSON",
+                data: formdata,
                 contentType: false,
                 processData: false,
                 beforeSend: () => {

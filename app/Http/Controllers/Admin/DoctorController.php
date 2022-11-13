@@ -10,10 +10,11 @@ use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Sittime;
+use App\Models\Specialist;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Validator;
 
 class DoctorController extends Controller
@@ -56,7 +57,7 @@ class DoctorController extends Controller
             ->pluck('permissions')
             ->toArray();
         if (!in_array("doctor.store", $access)) {
-            return view("admin.unauthorize");
+            return "UnAuthorized access! You have no access";
         }
         try {
             $validator = Validator::make($request->all(), [
@@ -68,9 +69,8 @@ class DoctorController extends Controller
                 'department_id' => "required",
                 'city_id' => "required",
                 'availability' => "required",
-                'to' => "required",
-                'from' => "required",
-                'phone' => "required|min:11|max:15",
+                'phone' => "required",
+                'concentration' => "required",
                 'first_fee' => "required|numeric",
                 'second_fee' => "required|numeric",
             ]);
@@ -86,14 +86,15 @@ class DoctorController extends Controller
                 $data->password = Hash::make($request->password);
 
                 $data->education = $request->education;
-                $data->department_id = $request->department_id;
+
                 $data->city_id = $request->city_id;
                 $data->availability = implode(",", $request->availability);
-                $data->to = $request->to;
-                $data->from = $request->from;
-                $data->phone = $request->phone;
+                $data->phone = implode(",", $request->phone);
                 $data->first_fee = $request->first_fee;
                 $data->second_fee = $request->second_fee;
+                $data->concentration = $request->concentration;
+                $data->description = $request->description;
+
                 if (!empty($request->hospital_id)) {
                     $data->hospital_id = implode(",", $request->hospital_id);
                 }
@@ -109,6 +110,23 @@ class DoctorController extends Controller
                         $chamber->address = $request->address[$key];
                         $chamber->doctor_id = $data->id;
                         $chamber->save();
+                    }
+                }
+                if (!empty($request->from)) {
+                    foreach ($request->from as $key => $item) {
+                        $t = new Sittime();
+                        $t->doctor_id = $data->id;
+                        $t->from = $item;
+                        $t->to = $request->to[$key];
+                        $t->save();
+                    }
+                }
+                if (!empty($request->department_id)) {
+                    foreach ($request->department_id as $item) {
+                        $s = new Specialist();
+                        $s->doctor_id = $data->id;
+                        $s->department_id = $item;
+                        $s->save();
                     }
                 }
                 return response()->json("Doctor addedd successfully");
@@ -127,7 +145,7 @@ class DoctorController extends Controller
             return view("admin.unauthorize");
         }
 
-        $data = Doctor::with("chamber")->find($id);
+        $data = Doctor::with("chamber", "time")->find($id);
         $avail = explode(",", $data->availability);
         $hospitals = DB::table("hospitals")->orderBy("id", "DESC")->get();
         $departments = DB::table("departments")->orderBy("id", "DESC")->get();
@@ -146,9 +164,8 @@ class DoctorController extends Controller
                 'department_id' => "required",
                 'city_id' => "required",
                 'availability' => "required",
-                'to' => "required",
-                'from' => "required",
-                'phone' => "required|min:11|max:15",
+                'phone' => "required",
+                'concentration' => "required",
                 'first_fee' => "required|numeric",
                 'second_fee' => "required|numeric",
             ]);
@@ -172,13 +189,12 @@ class DoctorController extends Controller
                 }
                 $data->education = $request->education;
                 $data->city_id = $request->city_id;
-                $data->department_id = $request->department_id;
                 $data->availability = implode(",", $request->availability);
-                $data->to = $request->to;
-                $data->from = $request->from;
-                $data->phone = $request->phone;
+                $data->phone = implode(",", $request->phone);
                 $data->first_fee = $request->first_fee;
                 $data->second_fee = $request->second_fee;
+                $data->concentration = $request->concentration;
+                $data->description = $request->description;
                 if (!empty($request->hospital_id)) {
                     $data->hospital_id = implode(",", $request->hospital_id);
                 }
@@ -187,6 +203,7 @@ class DoctorController extends Controller
                 }
                 $data->update();
 
+                Chamber::where("doctor_id", $request->id)->delete();
                 if (!empty($request->chamber)) {
                     foreach ($request->chamber as $key => $item) {
                         $chamber = new Chamber;
@@ -194,6 +211,25 @@ class DoctorController extends Controller
                         $chamber->address = $request->address[$key];
                         $chamber->doctor_id = $request->id;
                         $chamber->save();
+                    }
+                }
+                Specialist::where("doctor_id", $request->id)->delete();
+                if (!empty($request->department_id)) {
+                    foreach ($request->department_id as $item) {
+                        $s = new Specialist();
+                        $s->doctor_id = $request->id;
+                        $s->department_id = $item;
+                        $s->save();
+                    }
+                }
+                Sittime::where("doctor_id", $request->id)->delete();
+                if (!empty($request->from)) {
+                    foreach ($request->from as $key => $item) {
+                        $t = new Sittime();
+                        $t->doctor_id = $request->id;
+                        $t->from = $item;
+                        $t->to = $request->to[$key];
+                        $t->save();
                     }
                 }
                 return response()->json("Doctor updated successfully");
@@ -223,12 +259,6 @@ class DoctorController extends Controller
         } catch (\Throwable $e) {
             return response()->json("Something went wrong");
         }
-    }
-
-    public function Chamber_Destroy($id)
-    {
-        Chamber::find($id)->delete();
-        return "delete";
     }
 
     // doctor patient appointment

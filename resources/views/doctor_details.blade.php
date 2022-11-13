@@ -93,12 +93,16 @@
                     <div class="card-header pl-md-1 pt-md-1 bg-body">
                         <div class="row">
                             <div class="col-md-5 col-5 p-md-0">
-                                <img src="{{asset($item->image?$item->image:'frontend/img/doctor1.png')}}" class="card-img-top">
+                                <img src="{{asset($item->image?$item->image:'frontend/nodoctorimage.png')}}" class="card-img-top">
                             </div>
                             <div class="col-md-7 col-7 mt-md-2 pe-md-0">
                                 <h5 class="text-uppercase">{{$item->name}}</h5>
                                 <div class="speciality">
-                                    <span>{{$item->department->name}}</span>
+                                    <span>
+                                        @foreach($item->department->take(1) as $dept)
+                                            {{$dept->specialist->name}}
+                                        @endforeach
+                                    </span>
                                 </div>
                                 <h6 class="text-capitalize">{{$item->education}}</h6>
                             </div>
@@ -106,23 +110,29 @@
                     </div>
                     <div class="card-body" style="padding-top: 8px;">
                         <div class="location mb-1 d-flex justify-content-start align-item-center gap-1">
-                            @if($item->chamber)
-                                <i class="fa fa-home"></i> <span class="text-uppercase">{{$item->chamber}}</span>
+                            @if(count($item->chamber) != 0)
+                            <i class="fa fa-home"></i> <span class="text-uppercase">
+                                @foreach($item->chamber->take(1) as $chamber)
+                                {{$chamber->name}}
+                                @endforeach
+                            </span>
                             @else
-                                @if($item->hospital_id || $item->diagnostic_id)
-                                <i class="fa {{$item->hospital_id?'fa-hospital-o':'fa-plus-square'}}"></i> <span class="text-uppercase">{{$item->hospital_id?$item->hospital->name:$item->diagnostic->name}}</span>
-                                @endif
+                            @if($item->hospital_id || $item->diagnostic_id)
+                            <i class="fa {{$item->hospital_id?'fa-hospital-o':'fa-plus-square'}}"></i> <span class="text-uppercase">{{$item->hospital_id?$item->hospital->name:$item->diagnostic->name}}</span>
+                            @endif
                             @endif
                         </div>
                         <div class="location d-flex justify-content-start align-item-center gap-1">
                             <i class="fa fa-map-marker"></i>
                             <span style="padding-left: 3px;">
-                                @if($item->chamber)
-                                    {{$item->address}}, {{$item->city->name}}
+                                @if(count($item->chamber) != 0)
+                                    @foreach($item->chamber->take(1) as $chamber)
+                                    {{$chamber->address}}
+                                    @endforeach
                                 @else
-                                    @if($item->hospital_id || $item->diagnostic_id)
-                                        {{$item->hospital_id ? $item->hospital->address:$item->diagnostic->address}}, {{$item->hospital_id ? $item->hospital->city->name:$item->diagnostic->city->name}}
-                                    @endif
+                                @if($item->hospital_id || $item->diagnostic_id)
+                                {{$item->hospital_id ? $item->hospital->address:$item->diagnostic->address}}, {{$item->hospital_id ? $item->hospital->city->name:$item->diagnostic->city->name}}
+                                @endif
                                 @endif
                             </span>
                         </div>
@@ -135,7 +145,7 @@
                                 <li>{{ucwords($availity)}}</li>
                                 @endforeach
                             </ul>
-                            <small class="text-uppercase" style="margin-left: 16px;">{{date("h:i a",strtotime($item->from))}}- {{date("h:i a",strtotime($item->to))}}</small>
+                            <small class="text-uppercase" style="margin-left: 16px;">{{date("h:i a",strtotime(count($item->time)!=0?$item->time[0]->from:""))}}-{{date("h:i a",strtotime(count($item->time)!=0?$item->time[0]->to:""))}}</small>
                         </div>
                     </div>
                     <div class="card-footer d-flex gap-2">
@@ -271,6 +281,7 @@
     })
 
     function Row(index, value) {
+        
         var row = `<div class="col-md-6 col-10 col-sm-6 col-lg-4 mb-4">
                 <div class="card aboutdoctor">
                     <div class="card-header pl-md-1 pt-md-1 bg-body">
@@ -281,7 +292,7 @@
                             <div class="col-md-7 col-7 mt-md-2 pe-md-0">
                                 <h5 class="text-uppercase">${value.name}</h5>
                                 <div class="speciality">
-                                    <span>${value.department.name}</span>
+                                    <span>${value.department.length != 0?value.department[0].specialist.name:""}</span>
                                 </div>
                                 <h6 class="text-capitalize">${value.education}</h6>
                             </div>
@@ -289,12 +300,12 @@
                     </div>
                     <div class="card-body" style="padding-top: 8px;">
                         <div class="location mb-1 d-flex justify-content-start align-item-center gap-2">
-                            ${value.chamber?'<i class="fa fa-home"></i> <span class="text-uppercase">'+value.chamber+'</span>':value.hospital_id?'<i class="fa fa-hospital-o"></i> <span class="text-uppercase">'+value.hospital.name+'</span>':'<i class="fa fa-plus-square"></i> <span class="text-uppercase">'+value.diagnostic.name+'</span>'}
+                            ${value.chamber.length != 0?'<i class="fa fa-home"></i> <span class="text-uppercase">'+value.chamber[0].name+'</span>':value.hospital_id?'<i class="fa fa-hospital-o"></i> <span class="text-uppercase">'+value.hospital.name+'</span>':'<i class="fa fa-plus-square"></i> <span class="text-uppercase">'+value.diagnostic.name+'</span>'}
                         </div>
                         <div class="location d-flex justify-content-start align-item-center gap-2">
                             <i class="fa fa-map-marker"></i>
                             <span>
-                            ${value.chamber?value.address+", "+value.city.name:value.hospital_id?value.hospital.address+", "+value.city.name:value.diagnostic.address+", "+value.city.name}
+                            ${value.chamber.length != 0?value.chamber[0].address+", "+value.city.name:value.hospital_id?value.hospital.address+", "+value.city.name:value.diagnostic.address+", "+value.city.name}
                             </span>
                         </div>
                         <div class="available">
@@ -305,7 +316,7 @@
                             <ul>
                                 <li>${value.availability.replaceAll(",", " ").toUpperCase()}</li>
                             </ul>
-                            <small class="text-uppercase" style="margin-left: 16px;">${moment(value.from, "h:m A").format('LT')} - ${moment(value.to, "h:m A").format('LT')}</small>
+                            <small class="text-uppercase" style="margin-left: 16px;">${moment(value.time.length!=0?value.time[0].from:"", "h:m A").format('LT')} - ${moment(value.time.length!=0?value.time[0].to:"", "h:m A").format('LT')}</small>
                         </div>
                     </div>
                     <div class="card-footer d-flex gap-2">

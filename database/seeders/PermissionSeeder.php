@@ -63,6 +63,7 @@ class PermissionSeeder extends Seeder
                     "ambulance.index",
                     "ambulance.create",
                     "ambulance.edit",
+                    "ambulance.store",
                     "ambulance.destroy"
                 ]
             ],

@@ -46,6 +46,10 @@ class PrivatecarController extends Controller
                 "city_id" => "required",
                 "cartype_id" => "required",
                 "address" => "required",
+                "car_license" => "required",
+                "driver_license" => "required",
+                "driver_nid" => "required",
+                "driver_address" => "required",
             ]);
 
             if ($validator->fails()) {
@@ -60,6 +64,10 @@ class PrivatecarController extends Controller
                 $data->city_id = $request->city_id;
                 $data->address = $request->address;
                 $data->map_link = $request->map_link;
+                $data->car_license = $request->car_license;
+                $data->driver_license = $request->driver_license;
+                $data->driver_nid = $request->driver_nid;
+                $data->driver_address = $request->driver_address;
 
                 $data->save();
                 return response()->json("Privatecar added successfully");
@@ -85,6 +93,10 @@ class PrivatecarController extends Controller
                 "city_id" => "required",
                 "cartype_id" => "required",
                 "address" => "required",
+                "car_license" => "required",
+                "driver_license" => "required",
+                "driver_nid" => "required",
+                "driver_address" => "required",
             ]);
 
             if ($validator->fails()) {
@@ -105,6 +117,10 @@ class PrivatecarController extends Controller
                 $data->city_id = $request->city_id;
                 $data->address = $request->address;
                 $data->map_link = $request->map_link;
+                $data->car_license = $request->car_license;
+                $data->driver_license = $request->driver_license;
+                $data->driver_nid = $request->driver_nid;
+                $data->driver_address = $request->driver_address;
 
                 $data->update();
                 return response()->json("Privatecar updated successfully");

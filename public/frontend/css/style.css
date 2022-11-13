@@ -490,8 +490,8 @@ nav ul li a {
 /* bottom button */
 .positionabsolute {
     position: fixed;
-    bottom: 10px;
-    right: 10px;
+    bottom: 68px;
+    right: 35px;
     background: #283290;
     padding: 10px;
     display: flex;

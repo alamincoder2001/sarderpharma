@@ -62,6 +62,10 @@ class AmbulanceController extends Controller
                 "city_id" => "required",
                 "ambulance_type" => "required",
                 "address" => "required",
+                "car_license" => "required",
+                "driver_license" => "required",
+                "driver_nid" => "required",
+                "driver_address" => "required",
             ]);
 
             if ($validator->fails()) {
@@ -77,9 +81,11 @@ class AmbulanceController extends Controller
                 $data->phone = $request->phone;
                 $data->city_id = $request->city_id;
                 $data->address = $request->address;
-                if (!empty($request->map_link)) {
-                    $data->map_link = $request->map_link;
-                }
+                $data->car_license = $request->car_license;
+                $data->driver_license = $request->driver_license;
+                $data->driver_nid = $request->driver_nid;
+                $data->driver_address = $request->driver_address;
+                $data->map_link = $request->map_link;
                 $data->save();
                 return response()->json("ambulance added successfully");
             }
@@ -113,6 +119,10 @@ class AmbulanceController extends Controller
                 "city_id" => "required",
                 "ambulance_type" => "required",
                 "address" => "required",
+                "car_license" => "required",
+                "driver_license" => "required",
+                "driver_nid" => "required",
+                "driver_address" => "required",
             ]);
 
             if ($validator->fails()) {
@@ -136,9 +146,11 @@ class AmbulanceController extends Controller
                 $data->phone = $request->phone;
                 $data->city_id = $request->city_id;
                 $data->address = $request->address;
-                if (!empty($request->map_link)) {
-                    $data->map_link = $request->map_link;
-                }
+                $data->car_license = $request->car_license;
+                $data->driver_license = $request->driver_license;
+                $data->driver_nid = $request->driver_nid;
+                $data->driver_address = $request->driver_address;                
+                $data->map_link = $request->map_link;
                 $data->update();
                 return response()->json("Ambulance updated successfully");
             }

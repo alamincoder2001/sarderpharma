@@ -51,7 +51,7 @@ class UserAccessController extends Controller
             } else {
                 $validator = Validator::make($request->all(), [
                     "username"  => "required|unique:admins,username," . $request->user_id,
-                    "email" => "required",
+                    "email" => "required|unique:admins,email," . $request->user_id
                 ]);
                 $data = Admin::find($request->user_id);
             }

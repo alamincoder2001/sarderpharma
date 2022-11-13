@@ -37,12 +37,20 @@
                             <td>{{$item->name}}</td>
                             <td>{{$item->username}}</td>
                             <td>{{$item->education}}</td>
-                            <td>{{$item->department->name}}</td>
+                            <td>
+                                @foreach($item->department as $dept)
+                                    {{$dept->specialist->name}},
+                                @endforeach
+                            </td>
                             <td>{{$item->phone}}</td>
                             <td>{{$item->first_fee}}</td>
                             <td>{{$item->second_fee}}</td>
                             <td>{{$item->availability}}</td>
-                            <td>{{date("h:i a", strtotime($item->from))}}-{{date("h:i a", strtotime($item->to))}}</td>
+                            <td>
+                                @foreach($item->time as $t)
+                                {{date("h:i a", strtotime($t->from))}}-{{date("h:i a", strtotime($t->to))}}
+                                @endforeach
+                            </td>
                             <td>
                                 <img src="{{asset($item->image)}}" width="50">
                             </td>
@@ -68,7 +76,7 @@
     $(document).ready(() => {
         $("#example").DataTable();
 
-        $(document).on("click", ".deleteadminDoctor" ,(event) => {
+        $(document).on("click", ".deleteadminDoctor", (event) => {
             if (confirm("Are you sure want to delete this data!")) {
                 $.ajax({
                     url: "{{route('admin.doctor.destroy')}}",

@@ -6,10 +6,6 @@
     .select2-container .select2-selection--single {
         height: 34px !important;
     }
-
-    .select2-selection select2-selection--multiple {
-        height: 34px !important;
-    }
 </style>
 @endpush
 @section("content")
@@ -91,6 +87,34 @@
                                 <label for="map_link">Map Link</label>
                                 <textarea name="map_link" id="map_link" class="form-control">{{$data->map_link}}</textarea>
                                 <span class="error-map_link text-danger error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="car_license">Car License</label>
+                                <input type="text" name="car_license" id="car_license" class="form-control" value="{{$data->car_license}}">
+                                <span class="error-car_license text-danger error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="driver_license">Driving License</label>
+                                <input type="text" name="driver_license" id="driver_license" class="form-control" value="{{$data->driver_license}}">
+                                <span class="error-driver_license text-danger error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="driver_nid">Driver NID</label>
+                                <input type="text" name="driver_nid" id="driver_nid" class="form-control" value="{{$data->driver_nid}}">
+                                <span class="error-driver_nid text-danger error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="driver_address">Driver Address</label>
+                                <input type="text" name="driver_address" id="driver_address" class="form-control" value="{{$data->driver_address}}">
+                                <span class="error-driver_address text-danger error"></span>
                             </div>
                         </div>
                         <div class="col-md-4">

@@ -8,6 +8,7 @@ use App\Models\Ambulance;
 use App\Models\Diagnostic;
 use App\Models\Donor;
 use App\Models\Privatecar;
+use App\Models\Specialist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Devfaysal\BangladeshGeocode\Models\Upazila;
@@ -34,7 +35,7 @@ class FilterController extends Controller
     {
         try {
             if ($request->doctor || $request->service == "Doctor") {
-                $data = Doctor::with("department")->where("city_id", $request->id)->orderBy('name')->get();
+                $data = Doctor::with("department", "chamber")->where("city_id", $request->id)->orderBy('name')->get();
             } elseif ($request->hospital || $request->service == "Hospital") {
                 $data = Hospital::with("city")->where("city_id", $request->id)->orderBy('name')->get();
             } elseif ($request->diagnostic || $request->service == "Diagnostic") {
@@ -58,11 +59,11 @@ class FilterController extends Controller
     {
         try {
             if (!empty($request->doctor_name) && !empty($request->city)) {
-                $data = Doctor::with("city", "department", "hospital", "diagnostic")->where('city_id', $request->city)->orWhere('name', "like" . "%" . $request->doctor_name . "%")->orderBy('name')->get();
+                $data = Doctor::with("city", "time", "department", "hospital", "diagnostic", "chamber")->where('city_id', $request->city)->orWhere('name', "like" . "%" . $request->doctor_name . "%")->orderBy('name')->get();
             } else if (!empty($request->doctor_name)) {
-                $data = Doctor::with("city", "department", "hospital", "diagnostic")->where('name', 'like', '%' . $request->doctor_name . '%')->orderBy('name')->get();
+                $data = Doctor::with("city", "time", "department", "hospital", "diagnostic", "chamber")->where('name', 'like', '%' . $request->doctor_name . '%')->orderBy('name')->get();
             } else {
-                $data = Doctor::with("city", "department", "hospital", "diagnostic")->where("city_id", $request->city)->orderBy('name')->get();
+                $data = Doctor::with("city", "time", "department", "hospital", "diagnostic", "chamber")->where("city_id", $request->city)->orderBy("name")->get();
             }
             if (count($data) !== 0) {
                 return response()->json($data);
@@ -78,7 +79,7 @@ class FilterController extends Controller
     public function doctorsinglechange(Request $request)
     {
         try {
-            $data = Doctor::with("city", "department", "hospital", "diagnostic")->where("id", $request->id)->orderBy('name')->get();
+            $data = Doctor::with("city", "department", "hospital", "diagnostic", "chamber")->where("id", $request->id)->orderBy('name')->get();
             if (!empty($data)) {
                 return response()->json($data);
             } else {
@@ -194,20 +195,12 @@ class FilterController extends Controller
     public function hospitaldiagnosticdoctor(Request $request)
     {
         try {
-            $dataArry = [$request->name => $request->id, "department_id" => $request->department];
-            if ($request->name == "hospital_id") {
-                if (empty($request->department)) {
-                    $data = Doctor::where("hospital_id", $request->id)->orderBy('name')->get();
-                } else {
-                    $data = Doctor::where($dataArry)->orderBy('name')->get();
-                }
+            if (empty($request->department)) {
+                $data = Specialist::with("doctor", "specialist")->get();
             } else {
-                if (empty($request->department)) {
-                    $data = Doctor::where("diagnostic_id", $request->id)->orderBy('name')->get();
-                } else {
-                    $data = Doctor::where($dataArry)->orderBy('name')->get();
-                }
+                $data = Specialist::with("doctor", "specialist")->where("department_id", $request->department)->get();
             }
+
             if (count($data) !== 0) {
                 return response()->json($data);
             } else {

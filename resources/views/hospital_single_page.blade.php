@@ -141,10 +141,7 @@
                 $.ajax({
                     url: "{{route('filter.hospitaldiagnosticdoctor')}}",
                     method: "POST",
-                    dataType: "JSON",
                     data: {
-                        id: id,
-                        name: "hospital_id",
                         department: event.target.value
                     },
                     success: (response) => {
@@ -153,23 +150,25 @@
                         } else {
                             $(".showDoctor").html("")
                             $.each(response, (index, value) => {
-                                var row = `
-                                        <div class="col-md-4 mb-3">
-                                            <div class="card mt-3 border-bottom">
-                                                <div class="card-body d-flex gap-2">
-                                                    <img src="${document.location.origin+"/"+value.image}" width="100" height="100" style="border: 1px solid gray;padding:3px;">
-                                                    <div class="body">
-                                                        <h6>${value.name}</h6>
-                                                        <p>${value.education}</p>
-                                                    </div>                                        
-                                                </div>
-                                                <div class="card-footer text-end">
-                                                    <a href="/single-details-doctor/${value.id}" target="_blank" class="btn btn-info btn-sm">Appointment</a>
+                                if (value.doctor.hospital_id == id) {
+                                    var row = `
+                                            <div class="col-md-4 mb-3">
+                                                <div class="card mt-3 border-bottom">
+                                                    <div class="card-body d-flex gap-2">
+                                                        <img src="${document.location.origin+"/"+value.doctor.image}" width="100" height="100" style="border: 1px solid gray;padding:3px;">
+                                                        <div class="body">
+                                                            <h6>${value.doctor.name}</h6>
+                                                            <p>${value.doctor.education}</p>
+                                                        </div>                                        
+                                                    </div>
+                                                    <div class="card-footer text-end">
+                                                        <a href="/single-details-doctor/${value.doctor.id}" target="_blank" class="btn btn-info btn-sm">Appointment</a>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    `;
-                                $(".showDoctor").append(row)
+                                        `;
+                                    $(".showDoctor").append(row)
+                                }
                             })
                         }
                     }

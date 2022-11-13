@@ -68,10 +68,14 @@
                     },
                     method: "POST",
                     success: (response) => {
-                        $.notify(response, "success");
-                        setTimeout(() => {
-                            location.reload()
-                        }, 500);
+                        if(response.unauthorize){
+                            $.notify(response.unauthorize);
+                        }else{
+                            $.notify(response, "success");
+                            setTimeout(() => {
+                                location.reload()
+                            }, 1000);
+                        }
                     }
                 })
             }
