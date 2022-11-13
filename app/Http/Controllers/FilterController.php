@@ -242,7 +242,6 @@ class FilterController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 "service" => "required",
-                // "name"    => "required"
             ]);
             if ($validator->fails()) {
                 return response()->json(['error' => $validator->errors()]);
@@ -250,9 +249,9 @@ class FilterController extends Controller
 
             if ($request->service == "Doctor") {
                 if ($request->service == "Doctor" && $request->name) {
-                    return Doctor::with("city", "department", "hospital", "chamber")->where("id", $request->name)->get();
+                    return response()->json(Doctor::with("city", "department", "hospital", "time", "chamber")->where("id", $request->name)->get());
                 } else {
-                    return Doctor::with("city", "department", "hospital", "chamber")->get();
+                    return response()->json(Doctor::with("city", "department", "hospital", "time", "chamber")->get());
                 }
             } else if ($request->service == "Hospital") {
                 if ($request->service == "Hospital" && $request->name) {

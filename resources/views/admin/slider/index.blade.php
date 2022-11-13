@@ -104,8 +104,8 @@ $access = App\Models\UserAccess::where('user_id', Auth::guard('admin')->user()->
                                     <img width="40" src="${window.location.origin+"/"}${value.image}">
                                 </td>
                                 <td>
-                                    ${editaccess?'<button type="button" class="btn btn-primary btn-sm editSlider border-0" value="'+data.id+'">Edit</button>':''}
-                                    ${deleteaccess?'<button type="button" class="btn btn-danger btn-sm deleteSlider border-0" value="'+data.id+'">Delete</button>':''}
+                                    ${editaccess?'<button type="button" class="btn btn-primary btn-sm editSlider border-0" value="'+value.id+'">Edit</button>':''}
+                                    ${deleteaccess?'<button type="button" class="btn btn-danger btn-sm deleteSlider border-0" value="'+value.id+'">Delete</button>':''}
                                 </td>
                             </tr>
                         `
