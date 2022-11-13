@@ -65,26 +65,40 @@ $contact = \App\Models\Contact::first();
 <div class="ShowSearchBtn d-none">
     <div class="container p-0">
         <form class="d-flex" onsubmit="searchSubmit(event)">
-            <div style="width: 30%;">
+            <div class="input-group">
+                <select name="service" class="form-control" onchange="changeService(event)" id="services">
+                    <option value="">Select Service Name</option>
+                    <option value="Doctor">Doctor</option>
+                    <option value="Hospital">Hospital</option>
+                    <option value="Diagnostic">Diagnostic</option>
+                    <option value="Ambulance">Ambulance</option>
+                    <option value="Privatecar">Private Car</option>
+                </select>
+                <select name="name" class="form-control searchName" id="Name">
+
+                </select>
+                <button type="submit" class="btn btn-success">Search</button>
+            </div>
+            <!-- <div style="width: 30%;">
                 <select name="service" onchange="changeService(event)" id="services" style="width: 100%;padding: 5px;border: 0;outline: none;border-radius:5rem;background:black;color: #b1abab;padding-left: 20px;">
                     <option value="">Select Service Name</option>
                     <option value="Doctor">Doctor</option>
                     <option value="Hospital">Hospital</option>
                     <option value="Diagnostic">Diagnostic</option>
-                    <option value="Ambulance">Ambulance</option> 
+                    <option value="Ambulance">Ambulance</option>
                     <option value="Privatecar">Private Car</option>
                 </select>
                 <span class="error-service error text-danger"></span>
             </div>
             <div style="width: 55%">
                 <select name="name" class="searchName" id="select2" style="width: 100%;padding: 11px;border: none;border-left: 1px solid gray;outline: none;" id="Name">
-                    
+
                 </select>
                 <span class="error-name error text-danger"></span>
             </div>
             <div style="width: 15%">
                 <button style="width: 100%;padding: 4px;background: #197e00;border: none;color: white;border-radius: 5rem;">Search</button>
-            </div>
+            </div> -->
         </form>
     </div>
 </div>
