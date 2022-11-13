@@ -85,6 +85,7 @@ class AmbulanceController extends Controller
                 $data->driver_license = $request->driver_license;
                 $data->driver_nid = $request->driver_nid;
                 $data->driver_address = $request->driver_address;
+                $data->description = $request->description;
                 $data->map_link = $request->map_link;
                 $data->save();
                 return response()->json("ambulance added successfully");
@@ -150,6 +151,7 @@ class AmbulanceController extends Controller
                 $data->driver_license = $request->driver_license;
                 $data->driver_nid = $request->driver_nid;
                 $data->driver_address = $request->driver_address;                
+                $data->description = $request->description;
                 $data->map_link = $request->map_link;
                 $data->update();
                 return response()->json("Ambulance updated successfully");

@@ -20,7 +20,7 @@
     <div class="col-md-3 col-lg-3 col-xlg-3">
         <a href="{{route('doctor.appointment')}}" class="text-decoration-none">
             <div class="card" style="position: relative;">
-                <span style="border-bottom-left-radius: 25%;position: absolute;top: 0;right: 0;background: green;color: white;padding: 1px 10px;">1</span>
+                <span style="border-bottom-left-radius: 25%;position: absolute;top: 0;right: 0;background: green;color: white;padding: 1px 10px;">{{$data["all"]->count()}}</span>
                 <div class="text-center dashboard">
                     <i class="fa fa-user-plus" style="font-size: 26px;"></i>
                 </div>

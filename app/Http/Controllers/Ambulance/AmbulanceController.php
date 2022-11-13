@@ -52,9 +52,9 @@ class AmbulanceController extends Controller
                 $data->phone = $request->phone;
                 $data->city_id = $request->city_id;
                 $data->address = $request->address;
-                if (!empty($request->map_link)) {
-                    $data->map_link = $request->map_link;
-                }
+                $data->description = $request->description;
+                $data->map_link = $request->map_link;
+
                 $data->update();
                 return response()->json("Ambulance updated successfully");
             }

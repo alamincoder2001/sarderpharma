@@ -126,6 +126,12 @@
                         <div class="col-md-3">
                             <img src="{{asset($data->image)}}" width="100" class="img" style="border: 1px solid #ccc; height:80px;">
                         </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea name="description" id="description">{!!$data->description!!}</textarea>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group text-center mt-3">
                         <button type="submit" class="btn btn-primary text-white text-uppercase px-3">Update</button>
@@ -163,13 +169,17 @@
 @endsection
 
 @push("js")
+<script src="https://cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>
 <script>
+    CKEDITOR.replace('description');
+    $('.select2').select2();
     $(document).ready(() => {
-        $('.select2').select2();
-
         $("#updatePrivatecar").on("submit", (event) => {
             event.preventDefault()
+            var description = CKEDITOR.instances.description.getData();
             var formdata = new FormData(event.target)
+            formdata.append("description", description)
+
             $.ajax({
                 url: "{{route('admin.privatecar.update')}}",
                 data: formdata,

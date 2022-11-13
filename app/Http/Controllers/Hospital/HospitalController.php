@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Hospital;
 
-use App\Models\Test;
 use App\Models\Doctor;
 use App\Models\Hospital;
 use App\Models\Appointment;
@@ -39,7 +38,7 @@ class HospitalController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 "name" => "required",
-                "username" => "required|unique:hospitals,username,".$request->id,
+                "username" => "required|unique:hospitals,username," . $request->id,
                 "email" => "required|email",
                 "phone" => "required|min:11|max:15",
                 "city_id" => "required",
@@ -56,12 +55,11 @@ class HospitalController extends Controller
                 $data->email = $request->email;
                 $data->hospital_type = $request->hospital_type;
                 $data->phone = $request->phone;
-                $data->discount = $request->discount;
+                $data->discount_amount = $request->discount_amount;
                 $data->city_id = $request->city_id;
                 $data->address = $request->address;
-                if (!empty($request->map_link)) {
-                    $data->map_link = $request->map_link;
-                }
+                $data->description = $request->description;
+                $data->map_link = $request->map_link;
                 $data->update();
                 return response()->json("Hospital updated successfully");
             }
@@ -89,12 +87,12 @@ class HospitalController extends Controller
             } else {
                 $data = Auth::guard("hospital")->user();
                 $hasPass = $data->password;
-                if(Hash::check($request->password, $hasPass)){
+                if (Hash::check($request->password, $hasPass)) {
                     $data->password = Hash::make($request->new_password);
                     $data->update();
                     return response()->json("Password updated successfully");
-                }else{
-                    return response()->json(["errors"=> "Current Password Not Match"]);
+                } else {
+                    return response()->json(["errors" => "Current Password Not Match"]);
                 }
             }
         } catch (\Throwable $e) {
@@ -104,7 +102,7 @@ class HospitalController extends Controller
 
     public function imageUpdate(Request $request)
     {
-        try{
+        try {
             $data = Auth::guard("hospital")->user();
             $old = $data->image;
             if ($request->hasFile('image')) {
@@ -115,7 +113,7 @@ class HospitalController extends Controller
                 $data->update();
                 return response()->json("Hospital image updated");
             }
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return response()->json("Something went wrong");
         }
     }

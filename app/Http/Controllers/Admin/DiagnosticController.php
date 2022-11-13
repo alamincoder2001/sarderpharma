@@ -10,7 +10,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Validator;
 
 class DiagnosticController extends Controller
@@ -80,6 +79,7 @@ class DiagnosticController extends Controller
                 $data->discount_amount = $request->discount_amount;
                 $data->city_id = $request->city_id;
                 $data->address = $request->address;
+                $data->description = $request->description;
                 $data->map_link = $request->map_link;
 
                 $data->save();
@@ -139,6 +139,7 @@ class DiagnosticController extends Controller
                 $data->discount_amount = $request->discount_amount;
                 $data->city_id = $request->city_id;
                 $data->address = $request->address;
+                $data->description = $request->description;
                 $data->map_link = $request->map_link;
 
                 $data->update();

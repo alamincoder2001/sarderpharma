@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Doctor;
 
-use App\Models\Doctor;
+use App\Models\Chamber;
+use App\Models\Sittime;
+use App\Models\Hospital;
+use App\Models\Department;
+use App\Models\Diagnostic;
+use App\Models\Specialist;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Department;
-use App\Models\Diagnostic;
-use App\Models\Hospital;
-use Devfaysal\BangladeshGeocode\Models\District;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Validator;
 
 class DoctorController extends Controller
@@ -26,6 +26,7 @@ class DoctorController extends Controller
     public function index()
     {
         $doctor = Auth::guard("doctor")->user();
+        $data["all"] = Appointment::where(["doctor_id" => $doctor->id])->get();
         $data["new"] = Appointment::where(["doctor_id" => $doctor->id, "appointment_date" => date("d/m/Y")])->get();
         return view("doctor.dashboard", compact("data"));
     }
@@ -53,9 +54,7 @@ class DoctorController extends Controller
                 'email' => "required|email",
                 'education' => "required|max:255",
                 'department_id' => "required",
-                'to' => "required",
-                'from' => "required",
-                'phone' => "required|min:11|max:15",
+                'phone' => "required",
                 'first_fee' => "required|numeric",
                 'second_fee' => "required|numeric",
             ]);
@@ -67,14 +66,11 @@ class DoctorController extends Controller
                 $data->username = $request->username;
                 $data->email = $request->email;
                 $data->education = $request->education;
-                $data->department_id = $request->department_id;
-                $data->to = $request->to;
-                $data->from = $request->from;
-                $data->phone = $request->phone;
                 $data->first_fee = $request->first_fee;
                 $data->second_fee = $request->second_fee;
-                $data->chamber_name = $request->chamber_name;
-                $data->address = $request->address;
+                $data->description = $request->description;
+                $data->concentration = $request->concentration;
+                $data->phone = implode(",", $request->phone);
                 $data->availability = implode(",", $request->availability);
                 if (!empty($request->hospital_id)) {
                     $data->hospital_id = implode(",", $request->hospital_id);
@@ -83,10 +79,42 @@ class DoctorController extends Controller
                     $data->diagnostic_id = implode(",", $request->diagnostic_id);
                 }
                 $data->update();
+
+                Chamber::where("doctor_id", $data->id)->delete();
+                if (!empty($request->chamber)) {
+                    foreach ($request->chamber as $key => $item) {
+                        $chamber = new Chamber;
+                        $chamber->name = $item;
+                        $chamber->address = $request->address[$key];
+                        $chamber->doctor_id = $data->id;
+                        $chamber->save();
+                    }
+                }
+                Specialist::where("doctor_id", $data->id)->delete();
+                if (!empty($request->department_id)) {
+                    foreach ($request->department_id as $item) {
+                        $s = new Specialist();
+                        $s->doctor_id = $data->id;
+                        $s->department_id = $item;
+                        $s->save();
+                    }
+                }
+                Sittime::where("doctor_id", $data->id)->delete();
+                if (!empty($request->from)) {
+                    foreach ($request->from as $key => $item) {
+                        $t = new Sittime();
+                        $t->doctor_id = $data->id;
+                        $t->from = $item;
+                        $t->to = $request->to[$key];
+                        $t->save();
+                    }
+                }
+
+
                 return response()->json("Doctor Profile updated");
             }
         } catch (\Throwable $e) {
-            return response()->json("Something went wrong" . $e->getMessage());
+            return response()->json("Something went wrong");
         }
     }
 

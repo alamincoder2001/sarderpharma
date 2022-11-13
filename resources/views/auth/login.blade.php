@@ -6,93 +6,77 @@
         font-family: Arial, Helvetica, sans-serif;
     }
 
-    /* Full-width input fields */
-    #id01 #email, #id01 #password {
-        width: 100%;
-        padding: 12px 20px;
-        margin: 8px 0;
-        display: inline-block;
-        border: 1px solid #ccc;
-        box-sizing: border-box;
-    }
-
-    /* Set a style for all buttons */
-    .button {
-        background-color: #04AA6D;
-        color: white;
-        padding: 14px 20px;
-        margin: 8px 0;
-        border: none;
-        cursor: pointer;
-        width: 100%;
-    }
-
-    .button:hover {
-        opacity: 0.8;
-    }
-
-    /* Extra styles for the cancel button */
-    .cancelbtn {
-        width: auto;
-        padding: 10px 18px;
-        background-color: #f44336;
-    }
-
-    /* Center the image and position the close button */
-    .imgcontainer {
-        text-align: center;
-        margin: 0 0 12px 0;
+    .image-avatar {
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+        border-radius: 50%;
+        background: #ededed;
+        overflow: hidden;
         position: relative;
     }
 
-    img.avatar {
-        width: 10%;
+    .image-avatar img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
         border-radius: 50%;
     }
-
     .container {
         padding: 16px;
-    }
-
-    span.psw {
-        float: right;
-        padding-top: 16px;
     }
 </style>
 @endpush
 
 @section("content")
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="text-center image-avatar">
+                <img src="{{asset('frontend/nodoctorimage.png')}}">
+            </div>
+            <div class="card border-0">
+                <div class="card-body">
+                    <form method="POST" action="{{route('user.login')}}">
+                        @csrf
+                        <div class="row mb-3">
+                            <div class="col-6 offset-md-3">
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" style="box-shadow:none;" autocomplete="off" name="email" value="{{ old('email') }}" required placeholder="Email">
 
-<div id="id01" style="padding: 55px 0; padding-top:30px;">
+                                @error('email')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
 
-    <div class="container">
-        @if(Session::has("errors"))
-            <p class="alert alert-danger">{{Session::get("errors")}}</p>
-        @endif
-    </div>
+                        <div class="row mb-3">
+                            <div class="col-6 offset-md-3">
+                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" style="box-shadow:none;" autocomplete="off" name="password" required placeholder="Password">
 
-    <form action="{{route('user.login')}}" method="POST">
-        @csrf
-        <div class="imgcontainer">
-            <img src="{{asset('frontend/img_avatar2.png')}}" alt="Avatar" width="100" class="avatar">
-        </div>
+                                @error('password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
 
-        <div class="container">
-            <div class="row d-flex justify-content-center align-items-center">
-                <div class="col-6">
-                    <div class="form-gorup">
-                        <label for="username"><b>Username</b></label>
-                        <input type="text" placeholder="Enter username" name="email" id="email" value="{{old('email')}}" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="psw"><b>Password</b></label>
-                        <input type="password" placeholder="Enter Password" id="password" name="password" value="{{old('password')}}" required>
-                    </div>
-                    <button class="button" type="submit">Login</button>
+                        <div class="row mb-0 text-center">
+                            <div class="col-6 offset-md-3">
+                                <button type="submit" class="btn btn-primary">
+                                    {{ __('Login') }}
+                                </button>
+                                <a class="d-block" href="{{url('/register')}}">Account create first!</a>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-    </form>
+    </div>
 </div>
 @endsection

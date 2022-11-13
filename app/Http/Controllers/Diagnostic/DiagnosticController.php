@@ -10,7 +10,6 @@ use App\Models\Appointment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Validator;
 
 class DiagnosticController extends Controller
@@ -58,9 +57,9 @@ class DiagnosticController extends Controller
                 $data->discount = $request->discount;
                 $data->city_id = $request->city_id;
                 $data->address = $request->address;
-                if (!empty($request->map_link)) {
-                    $data->map_link = $request->map_link;
-                }
+                $data->description = $request->description;
+                $data->map_link = $request->map_link;
+
                 $data->update();
                 return response()->json("Diagnostic updated successfully");
             }

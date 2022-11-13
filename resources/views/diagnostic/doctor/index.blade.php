@@ -37,12 +37,20 @@
                             <td>{{$item->name}}</td>
                             <td>{{$item->username}}</td>
                             <td>{{$item->education}}</td>
-                            <td>{{$item->department->name}}</td>
+                            <td>
+                                @foreach($item->department as $department)
+                                    {{$department->specialist->name}}, 
+                                @endforeach
+                            </td>
                             <td>{{$item->phone}}</td>
                             <td>{{$item->first_fee}}</td>
                             <td>{{$item->second_fee}}</td>
                             <td>{{$item->availability}}</td>
-                            <td>{{date("h:i a", strtotime($item->from))}}-{{date("h:i a", strtotime($item->to))}}</td>
+                            <td>
+                                @foreach($item->time as $t)
+                                {{date("h:i a", strtotime($t->from))}}-{{date("h:i a", strtotime($t->to))}}
+                                @endforeach
+                            </td>
                             <td>
                                 <img src="{{asset($item->image)}}" width="50">
                             </td>
@@ -66,11 +74,6 @@
 <script>
     $(document).ready(() => {
         $("#example").DataTable();
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
 
         $(document).on("click", ".deletediagnosticDoctor",(event) => {
             if (confirm("Are you sure want to delete this data!")) {

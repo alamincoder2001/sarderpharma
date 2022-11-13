@@ -27,7 +27,7 @@ class CreateDiagnosticsTable extends Migration
             $table->foreign('city_id')->references('id')->on('districts')->onDelete('cascade');
             $table->string("address");
             $table->string("image")->nullable();
-            $table->longText("details")->nullable();
+            $table->longText("description")->nullable();
             $table->timestamps();
         });
     }

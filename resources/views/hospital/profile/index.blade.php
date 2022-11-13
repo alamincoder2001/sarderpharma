@@ -102,6 +102,12 @@
                                 <span class="error-map_link error text-danger"></span>
                             </div>
                         </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea name="description" id="description">{!!Auth::guard('hospital')->user()->description!!}</textarea>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-gorup text-center">
                         <button type="submit" class="btn btn-primary px-3">Update</button>
@@ -114,16 +120,20 @@
 @endsection
 
 @push("js")
+<script src="https://cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>
 <script>
+    CKEDITOR.replace('description');
     $(document).ready(() => {
         $("#updateHospital").on("submit", (event) => {
             event.preventDefault()
+            var description = CKEDITOR.instances.description.getData();
             var formdata = new FormData(event.target)
+            formdata.append("description", description)
+            
             $.ajax({
-                url: "{{route('hospital.hospital.update')}}",
+                url: "{{route('hospital.hospital.update')}}", 
                 data: formdata,
                 method: "POST",
-                dataType: "JSON",
                 contentType: false,
                 processData: false,
                 beforeSend: () => {

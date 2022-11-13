@@ -3,11 +3,11 @@
 @section("title", "Admin Ambulance Edit Page")
 
 @push("style")
-    <style>
-        .select2-container .select2-selection--single{
-            height: 34px !important;
-        }
-    </style>
+<style>
+    .select2-container .select2-selection--single {
+        height: 34px !important;
+    }
+</style>
 @endpush
 
 @section("content")
@@ -149,6 +149,12 @@ $access = App\Models\UserAccess::where('user_id', Auth::guard('admin')->user()->
                         <div class="col-md-3">
                             <img src="{{asset($data->image)}}" width="100" class="img" style="border: 1px solid #ccc; height:80px;">
                         </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea name="description" id="description">{!!$data->description!!}</textarea>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group text-center mt-3">
                         <button type="submit" class="btn btn-primary text-white text-uppercase px-3">Update</button>
@@ -161,9 +167,11 @@ $access = App\Models\UserAccess::where('user_id', Auth::guard('admin')->user()->
 @endsection
 
 @push("js")
+<script src="https://cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>
 <script>
+    CKEDITOR.replace('description');
+    $('.select2').select2();
     $(document).ready(() => {
-        $('.select2').select2();
         $("#Showpassword").on("click", (event) => {
             if (event.target.checked) {
                 $("#password").attr("disabled", false)
@@ -172,16 +180,16 @@ $access = App\Models\UserAccess::where('user_id', Auth::guard('admin')->user()->
             }
         })
 
-        var sl = $('.select2').select2();
-
         $("#updateAmbulance").on("submit", (event) => {
             event.preventDefault()
+            var description = CKEDITOR.instances.description.getData();
             var formdata = new FormData(event.target)
+            formdata.append("description", description)
+            
             $.ajax({
                 url: "{{route('admin.ambulance.update')}}",
                 data: formdata,
                 method: "POST",
-                dataType: "JSON",
                 contentType: false,
                 processData: false,
                 beforeSend: () => {

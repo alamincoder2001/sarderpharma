@@ -30,7 +30,7 @@ class CreateAmbulancesTable extends Migration
             $table->string("driver_nid")->nullable();
             $table->string("driver_address")->nullable();
             $table->string("image")->nullable();
-            $table->longText("details")->nullable();
+            $table->longText("description")->nullable();
             $table->timestamps();
         });
     }

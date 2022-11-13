@@ -18,7 +18,7 @@ class DoctorFactory extends Factory
             'name'          => $this->faker->name(),
             'username'      => $this->faker->unique()->userName(),
             'email'         => $this->faker->unique()->safeEmail(),
-            'image'         => "uploads/doctor/download_6357ca4975bfd.png",
+            'image'         => "uploads/doctor/download_6370a5d9432e3.png",
             'city_id'       => rand(1, 64),
             'password'      => Hash::make('1'),
             'availability'  => "sun,mon,tue,wed",

@@ -68,6 +68,7 @@ class PrivatecarController extends Controller
                 $data->driver_license = $request->driver_license;
                 $data->driver_nid = $request->driver_nid;
                 $data->driver_address = $request->driver_address;
+                $data->description = $request->description;
 
                 $data->save();
                 return response()->json("Privatecar added successfully");
@@ -121,6 +122,7 @@ class PrivatecarController extends Controller
                 $data->driver_license = $request->driver_license;
                 $data->driver_nid = $request->driver_nid;
                 $data->driver_address = $request->driver_address;
+                $data->description = $request->description;
 
                 $data->update();
                 return response()->json("Privatecar updated successfully");

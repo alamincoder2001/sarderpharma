@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Diagnostic;
 
 use App\Models\Doctor;
+use App\Models\Sittime;
 use App\Models\Department;
+use App\Models\Specialist;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Validator;
 
 class DoctorController extends Controller
@@ -34,7 +34,7 @@ class DoctorController extends Controller
 
     public function store(Request $request)
     {
-        try{
+        try {
             $validator = Validator::make($request->all(), [
                 'name' => "required|max:255",
                 'username' => "required|unique:doctors",
@@ -43,68 +43,81 @@ class DoctorController extends Controller
                 'department_id' => "required",
                 'availability' => "required",
                 'password' => "required",
-                'to' => "required",
-                'from' => "required",
-                'phone' => "required|min:11|max:15",
+                'phone' => "required",
                 'first_fee' => "required|numeric",
                 'second_fee' => "required|numeric",
             ]);
 
-            if($validator->fails()){
+            if ($validator->fails()) {
                 return response()->json(["error" => $validator->errors()]);
-            }else{
+            } else {
                 $data = new Doctor;
                 $data->image = $this->imageUpload($request, 'image', 'uploads/doctor') ?? '';
-                $data->name = $request->name;                
-                $data->username = $request->username;                
-                $data->email = $request->email;                
+                $data->name = $request->name;
+                $data->username = $request->username;
+                $data->email = $request->email;
                 $data->password = Hash::make($request->password);
                 $data->education = $request->education;
-                $data->department_id = $request->department_id;
                 $data->city_id = Auth::guard("diagnostic")->user()->city_id;
                 $data->availability = implode(",", $request->availability);
-                $data->to = $request->to;
-                $data->from = $request->from;
-                $data->phone = $request->phone;
+                $data->phone = implode(",", $request->phone);
                 $data->first_fee = $request->first_fee;
                 $data->second_fee = $request->second_fee;
+                $data->description = $request->description;
+                $data->concentration = $request->concentration;
                 $data->diagnostic_id = Auth::guard("diagnostic")->user()->id;
                 $data->save();
+
+                if (!empty($request->from)) {
+                    foreach ($request->from as $key => $item) {
+                        $t = new Sittime();
+                        $t->doctor_id = $data->id;
+                        $t->from = $item;
+                        $t->to = $request->to[$key];
+                        $t->save();
+                    }
+                }
+                if (!empty($request->department_id)) {
+                    foreach ($request->department_id as $item) {
+                        $s = new Specialist();
+                        $s->doctor_id = $data->id;
+                        $s->department_id = $item;
+                        $s->save();
+                    }
+                }
                 return response()->json("Doctor addedd successfully");
             }
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return response()->json("Something went wrong");
         }
     }
 
     public function edit($id)
     {
-        $departments = Department::all();   
-        $data = DB::table("doctors")->where("id", $id)->first();
+        $departments = Department::all();
+        $data = Doctor::with("time", "department")->find($id);
         $avail = explode(",", $data->availability);
-        return view("diagnostic.doctor.edit", compact("data", 'avail',"departments"));
+        return view("diagnostic.doctor.edit", compact("data", 'avail', "departments"));
     }
 
     public function update(Request $request)
     {
-        try{
+        try {
             $validator = Validator::make($request->all(), [
                 'name' => "required|max:255",
-                'username' => "required|unique:doctors,username,".$request->id,
+                'username' => "required|unique:doctors,username," . $request->id,
                 'email' => "required|email",
                 'education' => "required|max:255",
                 'department_id' => "required",
                 'availability' => "required",
-                'to' => "required",
-                'from' => "required",
-                'phone' => "required|min:11|max:15",
+                'phone' => "required",
                 'first_fee' => "required|numeric",
                 'second_fee' => "required|numeric",
             ]);
 
-            if($validator->fails()){
+            if ($validator->fails()) {
                 return response()->json(["error" => $validator->errors()]);
-            }else{
+            } else {
                 $data = Doctor::find($request->id);
                 $old  = $data->image;
                 if ($request->hasFile('image')) {
@@ -114,32 +127,51 @@ class DoctorController extends Controller
                     $data->image = $this->imageUpload($request, 'image', 'uploads/doctor') ?? '';
                 }
                 $data->name = $request->name;
-                $data->username = $request->username;                
+                $data->username = $request->username;
                 $data->email = $request->email;
-                if(!empty($request->password)){
+                if (!empty($request->password)) {
                     $data->email = Hash::make($request->password);
                 }
                 $data->education = $request->education;
-                $data->department_id = $request->department_id;
                 $data->city_id = Auth::guard("diagnostic")->user()->city_id;
                 $data->availability = implode(",", $request->availability);
-                $data->to = $request->to;
-                $data->from = $request->from;
-                $data->phone = $request->phone;
+                $data->phone = implode(",", $request->phone);
                 $data->first_fee = $request->first_fee;
                 $data->second_fee = $request->second_fee;
+                $data->description = $request->description;
+                $data->concentration = $request->concentration;
                 $data->diagnostic_id = Auth::guard("diagnostic")->user()->id;
                 $data->update();
+
+                Specialist::where("doctor_id", $request->id)->delete();
+                if (!empty($request->department_id)) {
+                    foreach ($request->department_id as $item) {
+                        $s = new Specialist();
+                        $s->doctor_id = $request->id;
+                        $s->department_id = $item;
+                        $s->save();
+                    }
+                }
+                Sittime::where("doctor_id", $request->id)->delete();
+                if (!empty($request->from)) {
+                    foreach ($request->from as $key => $item) {
+                        $t = new Sittime();
+                        $t->doctor_id = $request->id;
+                        $t->from = $item;
+                        $t->to = $request->to[$key];
+                        $t->save();
+                    }
+                }
                 return response()->json("Doctor updated successfully");
             }
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return response()->json("Something went wrong");
         }
     }
 
     public function destroy(Request $request)
     {
-        try{
+        try {
             $data = Doctor::find($request->id);
             $old = $data->image;
             if (File::exists($old)) {
@@ -147,7 +179,7 @@ class DoctorController extends Controller
             }
             $data->delete();
             return response()->json("Doctor deleted successfully");
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return response()->json("Something went wrong");
         }
     }

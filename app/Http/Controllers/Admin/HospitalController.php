@@ -10,7 +10,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Validator;
 
 class HospitalController extends Controller
@@ -79,6 +78,7 @@ class HospitalController extends Controller
                 $data->discount_amount = $request->discount_amount;
                 $data->city_id = $request->city_id;
                 $data->address = $request->address;
+                $data->description = $request->description;
                 $data->map_link = $request->map_link;
                 $data->save();
                 return response()->json("Hospital added successfully");
@@ -137,6 +137,7 @@ class HospitalController extends Controller
                 $data->discount_amount = $request->discount_amount;
                 $data->city_id = $request->city_id;
                 $data->address = $request->address;
+                $data->description = $request->description;
                 $data->map_link = $request->map_link;
 
                 $data->update();
