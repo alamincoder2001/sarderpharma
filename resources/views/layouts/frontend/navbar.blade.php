@@ -57,15 +57,15 @@ $contact = \App\Models\Contact::first();
                     <a class="nav-link text-uppercase {{Route::is('contactus')?'activ':''}}" href="{{route('contactus')}}">Contact Us</a>
                 </li>
             </ul>
-            <div id="google_translate_element" style="margin-left: 8px;"></div>
         </div>
+        <div id="google_translate_element" style="margin-left: 8px;"></div>
         <button type="button" value="0" class="SearchBtn btn btn-dark py-1 fa fa-search" style="box-shadow: none;"></button>
     </div>
 </nav>
 <div class="ShowSearchBtn d-none">
     <div class="container p-0">
         <div class="row">
-            <div class="col-8 offset-md-2">
+            <div class="col-12 col-lg-8 offset-lg-2">
                 <form class="d-flex" onsubmit="searchSubmit(event)">
                     <div class="input-group">
                         <select name="service" class="form-control" onchange="changeService(event)" id="services" style="box-shadow: none;border-radius:0;">

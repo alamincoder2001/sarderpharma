@@ -18,9 +18,9 @@ class DatabaseSeeder extends Seeder
         $this->call(ContactSeederTable::class);
         $this->call(DepartmentSeederTable::class);
         $this->call(PermissionSeeder::class);
-        \App\Models\Hospital::factory(50)->create();
-        \App\Models\Diagnostic::factory(50)->create();
-        \App\Models\Ambulance::factory(50)->create();
-        \App\Models\Doctor::factory(50)->create();
+        \App\Models\Hospital::factory(1)->create();
+        \App\Models\Diagnostic::factory(1)->create();
+        \App\Models\Ambulance::factory(1)->create();
+        \App\Models\Doctor::factory(1)->create();
     }
 }

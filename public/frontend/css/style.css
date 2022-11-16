@@ -587,6 +587,15 @@ nav ul li a {
     #footer h2 {
         font-size: 15px;
     }
+
+    #google_translate_element {
+        display: inline-flex !important;
+    }
+
+    .SearchBtn {
+        height: 37px !important;
+        margin: 5px !important;
+    }
 }
 
 /* doctor page card */
@@ -724,6 +733,7 @@ nav ul li a {
     background: red !important;
     text-decoration: underline;
 }
+
 /* ambulance footer */
 .privatecarbody .card-footer {
     background: #10a7ff !important;
@@ -772,7 +782,7 @@ nav ul li a {
     background: linear-gradient(45deg, #0718e7, #00a10c) !important;
 }
 
-.hospitalbody .card .discount{
+.hospitalbody .card .discount {
     position: absolute;
     left: 0;
     background: red;
@@ -784,7 +794,8 @@ nav ul li a {
     display: flex;
     align-items: center;
 }
-.diagnosticbody .card .discount{
+
+.diagnosticbody .card .discount {
     position: absolute;
     left: 0;
     background: red;

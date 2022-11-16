@@ -191,7 +191,7 @@
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <label for="concentration">Concentration</label>
+                                <label for="concentration">Consultancy</label>
                                 <textarea name="concentration" id="concentration"></textarea>
                             </div>
                             <div class="col-12">

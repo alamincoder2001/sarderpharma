@@ -102,7 +102,7 @@
     <div class="container">
         <div class="search">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12 col-12">
                     <form id="fillterWebsite">
                         <div class="row d-flex justify-content-center">
                             <div class="col-md-6 col-lg-3 col-6">

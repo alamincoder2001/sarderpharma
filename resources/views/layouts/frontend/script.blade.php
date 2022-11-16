@@ -1,7 +1,8 @@
 <script src="{{asset('frontend')}}/js/jquery.js"></script>
 <script src="{{asset('frontend')}}/js/bootstrap.bundle.min.js"></script>
 <script src="{{asset('frontend')}}/js/owl.carousel.min.js"></script>
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<!-- datepicker -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
 <script>
     $('.facilities').owlCarousel({
@@ -85,20 +86,25 @@
     })
 
     $(".datepicker").datepicker({
-        dateFormat: "dd/mm/yy",
-        changeMonth: true,
-        changeYear: true
+        format: "dd-mm-yyyy",
+        orientation: 'bottom'
     });
 
     $(document).scroll(function() {
         if ($(window).scrollTop() > 10) {
             $("nav").addClass('scroll-hieght')
-            $(".ShowSearchBtn").css({top:"82px"})
-            $(".SearchBtn").css({height:"35px"})
+            $(".ShowSearchBtn").css({
+                top: "82px"
+            })
+            $(".SearchBtn").css({
+                height: "35px"
+            })
 
         } else {
             $("nav").removeClass('scroll-hieght')
-            $(".SearchBtn").css({height:"36px"})
+            $(".SearchBtn").css({
+                height: "36px"
+            })
         }
         if ($(window).scrollTop() > 400) {
             $(".positionabsolute").css('display', "block")
@@ -139,4 +145,4 @@
 <script src="{{asset('js/select2.js')}}"></script>
 <script src="{{asset('js/notify.js')}}"></script>
 
-@stack("js") 
+@stack("js")

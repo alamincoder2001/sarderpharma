@@ -30,7 +30,7 @@
                             <div class="col-md-4">
                                 <div class="form-group mt-3">
                                     <label for="dob">Date of Birth</label>
-                                    <input type="text" name="dob" id="dob" class="form-control datepicker" placeholder="dd/mm/YY" style="box-shadow: none;border-radius:0;">
+                                    <input type="text" name="dob" id="dob" class="form-control datepicker" autocomplete="off" placeholder="dd-mm-YY" style="box-shadow: none;border-radius:0;">
                                     <span class="error-dob error text-warning"></span>
                                 </div>
                             </div>
@@ -229,7 +229,7 @@
                                         <p><span>Name:</span> ${value.name}</p>
                                         <p><span>Blood Group:</span> ${value.blood_group}</p>
                                         <p><span>Phone:</span> ${value.phone}</p>
-                                        <p><span>Gender:</span> ${value.gender}</p>
+                                        <p><span>Gender:</span> ${value.gender.charAt().toUpperCase()+value.gender.slice(1)}</p>
                                         </div>
                                     <div class="card-footer" style="background: none;border-top: 0;">    
                                         <p>${value.address}, ${value.city.name}</p>

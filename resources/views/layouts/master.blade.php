@@ -71,7 +71,7 @@
 <body class="antialiased">
     @include("layouts.frontend.navbar")
     <div class="container searchshow mt-4 d-none">
-        <div class="row">
+        <div class="row d-flex justify-content-center">
 
         </div>
     </div>

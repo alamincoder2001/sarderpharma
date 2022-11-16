@@ -238,7 +238,7 @@
                                 <div class="col-md-6 col-6">
                                     <div class="form-group">
                                         <label for="appointment_date" class="py-2">Appointment Date</label>
-                                        <input type="text" name="appointment_date" id="appointment_date" class="form-control" value="{{date('d/m/Y')}}">
+                                        <input type="text" name="appointment_date" id="appointment_date" class="form-control" value="{{date('d-m-Y')}}">
                                         <span class="error-appointment_date error text-danger"></span>
                                     </div>
                                 </div>
@@ -344,8 +344,9 @@
 <script>
     $(document).ready(() => {
         $("#appointment_date").datepicker({
-            dateFormat: "dd/mm/yy",
-            minDate: new Date()
+            format: "dd-mm-yyyy",
+            startDate: new Date(),
+            orientation: 'bottom'
         })
 
         $(".select2").select2({
