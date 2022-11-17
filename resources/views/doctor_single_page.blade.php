@@ -122,8 +122,6 @@
         display: none;
         margin: 6px !important;
     }
-
-
 </style>
 
 @section("content")
@@ -166,7 +164,7 @@
                         </ul>
                         </p>
                         @foreach($data->time as $t)
-                            <small>{{date("h:i a",strtotime($t->from))}}- {{date("h:i a",strtotime($t->to))}}, </small>
+                        <small>{{date("h:i a",strtotime($t->from))}}- {{date("h:i a",strtotime($t->to))}}, </small>
                         @endforeach
                         <br />
                         <small>Contact: +88 {{$data->phone}}</small>
@@ -297,30 +295,30 @@
                             <h4 class="fs-6 text-uppercase">Info</h4>
                         </div>
                         <div class="card-body">
-                            <h6>Consultant. Department of 
+                            <h6>Consultant. Department of
                                 @foreach($data->department as $dept)
                                 {{$dept->specialist->name}},
                                 @endforeach
                             </h6>
-                            <h5>
+                            <h5 style="font-size:14px;">
                                 @if(count($data->chamber) != 0)
-                                    @foreach($data->chamber->take(1) as $chamber)
-                                        {{$chamber->name}}
-                                    @endforeach
-                                @else
-                                    @if($data->hospital_id || $data->diagnostic_id)
-                                    {{$data->hospital_id?$data->hospital->name:$data->diagnostic->name}}
-                                    @endif
+                                @foreach($data->chamber->take(1) as $chamber)
+                                 <i class="fa fa-home"></i> {{$chamber->name}}
+                                @endforeach
                                 @endif
+                                <br>
+                                <i class="fa fa-hospital-o"></i> {{$data->hospital_id?$data->hospital->name:""}}
+                                <br>
+                                <i class="fa fa-plus-square-o"></i> {{$data->diagnostic_id?$data->diagnostic->name:""}}
                             </h5>
                             <div class="clearfix mb-2" style="border-bottom:1px solid #ddd"></div>
                             <div class="details-status">
-                                <span style="text-align: justify;">{!!$data->description!!}</span>
+                                <div style="text-align: justify;" id="description">{!!$data->description!!}</div>
                             </div>
                             <div class="clearfix my-2" style="border-bottom:1px solid #ddd"></div>
                             <div class="concentration">
                                 <h6>Field of Concentration:</h6>
-                                <span style="font-size: 13px;">{!!$data->concentration!!}</span>
+                                <div style="font-size: 13px;" id="concentration">{!!$data->concentration!!}</div>
                             </div>
                             <div class="clearfix my-2" style="border-bottom:1px solid #ddd"></div>
                             <div class="consultancy">
@@ -444,7 +442,7 @@
             event.preventDefault();
 
             var contact = $("#Appointment").find("#contact").val()
-            if(!Number(contact)){
+            if (!Number(contact)) {
                 $("#Appointment").find(".error-contact").text("Must be a number value")
                 return;
             }
@@ -468,11 +466,11 @@
                             $("#Appointment").find(".error-" + index).text(value);
                         })
                     } else if (response.errors) {
-                        if(changeName === "chamber"){
+                        if (changeName === "chamber") {
                             $("#Appointment").find(".chamber_id").text("Select Chamber Name")
-                        }else if(changeName === "hospital"){
+                        } else if (changeName === "hospital") {
                             $("#Appointment").find(".hospital_id").text("Select Hospital Name")
-                        }else{
+                        } else {
                             $("#Appointment").find(".diagnostic_id").text("Select Diagnostic Name")
                         }
                     } else {
@@ -500,7 +498,9 @@
             if (event.target.value) {
                 if (event.target.value.match(phoneno)) {
                     $("#Appointment").find(".error-contact").text("")
-                    $("#Appointment").find("#contact").css({borderBottom:"1px solid #b7b7b7"})
+                    $("#Appointment").find("#contact").css({
+                        borderBottom: "1px solid #b7b7b7"
+                    })
                     $.ajax({
                         url: "{{route('get.patient.details')}}",
                         method: "POST",
@@ -525,12 +525,16 @@
                         }
                     })
                 } else {
-                    $("#Appointment").find("#contact").css({borderBottom:"1px solid red"})
+                    $("#Appointment").find("#contact").css({
+                        borderBottom: "1px solid red"
+                    })
                     $("#Appointment").find(".error-contact").text("Not valid Number")
                 }
             } else {
                 $("#Appointment").find(".error-contact").text("")
-                $("#Appointment").find("#contact").css({borderBottom:"1px solid #b7b7b7"})
+                $("#Appointment").find("#contact").css({
+                    borderBottom: "1px solid #b7b7b7"
+                })
                 $("#email").val("")
                 $("#name").val("")
                 $("#age").val("")
@@ -543,5 +547,45 @@
             }
         })
     })
+    
+    var concentration = document.getElementById("concentration");
+    concentration.setAttribute('data-full', concentration.innerHTML);
+    if (concentration.innerText.length > 50) {
+        concentration.innerHTML = `${concentration.innerHTML.slice(0, 300)}...`;
+
+        const btn = document.createElement('button');
+        btn.innerText = 'Read more...';
+        btn.style.border = "none"
+        btn.style.float = "right"
+        btn.style.background = "none"
+        btn.setAttribute('onclick', 'displayConcentration(event)');
+        concentration.appendChild(btn);
+    }
+    const displayConcentration = (elem) => {
+        concentration.innerHTML = concentration.getAttribute('data-full');
+        concentration.style.height = "200px"
+        concentration.style.overflow = "scroll"
+        elem.target.remove();
+    };
+    // description
+    var description = document.getElementById("description");
+    description.setAttribute('data-full', description.innerHTML);
+    if (description.innerText.length > 50) {
+        description.innerHTML = `${description.innerHTML.slice(0, 300)}...`;
+
+        const btn = document.createElement('button');
+        btn.innerText = 'Read more...';
+        btn.style.border = "none"
+        btn.style.float = "right"
+        btn.style.background = "none"
+        btn.setAttribute('onclick', 'displayDescription(event)');
+        description.appendChild(btn);
+    }
+    const displayDescription = (elem) => {
+        description.innerHTML = description.getAttribute('data-full');
+        description.style.height = "150px"
+        description.style.overflow = "scroll"
+        elem.target.remove();
+    };
 </script>
 @endpush
