@@ -265,7 +265,7 @@
             <div class="col-md-6 mb-3 col-10 col-sm-10 col-lg-3">
                 <a class="text-decoration-none" href="{{route('singlepagedoctor', $item->doctor->id)}}">
                     <div class="card border-0" style="border-radius: 0;box-shadow:0px 0px 15px 0px #c5c1c1;">
-                        <img src="{{asset($item->doctor->image)}}" class="card-img-top" alt="...">
+                        <img src="{{asset($item->doctor->image?$item->doctor->image:'frontend/nodoctorimage.png')}}" class="card-img-top" alt="...">
                         <div class="card-body text-center">
                             <p style="color:#f59217;font-size: 15px;font-weight: 500;">{{$item->doctor->name}}</p>
                             <h5 class="card-title">
@@ -591,7 +591,7 @@
                                 <div class="col-md-6 mb-3 col-10 col-sm-10 col-lg-3">
                                     <a class="text-decoration-none" href="/single-details-doctor/${value.doctor.id}">
                                     <div class="card border-0" style="border-radius: 0;box-shadow:0px 0px 15px 0px #c5c1c1;">
-                                            <img src="${window.location.protocol+"/"+value.doctor.image}" class="card-img-top" alt="...">
+                                            <img src="${value.doctor.image!=0?location.origin+"/"+value.doctor.image:location.origin+'/frontend/nodoctorimage.png'}" class="card-img-top" alt="...">
                                             <div class="card-body text-center">
                                                 <p style="color:#f59217;font-size: 15px;font-weight: 500;">${value.doctor.name}</p>
                                                 <h5 class="card-title">${value.specialist.name}</h5>

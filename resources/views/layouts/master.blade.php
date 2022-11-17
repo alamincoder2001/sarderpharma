@@ -280,7 +280,7 @@
                             <div class="card-header pl-md-1 pt-md-1 bg-body"> 
                                 <div class="row">
                                     <div class="col-md-5 col-5 p-md-0">
-                                        <img src="${value.image}" class="card-img-top">
+                                        <img src="${value.image!=0?location.origin+"/"+value.image:location.origin+'/frontend/nodoctorimage.png'}" class="card-img-top">
                                     </div>
                                     <div class="col-md-7 col-7 mt-md-2 pe-md-0">
                                         <h5 class="text-uppercase">${value.name}</h5>
