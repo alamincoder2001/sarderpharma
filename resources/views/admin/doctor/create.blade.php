@@ -80,17 +80,17 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="form-group">
-                                    <label for="availability">Availability Day <small class="text-danger">*</small></label>
+                                    <label for="day">Availability Day <small class="text-danger">*</small></label>
                                     <div class="input-group gap-2">
-                                        <input type="checkbox" id="sat" name="availability[]" value="sat" /><label>Saturday</label>
-                                        <input type="checkbox" id="sun" name="availability[]" value="sun" /><label>Sunday</label>
-                                        <input type="checkbox" id="mon" name="availability[]" value="mon" /><label>Monday</label>
-                                        <input type="checkbox" id="tue" name="availability[]" value="tue" /><label>Tuesday</label><br>
-                                        <input type="checkbox" id="wed" name="availability[]" value="wed" /><label>Wednessday</label>
-                                        <input type="checkbox" id="thu" name="availability[]" value="thu" /><label>Thursday</label>
-                                        <input type="checkbox" id="fri" name="availability[]" value="fri" /><label>Friday</label>
+                                        <input type="checkbox" id="sat" onchange="DayWiseTime(event)" name="day[]" value="Saturday" /><label for="sat">Saturday</label>
+                                        <input type="checkbox" id="sun" onchange="DayWiseTime(event)" name="day[]" value="Sunday" /><label for="sun">Sunday</label>
+                                        <input type="checkbox" id="mon" onchange="DayWiseTime(event)" name="day[]" value="Monday" /><label for="mon">Monday</label>
+                                        <input type="checkbox" id="tue" onchange="DayWiseTime(event)" name="day[]" value="Tuesday" /><label for="tue">Tuesday</label><br>
+                                        <input type="checkbox" id="wed" onchange="DayWiseTime(event)" name="day[]" value="Wednessday" /><label for="wed">Wednessday</label>
+                                        <input type="checkbox" id="thu" onchange="DayWiseTime(event)" name="day[]" value="Thursday" /><label for="thu">Thursday</label>
+                                        <input type="checkbox" id="fri" onchange="DayWiseTime(event)" name="day[]" value="Friday" /><label for="fri">Friday</label>
                                     </div>
-                                    <span class="error-availability error text-danger"></span>
+                                    <span class="error-day error text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-4">
@@ -108,13 +108,8 @@
                                 </div>
                             </div>
                             <div class="col-4">
-                                <label for="">Time <i class="fa fa-plus" onclick="TimeAdd()"></i></label>
+                                <label for="">Time</label>
                                 <div class="timeadd">
-                                    <div class="input-group">
-                                        <input type="time" id="from" name="from[]" class="form-control">
-                                        <input type="time" id="to" name="to[]" class="form-control">
-                                        <button type="button" class="btn btn-danger">remove</button>
-                                    </div>
                                 </div>
                                 <span class="error-time error text-danger"></span>
                             </div>
@@ -383,17 +378,6 @@
         })
     })
 
-    function TimeAdd() {
-        var row = `
-            <div class="input-group">
-                <input type="time" id="from" name="from[]" class="form-control">
-                <input type="time" id="to" name="to[]" class="form-control">
-                <button type="button" class="btn btn-danger removeTime">remove</button>
-            </div>
-        `
-        $(".timeadd").append(row)
-    }
-
     function phoneAdd() {
         var row = `
             <div class="input-group">
@@ -404,12 +388,22 @@
         $(".phoneadd").append(row)
     }
 
-    $(document).on("click", ".removeTime", event => {
-        event.target.offsetParent.remove();
-    })
-
     $(document).on("click", ".removePhone", event => {
         event.target.offsetParent.remove();
     })
+
+    function DayWiseTime(event) {
+        if (event.target.checked) {
+            var row = `
+                <div class="input-group ${event.target.value}">
+                    <input type="time" id="from" name="from[]" class="form-control">
+                    <input type="time" id="to" name="to[]" class="form-control">
+                </div>
+            `
+            $(".timeadd").append(row)
+        } else {
+          $(".timeadd ."+event.target.value).remove();
+        }
+    }
 </script>
 @endpush

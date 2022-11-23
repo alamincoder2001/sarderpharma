@@ -74,18 +74,21 @@
                                 <span class="error-second_fee error text-danger"></span>
                             </div>
                             <div class="col-md-8">
+                            @php
+                                $timedaycheck = $data->time->pluck("day")->toArray();
+                            @endphp 
                                 <div class="form-group">
-                                    <label for="availability">Availability Day <small class="text-danger">*</small></label>
+                                    <label for="day">Availability Day <small class="text-danger">*</small></label>
                                     <div class="input-group gap-2">
-                                        <input type="checkbox" id="sat" {{in_array("sat", $avail)?"checked":""}} name="availability[]" value="sat" /><label>Saturday</label>
-                                        <input type="checkbox" id="sun" {{in_array("sun", $avail)?"checked":""}} name="availability[]" value="sun" /><label>Sunday</label>
-                                        <input type="checkbox" id="mon" {{in_array("mon", $avail)?"checked":""}} name="availability[]" value="mon" /><label>Monday</label>
-                                        <input type="checkbox" id="tue" {{in_array("tue", $avail)?"checked":""}} name="availability[]" value="tue" /><label>Tuesday</label><br>
-                                        <input type="checkbox" id="wed" {{in_array("wed", $avail)?"checked":""}} name="availability[]" value="wed" /><label>Wednessday</label>
-                                        <input type="checkbox" id="thu" {{in_array("thu", $avail)?"checked":""}} name="availability[]" value="thu" /><label>Thursday</label>
-                                        <input type="checkbox" id="fri" {{in_array("fri", $avail)?"checked":""}} name="availability[]" value="fri" /><label>Friday</label>
+                                        <input type="checkbox" onchange="DayWiseTime(event)" id="sat" {{in_array("Saturday", $timedaycheck)?"checked":""}} name="day[]" value="Saturday" /><label for="sat">Saturday</label>
+                                        <input type="checkbox" onchange="DayWiseTime(event)" id="sun" {{in_array("Sunday", $timedaycheck)?"checked":""}} name="day[]" value="Sunday" /><label for="sun">Sunday</label>
+                                        <input type="checkbox" onchange="DayWiseTime(event)" id="mon" {{in_array("Monday", $timedaycheck)?"checked":""}} name="day[]" value="Monday" /><label for="mon">Monday</label>
+                                        <input type="checkbox" onchange="DayWiseTime(event)" id="tue" {{in_array("Tuesday", $timedaycheck)?"checked":""}} name="day[]" value="Tuesday" /><label for="tue">Tuesday</label><br>
+                                        <input type="checkbox" onchange="DayWiseTime(event)" id="wed" {{in_array("Wednessday", $timedaycheck)?"checked":""}} name="day[]" value="Wednessday" /><label for="wed">Wednessday</label>
+                                        <input type="checkbox" onchange="DayWiseTime(event)" id="thu" {{in_array("Thursday", $timedaycheck)?"checked":""}} name="day[]" value="Thursday" /><label for="thu">Thursday</label>
+                                        <input type="checkbox" onchange="DayWiseTime(event)" id="fri" {{in_array("Friday", $timedaycheck)?"checked":""}} name="day[]" value="Friday" /><label for="fri">Friday</label>
                                     </div>
-                                    <span class="error-availability error text-danger"></span>
+                                    <span class="error-day error text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-4">
@@ -107,13 +110,12 @@
                                 </div>
                             </div>
                             <div class="col-4">
-                                <label for="">Time <i class="fa fa-plus" onclick="TimeAdd()"></i></label>
+                                <label for="">Time</label>
                                 <div class="timeadd">
                                     @foreach($data->time as $item)
-                                    <div class="input-group">
+                                    <div class="input-group {{$item->day}}">
                                         <input type="time" id="from" name="from[]" class="form-control" value="{{$item->from}}">
                                         <input type="time" id="to" name="to[]" class="form-control" value="{{$item->to}}">
-                                        <button type="button" class="btn btn-danger removeTime">remove</button>
                                     </div>
                                     @endforeach
                                 </div>
@@ -356,17 +358,6 @@
         })
     })
 
-    function TimeAdd() {
-        var row = `
-            <div class="input-group">
-                <input type="time" id="from" name="from[]" class="form-control">
-                <input type="time" id="to" name="to[]" class="form-control">
-                <button type="button" class="btn btn-danger removeTime">remove</button>
-            </div>
-        `
-        $(".timeadd").append(row)
-    }
-
     function phoneAdd() {
         var row = `
             <div class="input-group">
@@ -377,12 +368,22 @@
         $(".phoneadd").append(row)
     }
 
-    $(document).on("click", ".removeTime", event => {
-        event.target.offsetParent.remove();
-    })
-
     $(document).on("click", ".removePhone", event => {
         event.target.offsetParent.remove();
     })
+
+    function DayWiseTime(event) {
+        if (event.target.checked) {
+            var row = `
+                <div class="input-group ${event.target.value}">
+                    <input type="time" id="from" name="from[]" class="form-control">
+                    <input type="time" id="to" name="to[]" class="form-control">
+                </div>
+            `
+            $(".timeadd").append(row)
+        } else {
+          $(".timeadd ."+event.target.value).remove();
+        }
+    }
 </script>
 @endpush

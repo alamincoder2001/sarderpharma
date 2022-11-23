@@ -76,6 +76,7 @@ $access = App\Models\UserAccess::where('user_id', Auth::guard('admin')->user()->
                                     <option value="NICU">Non ICU Ambulance</option>
                                     <option value="Freezing">Freezing Ambulance</option>
                                     <option value="AC">AC Ambulance</option>
+                                    <option value="NON-AC">Non AC Ambulance</option>
                                 </select>
                                 <span class="error-ambulance_type text-danger error"></span>
                             </div>

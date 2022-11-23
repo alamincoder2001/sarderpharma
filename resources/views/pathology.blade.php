@@ -73,7 +73,7 @@ $data = App\Models\Test::orderBy("name")->get();
                 <div class="col-md-6">
                     <ul>
                         @foreach($data as $item)
-                        <li>{{$item->name}}</li>
+                        <li class="text-capitalize">{{$item->name}}</li>
                         @endforeach
                     </ul>
                 </div>

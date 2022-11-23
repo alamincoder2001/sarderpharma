@@ -327,25 +327,6 @@ nav ul li a {
     font-size: inherit;
 }
 
-.list ul li {
-    background: #ab0000;
-    padding: 6px 15px;
-    color: #fff;
-    text-transform: uppercase;
-    font-size: 12px;
-    cursor: pointer;
-}
-
-.list ul button {
-    background: #ab0000;
-    padding: 6px 15px;
-    color: #fff;
-    text-transform: uppercase;
-    font-size: 12px;
-    cursor: pointer;
-    border: none;
-}
-
 /* facilities style */
 #facilities {
     padding: 55px 0;
@@ -414,7 +395,7 @@ nav ul li a {
 }
 
 #footer .input-group input {
-    padding: 5px;
+    padding: 5px 8px;
     outline: none;
     border: 1px solid #dddddd;
     box-shadow: none;
@@ -424,8 +405,9 @@ nav ul li a {
 #footer button {
     border: none;
     padding: 7px 10px;
-    background: green;
+    background: #283290;
     color: white;
+    width: 10%;
 }
 
 /* doctor-details */
@@ -490,16 +472,18 @@ nav ul li a {
 /* bottom button */
 .positionabsolute {
     position: fixed;
-    bottom: 68px;
-    right: 35px;
+    bottom: 105px;
+    right: 33px;
     background: #283290;
-    padding: 10px;
+    padding: 10px 14px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #fff;
     cursor: pointer;
     display: none;
+    border-radius: 50%;
+    z-index: 999999;
 }
 
 .positionabsolute i {

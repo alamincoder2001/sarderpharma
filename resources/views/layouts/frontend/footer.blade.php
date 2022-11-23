@@ -31,9 +31,12 @@
                     </ul>
                 </div>
             </div>
+            @php
+                $contact = App\Models\Contact::first();    
+            @endphp
             <div class="col-md-4 col-12">
                 <h2 class="text-uppercase text-secondary">Our Location</h2>
-                <p class="mb-4 text-dark">The Suithouse V303, Kuningan City, Jakarta Indonesia 12940</p>
+                <p class="mb-4 text-dark text-capitalize">{{$contact->address}}, {{$contact->phone}}</p>
                 <div class="footer-body">
                     <h4 class="text-secondary">News Letter</h4>
                     <div class="news-letter">

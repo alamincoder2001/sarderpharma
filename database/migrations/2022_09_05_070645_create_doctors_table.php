@@ -25,7 +25,6 @@ class CreateDoctorsTable extends Migration
             $table->text("description")->nullable();
             $table->string("image")->nullable();
             //address details
-            $table->string("availability");
             $table->string("phone");
             $table->string("first_fee");
             $table->string("second_fee");

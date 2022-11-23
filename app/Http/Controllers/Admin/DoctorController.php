@@ -68,7 +68,7 @@ class DoctorController extends Controller
                 'username' => "required|unique:hospitals",
                 'department_id' => "required",
                 'city_id' => "required",
-                'availability' => "required",
+                'day' => "required",
                 'phone' => "required",
                 'concentration' => "required",
                 'first_fee' => "required|numeric",
@@ -88,7 +88,6 @@ class DoctorController extends Controller
                 $data->education = $request->education;
 
                 $data->city_id = $request->city_id;
-                $data->availability = implode(",", $request->availability);
                 $data->phone = implode(",", $request->phone);
                 $data->first_fee = $request->first_fee;
                 $data->second_fee = $request->second_fee;
@@ -114,10 +113,11 @@ class DoctorController extends Controller
                 }
                 if (!empty($request->from)) {
                     foreach ($request->from as $key => $item) {
-                        $t = new Sittime();
+                        $t            = new Sittime();
                         $t->doctor_id = $data->id;
-                        $t->from = $item;
-                        $t->to = $request->to[$key];
+                        $t->day       = $request->day[$key];
+                        $t->from      = $item;
+                        $t->to        = $request->to[$key];
                         $t->save();
                     }
                 }
@@ -146,28 +146,27 @@ class DoctorController extends Controller
         }
 
         $data = Doctor::with("chamber", "time")->find($id);
-        $avail = explode(",", $data->availability);
         $hospitals = DB::table("hospitals")->orderBy("id", "DESC")->get();
         $departments = DB::table("departments")->orderBy("id", "DESC")->get();
         $diagnostics = DB::table("diagnostics")->orderBy("id", "DESC")->get();
-        return view("admin.doctor.edit", compact("data", 'avail', "hospitals", "diagnostics", "departments"));
+        return view("admin.doctor.edit", compact("data", "hospitals", "diagnostics", "departments"));
     }
 
     public function update(Request $request)
     {
         try {
             $validator = Validator::make($request->all(), [
-                'name' => "required|max:255",
-                'email' => "required|email",
-                'education' => "required",
-                'username' => "required|unique:hospitals,username," . $request->id,
+                'name'          => "required|max:255",
+                'email'         => "required|email",
+                'education'     => "required",
+                'username'      => "required|unique:hospitals,username," . $request->id,
                 'department_id' => "required",
-                'city_id' => "required",
-                'availability' => "required",
-                'phone' => "required",
+                'city_id'       => "required",
+                'day'           => "required",
+                'phone'         => "required",
                 'concentration' => "required",
-                'first_fee' => "required|numeric",
-                'second_fee' => "required|numeric",
+                'first_fee'     => "required|numeric",
+                'second_fee'    => "required|numeric",
             ]);
 
             if ($validator->fails()) {
@@ -189,7 +188,6 @@ class DoctorController extends Controller
                 }
                 $data->education = $request->education;
                 $data->city_id = $request->city_id;
-                $data->availability = implode(",", $request->availability);
                 $data->phone = implode(",", $request->phone);
                 $data->first_fee = $request->first_fee;
                 $data->second_fee = $request->second_fee;
@@ -225,10 +223,11 @@ class DoctorController extends Controller
                 Sittime::where("doctor_id", $request->id)->delete();
                 if (!empty($request->from)) {
                     foreach ($request->from as $key => $item) {
-                        $t = new Sittime();
+                        $t            = new Sittime();
                         $t->doctor_id = $request->id;
-                        $t->from = $item;
-                        $t->to = $request->to[$key];
+                        $t->day      = $request->day[$key];
+                        $t->from      = $item;
+                        $t->to        = $request->to[$key];
                         $t->save();
                     }
                 }

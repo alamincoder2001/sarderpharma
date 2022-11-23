@@ -89,7 +89,7 @@
         <div class="row d-flex justify-content-center doctorbody">
             @foreach($data["doctor"] as $item)
             <div class="col-md-6 col-10 col-sm-6 col-lg-4 mb-4">
-                <div class="card aboutdoctor" style="font-size-adjust: 0.58;">
+                <div class="card aboutdoctor" style="font-size-adjust: 0.58; height:320px;">
                     <div class="card-header pl-md-1 pt-md-1 bg-body">
                         <div class="row">
                             <div class="col-md-5 col-5 p-md-0">
@@ -136,7 +136,7 @@
                                 @endif
                             </span>
                         </div>
-                        <div class="available">
+                        <!-- <div class="available">
                             <div class="time d-flex align-items-center gap-1">
                                 <i class="fa fa-clock-o"></i><span class="text-uppercase">Availability:</span>
                             </div>
@@ -146,7 +146,7 @@
                                 @endforeach
                             </ul>
                             <small class="text-uppercase" style="margin-left: 16px;">{{date("h:i a",strtotime(count($item->time)!=0?$item->time[0]->from:""))}}-{{date("h:i a",strtotime(count($item->time)!=0?$item->time[0]->to:""))}}</small>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="card-footer d-flex gap-2">
                         <a href="{{route('singlepagedoctor', $item->id)}}" target="_blank" class="btn btn-primary btn-sm text-uppercase">View Profile</a>

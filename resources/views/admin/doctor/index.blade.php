@@ -45,7 +45,11 @@
                             <td>{{$item->phone}}</td>
                             <td>{{$item->first_fee}}</td>
                             <td>{{$item->second_fee}}</td>
-                            <td>{{$item->availability}}</td>
+                            <td>
+                                @foreach($item->time as $day)
+                                    {{$day->day}},
+                                @endforeach
+                            </td>
                             <td>
                                 @foreach($item->time as $t)
                                 {{date("h:i a", strtotime($t->from))}}-{{date("h:i a", strtotime($t->to))}}

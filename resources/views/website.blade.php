@@ -32,6 +32,22 @@
         background: linear-gradient(45deg, #0718e7, #00a10c) !important;
     }
 
+    .department {
+        border: none;
+        border-radius: 15px;
+        width: 100%;
+        height: 110px;
+        display: flex;
+        align-items: center;
+        background: #050d6ceb;
+        text-align: center;
+        color: white;
+        cursor: pointer;
+        text-transform: uppercase;
+        font-family: sans-serif;
+
+    }
+
     /* select 2 style */
     .select2-container--default .select2-selection--single {
         border: 0 !important;
@@ -239,43 +255,31 @@
 
 <!-- doctor section -->
 
-<section id="doctor" style="background: #DDDDDD;">
+<section style="padding:55px 0; background: #DDDDDD;">
     <div class="container">
         <div class="doctor-header">
-            <h2 class="text-uppercase text-center">Doctors</h2>
+            <h2 class="text-uppercase text-center mb-5">Specialist</h2>
         </div>
         <div class="row">
-            <div class="col-md-12">
-                <div class="list">
-                    <ul>
-                        <button style="background: #002a68;" class="department item departments">All</button>
-                        @foreach($departments->take(8) as $item)
-                        <button style="background: #002a68;" value="{{$item->id}}" class="department item{{$item->id}}">{{$item->name}}</button>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="Loading1 text-center d-none">
-            <img src="{{asset('loading.gif')}}" width="350px">
-        </div>
-        <div class="row d-flex justify-content-center addDepartment mt-3">
-
-            @foreach($data["specialist"] as $item)
-            <div class="col-md-6 mb-3 col-10 col-sm-10 col-lg-3">
-                <a class="text-decoration-none" href="{{route('singlepagedoctor', $item->doctor->id)}}">
-                    <div class="card border-0" style="border-radius: 0;box-shadow:0px 0px 15px 0px #c5c1c1;">
-                        <img src="{{asset($item->doctor->image?$item->doctor->image:'frontend/nodoctorimage.png')}}" class="card-img-top" alt="...">
-                        <div class="card-body text-center">
-                            <p style="color:#f59217;font-size: 15px;font-weight: 500;">{{$item->doctor->name}}</p>
-                            <h5 class="card-title">
-                                {{$item->specialist->name}}
-                            </h5>
+            @foreach($departments as $item)
+            <!-- style="background: #002a68;" value="{{$item->id}}" class="department item{{$item->id}}" -->
+            <div class="col-6 col-lg-2">
+                <a onclick="departmentWiseDoctor(event, {{$item->id}})">
+                    <div class="card department item{{$item->id}} mb-4">
+                        <div class="card-body d-flex align-items-center">
+                            <p>{{$item->name}}</p>
                         </div>
                     </div>
                 </a>
             </div>
             @endforeach
+        </div>
+
+        <div class="borderShow d-none" style="border-top: 3px dotted #c5c3c3;padding-top: 5px;"></div>
+        <div class="Loading1 text-center d-none">
+            <img src="{{asset('loading.gif')}}" width="350px">
+        </div>
+        <div class="row d-flex justify-content-center addDepartment">
         </div>
     </div>
 </section>
@@ -565,49 +569,6 @@
                 }
             })
         }
-
-        // departmentwise doctor filter
-        $(".department").on("click", (event) => {
-            if (event.target.value !== 0) {
-                $(".department").removeClass("departments")
-                $(".item" + event.target.value).addClass("departments")
-            } else {
-                $(".department").removeClass("departments")
-                $(".item").addClass("departments")
-            }
-            $.ajax({
-                url: "{{route('home.filter')}}",
-                method: "POST",
-                data: {
-                    department_id: event.target.value
-                },
-                beforeSend: () => {
-                    $(".addDepartment").html("")
-                    $(".Loading1").removeClass("d-none")
-                },
-                success: response => {
-                    $.each(response, (index, value) => {
-                        let row = `
-                                <div class="col-md-6 mb-3 col-10 col-sm-10 col-lg-3">
-                                    <a class="text-decoration-none" href="/single-details-doctor/${value.doctor.id}">
-                                    <div class="card border-0" style="border-radius: 0;box-shadow:0px 0px 15px 0px #c5c1c1;">
-                                            <img src="${value.doctor.image!=0?location.origin+"/"+value.doctor.image:location.origin+'/frontend/nodoctorimage.png'}" class="card-img-top" alt="...">
-                                            <div class="card-body text-center">
-                                                <p style="color:#f59217;font-size: 15px;font-weight: 500;">${value.doctor.name}</p>
-                                                <h5 class="card-title">${value.specialist.name}</h5>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                `;
-                        $(".addDepartment").append(row)
-                    })
-                },
-                complete: () => {
-                    $(".Loading1").addClass("d-none")
-                }
-            })
-        })
     })
 
     function Doctor(index, value) {
@@ -774,6 +735,46 @@
         $("#facilities").addClass("d-none")
         $("#testmonial").addClass("d-none")
         $("#corporate").addClass("d-none")
+    }
+
+
+    // departmentwise doctor filter
+    function departmentWiseDoctor(event, id) {
+        $(".department").removeClass("departments")
+        $(".item" + id).addClass("departments")
+        $(".borderShow").removeClass("d-none")
+        $.ajax({
+            url: "{{route('home.filter')}}",
+            method: "POST",
+            data: {
+                department_id: id
+            },
+            beforeSend: () => {
+                $(".addDepartment").html("")
+                $(".Loading1").removeClass("d-none")
+            },
+            success: response => {
+                $.each(response, (index, value) => {
+                    let row = `
+                            <div class="col-md-6 mb-3 col-10 col-sm-10 col-lg-3">
+                                <a class="text-decoration-none" href="/single-details-doctor/${value.doctor.id}">
+                                <div class="card border-0" style="border-radius: 0;box-shadow:0px 0px 15px 0px #c5c1c1;">
+                                        <img src="${value.doctor.image!=0?location.origin+"/"+value.doctor.image:location.origin+'/frontend/nodoctorimage.png'}" class="card-img-top" alt="...">
+                                        <div class="card-body text-center">
+                                            <p style="color:#f59217;font-size: 15px;font-weight: 500;">${value.doctor.name}</p>
+                                            <h5 class="card-title">${value.specialist.name}</h5>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            `;
+                    $(".addDepartment").append(row)
+                })
+            },
+            complete: () => {
+                $(".Loading1").addClass("d-none")
+            }
+        })
     }
 </script>
 @endpush

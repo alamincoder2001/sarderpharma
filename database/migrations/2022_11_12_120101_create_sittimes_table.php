@@ -16,6 +16,7 @@ class CreateSittimesTable extends Migration
         Schema::create('sittimes', function (Blueprint $table) {
             $table->id();
             $table->foreignId("doctor_id")->constrained("doctors", "id")->onDelete("cascade");
+            $table->string("day");
             $table->string("from");
             $table->string("to");
             $table->timestamps();
