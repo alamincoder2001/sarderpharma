@@ -1,6 +1,7 @@
 @extends("layouts.master")
 @push("js")
 <style>
+    /* =========== select doctor ============ */
     .select2-container--default .select2-selection--single {
         border: 0 !important;
         border-radius: 0;
@@ -34,6 +35,33 @@
         color: #9b9b9b !important;
         line-height: 29px !important;
         padding-left: 20px !important;
+    }
+
+
+    /* =========== doctor card design ============ */
+    .doctor_details .card {
+        transition: 2ms ease-in-out;
+    }
+
+    .doctor_details .card:hover {
+        border: 1px solid #d9d9d9 !important;
+        box-shadow: 5px 3px 0px 3px #81818130 !important;
+    }
+
+    .doctor_department {
+        text-decoration: none;
+        display: block;
+        list-style: none;
+        padding: 4px;
+        font-family: auto;
+        margin-bottom: 5px;
+        border-bottom: 1px dashed #d1d1d1;
+        color: #626262;
+        transition: 2ms ease-in-out;
+    }
+
+    .doctor_department:hover {
+        color: red !important;
     }
 </style>
 @endpush
@@ -83,80 +111,46 @@
             </div>
         </div>
 
-        <div class="Loading text-center d-none">
-            <img src="{{asset('loading.gif')}}" width="350px">
-        </div>
-        <div class="row d-flex justify-content-center doctorbody">
-            @foreach($data["doctor"] as $item)
-            <div class="col-md-6 col-10 col-sm-6 col-lg-4 mb-4">
-                <div class="card aboutdoctor" style="font-size-adjust: 0.58; height:320px;">
-                    <div class="card-header pl-md-1 pt-md-1 bg-body">
-                        <div class="row">
-                            <div class="col-md-5 col-5 p-md-0">
-                                <img src="{{asset($item->image?$item->image:'frontend/nodoctorimage.png')}}" class="card-img-top">
-                            </div>
-                            <div class="col-md-7 col-7 mt-md-2 pe-md-0">
-                                <h5 class="text-uppercase">{{$item->name}}</h5>
-                                <div class="speciality">
-                                    <span>
-                                        @foreach($item->department->take(1) as $dept)
-                                            {{$dept->specialist->name}}
-                                        @endforeach
-                                    </span>
-                                </div>
-                                <h6 class="text-capitalize">{{$item->education}}</h6>
-                            </div>
-                        </div>
+        <div class="row m-lg-0" style="border: 1px solid #e5e5e5;">
+            <div class="col-12 col-lg-3 p-lg-0">
+                <div class="card" style="border-radius: 0;height:100%;">
+                    <div class="card-header" style="border: none;border-radius: 0;background: #e3e3e3;">
+                        <h6 class="card-title text-uppercase" style="color:#832a00;">Department List</h6>
                     </div>
-                    <div class="card-body" style="padding-top: 8px;">
-                        <div class="location mb-1 d-flex justify-content-start align-item-center gap-1">
-                            @if(count($item->chamber) != 0)
-                            <i class="fa fa-home"></i> <span class="text-uppercase">
-                                @foreach($item->chamber->take(1) as $chamber)
-                                {{$chamber->name}}
-                                @endforeach
-                            </span>
-                            @else
-                            @if($item->hospital_id || $item->diagnostic_id)
-                            <i class="fa {{$item->hospital_id?'fa-hospital-o':'fa-plus-square'}}"></i> <span class="text-uppercase">{{$item->hospital_id?$item->hospital->name:$item->diagnostic->name}}</span>
-                            @endif
-                            @endif
-                        </div>
-                        <div class="location d-flex justify-content-start align-item-center gap-1">
-                            <i class="fa fa-map-marker"></i>
-                            <span style="padding-left: 3px;">
-                                @if(count($item->chamber) != 0)
-                                    @foreach($item->chamber->take(1) as $chamber)
-                                    {{$chamber->address}}
-                                    @endforeach
-                                @else
-                                @if($item->hospital_id || $item->diagnostic_id)
-                                {{$item->hospital_id ? $item->hospital->address:$item->diagnostic->address}}, {{$item->hospital_id ? $item->hospital->city->name:$item->diagnostic->city->name}}
-                                @endif
-                                @endif
-                            </span>
-                        </div>
-                        <!-- <div class="available">
-                            <div class="time d-flex align-items-center gap-1">
-                                <i class="fa fa-clock-o"></i><span class="text-uppercase">Availability:</span>
-                            </div>
-                            <ul>
-                                @foreach(explode(",", $item->availability) as $availity)
-                                <li>{{ucwords($availity)}}</li>
-                                @endforeach
-                            </ul>
-                            <small class="text-uppercase" style="margin-left: 16px;">{{date("h:i a",strtotime(count($item->time)!=0?$item->time[0]->from:""))}}-{{date("h:i a",strtotime(count($item->time)!=0?$item->time[0]->to:""))}}</small>
-                        </div> -->
-                    </div>
-                    <div class="card-footer d-flex gap-2">
-                        <a href="{{route('singlepagedoctor', $item->id)}}" target="_blank" class="btn btn-primary btn-sm text-uppercase">View Profile</a>
-                        <a href="{{route('singlepagedoctor', $item->id)}}" target="_blank" class="btn btn-danger btn-sm text-uppercase">Quick Appoinment</a>
+                    <div class="card-body">
+                        @foreach($departments as $item)
+                        <a href="{{route('doctor.details',strtolower($item->name))}}" class="doctor_department">{{mb_strimwidth($item->name, 0, 35, "...")}}</a>
+                        @endforeach
                     </div>
                 </div>
             </div>
-            @endforeach
+            <div class="col-12 col-lg-9 doctor_details">
+                <div class="Loading text-center d-none">
+                    <img src="{{asset('loading.gif')}}" width="350px">
+                </div>
+                <div class="row py-2 doctorbody">
+                    @foreach($data['specialist'] as $item)
+                    <div class="col-12 col-lg-6 mb-3">
+                        <a href="{{route('singlepagedoctor', $item->doctor->id)}}" target="_blank" class="text-decoration-none text-secondary" title="{{$item->doctor->name}}">
+                            <div class="card" style="border-radius: 0;border: 0;font-family: auto;box-shadow: 0px 0px 8px 0px #bfbfbfbf;height:130px;">
+                                <div class="card-body d-flex" style="padding: 5px;gap: 8px;">
+                                    <div class="image" style="border: 1px dotted #ababab;height: 110px;margin-top: 4px;">
+                                        <img src="{{asset($item->doctor->image? $item->doctor->image:'/uploads/nouserimage.png')}}" width="100" height="100%">
+                                    </div>
+                                    <div class="info" style="padding-right:5px;">
+                                        <h6>{{$item->doctor->name}}</h6>
+                                        <p style="color:#c99913;">{{$item->specialist->name}}, {{$item->doctor->city->name}}</p>
+                                        <p style="border-top: 2px dashed #dddddd85;text-align:justify;">{{mb_strimwidth($item->doctor->education, 0, 100, "...")}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    @endforeach
 
-            {{$data['doctor']->render()}}
+                    {{$data['specialist']->links('vendor.pagination.simple-bootstrap-4')}}
+                </div>
+            </div>
         </div>
 
     </div>
@@ -281,49 +275,22 @@
     })
 
     function Row(index, value) {
-        
-        var row = `<div class="col-md-6 col-10 col-sm-6 col-lg-4 mb-4">
-                <div class="card aboutdoctor">
-                    <div class="card-header pl-md-1 pt-md-1 bg-body">
-                        <div class="row">
-                            <div class="col-md-5 col-5 p-md-0">
-                                <img src="${value.image}" class="card-img-top">
+        var row = `
+            <div class="col-12 col-lg-6 mb-3">
+                <a href="/single-details-doctor/${value.id}" target="_blank" class="text-decoration-none text-secondary" title="${value.name}">
+                    <div class="card" style="border-radius: 0;border: 0;font-family: auto;box-shadow: 0px 0px 8px 0px #bfbfbfbf;height:130px;">
+                        <div class="card-body d-flex" style="padding: 5px;gap: 8px;">
+                            <div class="image" style="border: 1px dotted #ababab;height: 110px;margin-top: 4px;">
+                                <img height="100%" src="${value.image != 0?location.origin+"/"+value.image:location.origin+'/uploads/nouserimage.png'}" width="100">
                             </div>
-                            <div class="col-md-7 col-7 mt-md-2 pe-md-0">
-                                <h5 class="text-uppercase">${value.name}</h5>
-                                <div class="speciality">
-                                    <span>${value.department.length != 0?value.department[0].specialist.name:""}</span>
-                                </div>
-                                <h6 class="text-capitalize">${value.education}</h6>
+                            <div class="info" style="padding-right:5px;">
+                                <h6>${value.name}</h6>
+                                <p style="color:#c99913;">${value.department.length > 0 ? value.department[0].specialist.name:''}, ${value.city.name}</p>
+                                <p style="border-top: 2px dashed #dddddd85;text-align:justify;">${value.education}</p>
                             </div>
                         </div>
                     </div>
-                    <div class="card-body" style="padding-top: 8px;">
-                        <div class="location mb-1 d-flex justify-content-start align-item-center gap-2">
-                            ${value.chamber.length != 0?'<i class="fa fa-home"></i> <span class="text-uppercase">'+value.chamber[0].name+'</span>':value.hospital_id?'<i class="fa fa-hospital-o"></i> <span class="text-uppercase">'+value.hospital.name+'</span>':'<i class="fa fa-plus-square"></i> <span class="text-uppercase">'+value.diagnostic.name+'</span>'}
-                        </div>
-                        <div class="location d-flex justify-content-start align-item-center gap-2">
-                            <i class="fa fa-map-marker"></i>
-                            <span>
-                            ${value.chamber.length != 0?value.chamber[0].address+", "+value.city.name:value.hospital_id?value.hospital.address+", "+value.city.name:value.diagnostic.address+", "+value.city.name}
-                            </span>
-                        </div>
-                        <div class="available">
-                            <div class="time d-flex align-items-center gap-1">
-                                <i class="fa fa-clock-o"></i><span class="text-uppercase">Availability:</span>
-                                
-                            </div>
-                            <ul>
-                                <li>${value.availability.replaceAll(",", " ").toUpperCase()}</li>
-                            </ul>
-                            <small class="text-uppercase" style="margin-left: 16px;">${moment(value.time.length!=0?value.time[0].from:"", "h:m A").format('LT')} - ${moment(value.time.length!=0?value.time[0].to:"", "h:m A").format('LT')}</small>
-                        </div>
-                    </div>
-                    <div class="card-footer d-flex gap-2">
-                        <a href="/single-details-doctor/${value.id}" target="_blank" class="btn btn-primary btn-sm text-uppercase">View Profile</a>
-                        <a href="/single-details-doctor/${value.id}" target="_blank" class="btn btn-danger btn-sm text-uppercase">Quick Appoinment</a>
-                    </div>
-                </div>
+                </a>
             </div>
             `;
         $(".doctorbody").append(row)

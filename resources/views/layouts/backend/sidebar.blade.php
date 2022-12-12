@@ -96,6 +96,13 @@ $access = App\Models\UserAccess::where('user_id', Auth::guard('admin')->user()->
                     </ul>
                 </li>
                 @endif
+                @if(in_array("city.index", $access) || in_array("city.create", $access) || in_array("city.edit", $access) || in_array("city.destroy", $access))
+                <li class="{{Route::is('city.index')?'active-page':''}}">
+                    <a href="{{route('city.index')}}">
+                        <i class="menu-icon fa fa-list-alt"></i><span>City List</span>
+                    </a>
+                </li>
+                @endif
                 @if(in_array("department.index", $access) || in_array("department.create", $access) || in_array("department.edit", $access) || in_array("department.destroy", $access))
                 <li class="{{Route::is('department.index')?'active-page':''}}">
                     <a href="{{route('department.index')}}">

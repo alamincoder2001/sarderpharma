@@ -38,6 +38,18 @@
             <!-- end page inner -->
         </div>
     </div>
+
+    <script>
+        function dateTime() {
+            d = new Date().toDateString();
+            time = new Date().toLocaleTimeString();
+            document.getElementById("time").innerText = d+', '+time
+            setTimeout(() => {
+                dateTime()
+            }, 1000)
+        }
+        dateTime()
+    </script>
     @include("layouts.backend.script")
 </body>
 

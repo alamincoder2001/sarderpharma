@@ -15,7 +15,8 @@
                     <thead>
                         <tr>
                             <th>Sl</th>
-                            <th>Donor Name</th>
+                            <th></th>
+                            <th>Prescription</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -37,7 +38,7 @@
                                 @endif
                             </td>
                             <td>
-                                <button value="{{$item->id}}" class="fas fa-trash text-danger border-0 deleteadminDonor" style="background: none;"></button>
+                                <button value="{{$item->id}}" class="fas fa-trash text-danger border-0 deletePrescription" style="background: none;"></button>
                             </td>
                         </tr>
                         @endforeach
@@ -55,10 +56,10 @@
         $(document).ready(() => {
             $("#example").DataTable();
 
-            $(document).on("click", ".deleteadminDonor",(event) => {
+            $(document).on("click", ".deletePrescription",(event) => {
             if (confirm("Are you sure want to delete this data!")) {
                 $.ajax({
-                    url: "{{route('admin.donor.destroy')}}",
+                    url: "{{route('admin.prescription.destroy')}}",
                     data: {
                         id: event.target.value
                     },

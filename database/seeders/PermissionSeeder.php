@@ -68,6 +68,15 @@ class PermissionSeeder extends Seeder
                 ]
             ],
             [
+                'group_name' => 'city',
+                'permission_name' => [
+                    "city.index",
+                    "city.create",
+                    "city.edit",
+                    "city.destroy"
+                ]
+            ],
+            [
                 'group_name' => 'department',
                 'permission_name' => [
                     "department.index",

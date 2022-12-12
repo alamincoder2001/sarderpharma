@@ -18,6 +18,7 @@ use App\Models\Investigation;
 use App\Models\Privatecar;
 use App\Models\Slider;
 use App\Models\Test;
+use Devfaysal\BangladeshGeocode\Models\District;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -49,6 +50,7 @@ class AdminController extends Controller
         $data['investigation'] = Investigation::all();
         $data['slider'] = Slider::all();
         $data['donor'] = Donor::all();
+        $data['city'] = District::all();
         $data['user'] = Admin::where("id", "!=", 1)->get();
         return view("admin.dashboard", compact("data"));
     }
@@ -177,5 +179,16 @@ class AdminController extends Controller
     {
         $data = Prescription::latest()->get();
         return view("admin.prescription.index", compact("data"));
+    }
+    
+    public function deletePrescription(Request $request)
+    {
+        $data = Prescription::find($request->id);
+        $old = $data->image;
+        if(File::exists($old)){
+            File::delete($old);
+        }
+        $data->delete();
+        return "Prescription Delete";
     }
 }

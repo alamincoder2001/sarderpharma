@@ -97,13 +97,13 @@
                 top: "82px"
             })
             $(".SearchBtn").css({
-                height: "35px"
+                height: "36px !important"
             })
 
         } else {
             $("nav").removeClass('scroll-hieght')
             $(".SearchBtn").css({
-                height: "36px"
+                height: "36px !important"
             })
         }
         if ($(window).scrollTop() > 400) {

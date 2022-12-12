@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Models\City;
+use App\Models\Contact;
 use App\Models\Test;
 use App\Models\Setting;
 use App\Models\Department;
+use App\Models\Doctor;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Schema;
@@ -34,7 +36,9 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrap();
         Schema::defaultStringLength(191);
         View::share('setting', Setting::first());
+        View::share('contact', Contact::first());
         View::share('cities', District::orderBy("name")->get());
-        View::share('departments', Department::latest()->limit(8)->get());
+        View::share('departments', Department::orderBy("name", 'ASC')->get());
+        View::share('doctors', Doctor::orderBy("name", 'ASC')->get());
     }
 }

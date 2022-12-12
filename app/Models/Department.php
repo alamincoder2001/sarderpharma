@@ -12,4 +12,9 @@ class Department extends Model
     protected $fillable = [
         "name"
     ];
+
+    public function specialistdoctor()
+    {
+        return $this->hasMany(Specialist::class, "department_id", "id")->with("doctor");
+    }
 }

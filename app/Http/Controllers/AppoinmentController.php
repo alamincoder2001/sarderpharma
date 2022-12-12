@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use Illuminate\Http\Request;
+use App\Mail\PatientNotification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class AppoinmentController extends Controller
@@ -19,7 +21,7 @@ class AppoinmentController extends Controller
                 "district"         => "required",
                 "upozila"          => "required",
                 "changeName"       => "required",
-                "contact"          => "required|min:11|max:15",
+                "contact"          => "required",
             ]);
             if ($validator->fails()) {
                 return response()->json(["error" => $validator->errors()]);
@@ -46,6 +48,9 @@ class AppoinmentController extends Controller
                         $data->email = $request->email;
                     }
                     $data->save();
+                    //send mail
+                    $mail = 'ialamin573@gmail.com';
+                    Mail::to($mail)->send(new PatientNotification($request->name, $request->contact, $request->problem));
                     return response()->json("Appointment Send");
                 } else {
                     return response()->json(["errors" => "Must be select Chamber name Or Hospital name or Dignostic Name"]);
@@ -58,12 +63,12 @@ class AppoinmentController extends Controller
 
     public function getDetails(Request $request)
     {
-        try{
+        try {
             $data = Appointment::with("city", "upazila")->where("contact", $request->number)->first();
-            if(!empty($data)){
-                return response()->json($data);            
+            if (!empty($data)) {
+                return response()->json($data);
             }
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             return response()->json("Something went wrong");
         }
     }

@@ -114,21 +114,17 @@ p {
     outline: none;
     font-size: 13px;
     font-weight: 600;
-    /* background: #c10000; */
     background-color: green;
     box-shadow: none;
     transition: all ease-in-out;
 }
 
 .search button:hover {
-    /* background: #c10000; */
     background-color: green;
 }
 
 .top-header {
     background: #283290;
-    /* background: red; */
-    /* background: green; */
     color: #fff;
     padding: 5px 0;
     display: flex;
@@ -146,10 +142,19 @@ nav ul li {
     transition: 0.4s ease-in-out;
 }
 
-nav ul li:hover a {
+nav ul li.nav-item:hover a {
     background: #000000;
     border-top-left-radius: 50%;
     border-bottom-right-radius: 50%;
+}
+
+nav ul li.dropdown .nav-item a {
+    border-radius: none !important;
+    color: white;
+}
+nav ul li.dropdown .nav-item:hover a {
+    background: #b4ec33 !important;
+    border-radius: none !important;
 }
 
 nav ul li a:hover {
@@ -198,64 +203,13 @@ nav ul li a {
 }
 
 .service-header {
-    margin-bottom: 85px;
+    margin-bottom: 55px;
 }
 
 .service-header h2 {
     font-size: 25px;
     font-weight: revert;
     color: #7a5c51;
-}
-
-.service-body {
-    box-shadow: 0 0 20px rgb(0 0 0 / 12%);
-    background: #fff;
-    padding: 30px 20px;
-    position: relative;
-    border-radius: 0.15rem;
-    height: 260px;
-}
-
-.service-body h6 {
-    font-size: 13px;
-    font-weight: 300;
-    margin-bottom: 20px;
-}
-
-.service-body h5 {
-    color: #a5a5a5;
-    font-size: 18px;
-    letter-spacing: 1px;
-    margin-bottom: 30px;
-}
-
-.service-body a {
-    /* background: #016474; */
-    background-color: #081f3e;
-    border: none;
-    transition: 0.5s ease-in-out;
-    font-size: 12px;
-}
-
-.service-body a:hover {
-    background: #0b6977;
-}
-
-.servic-icon {
-    position: absolute;
-    top: -28px;
-    left: 20px;
-    background: #081f3e;
-    width: 55px;
-    height: 55px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-}
-
-.servic-icon i {
-    font-size: 32px;
 }
 
 /* doctor section */
@@ -731,11 +685,21 @@ nav ul li a {
 
 
 /* footer style */
+/* #footer {
+    position: sticky;
+    padding: 55px 0;
+    box-shadow: 0px 0px 5px 1px #efefef;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+} */
 #footer {
     position: relative;
     padding: 55px 0;
     box-shadow: 0px 0px 5px 1px #efefef;
 }
+
+
 
 #footer:before {
     content: ' ';

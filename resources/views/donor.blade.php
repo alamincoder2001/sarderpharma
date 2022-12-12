@@ -129,11 +129,11 @@
             <img src="{{asset('loading.gif')}}" width="350px">
         </div>
         <div class="row d-flex justify-content-center groupWiseDonorShow">
-            @if($data->count())
+            @if(count($data) > 0)
             @foreach($data as $item)
             <div class="col-md-2">
-                <div class="card">
-                    <img style="width: 100%; height:110px;padding:6px;" src="{{asset($item->image?$item->image:'uploads/admin/9171783_632580364bbb9_632584b62489a.png')}}" class="card-img-top">
+                <div class="card" style="height: 240px;">
+                    <img style="width: 100%; height:110px;padding:6px;" src="{{asset($item->image?$item->image:'uploads/nouserimage.png')}}" class="card-img-top">
                     <div class="card-body pt-1 pb-0" class="height:145px">
                         <p><span>Name:</span> {{$item->name}}</p>
                         <p><span>Blood Group:</span> {{$item->blood_group}}</p>
@@ -150,7 +150,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body text-center">
-                        <p>No Data Found</p>
+                        <p>Not Found Data</p>
                     </div>
                 </div>
             </div>
@@ -213,18 +213,20 @@
                 url: "{{route('filter.donor')}}",
                 method: "POST",
                 dataType: "JSON",
-                data: {group:event.target.value},
+                data: {
+                    group: event.target.value
+                },
                 beforeSend: () => {
                     $(".groupWiseDonorShow").html("")
                     $(".Loading").removeClass("d-none")
                 },
                 success: response => {
-                    if(!response.null){
-                        $.each(response, (index, value) => {
+                    if (!response.null) {
+                        $.each(response, (index, value) => {                            
                             let row = `
                             <div class="col-md-2">
-                                <div class="card">
-                                    <img style="width: 100%; height:110px;padding:6px;" src="${value.image?window.location.origin+'/'+value.image:window.location.origin+'/uploads/admin/9171783_632580364bbb9_632584b62489a.png'}" class="card-img-top">
+                                <div class="card" style="height: 240px;">
+                                    <img style="width: 100%; height:110px;padding:6px;" src="${value.image > 0?location.origin+"/"+value.image:"/uploads/nouserimage.png"}" class="card-img-top">
                                     <div class="card-body pt-1 pb-0">
                                         <p><span>Name:</span> ${value.name}</p>
                                         <p><span>Blood Group:</span> ${value.blood_group}</p>
@@ -239,7 +241,7 @@
                             `;
                             $(".groupWiseDonorShow").append(row)
                         })
-                    }else{
+                    } else {
                         let row = `
                             <div class="col-md-12">
                                 <div class="card">

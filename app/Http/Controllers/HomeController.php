@@ -22,17 +22,21 @@ class HomeController extends Controller
     // frontend section
     public function index()
     {
-        $data['department'] = Department::all();
         $data['slider'] = Slider::latest()->limit(4)->get();
         $data['partner'] = Partner::latest()->get();
         $data["specialist"] = Specialist::with("doctor", "specialist")->groupBy("doctor_id")->latest()->limit(8)->get();
         return view('website', compact("data"));
     }
     //doctor
-    public function doctor()
+    public function doctor($id = null)
     {
-        $data['doctor'] = Doctor::with("time", "chamber")->latest("id")->paginate(15);
-        $data['department'] = Department::all();
+        if($id != null){
+            $dept_id = Department::where("name", $id)->first()->id;
+            $data["specialist"] = Specialist::where("department_id", $dept_id)->with("doctor", "specialist")->groupBy("doctor_id")->latest()->paginate(24);
+            
+        }else{
+            $data["specialist"] = Specialist::with("doctor", "specialist")->groupBy("doctor_id")->latest()->paginate(24);
+        }
         return view('doctor_details', compact("data"));
     }
     //hospital

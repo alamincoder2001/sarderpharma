@@ -55,7 +55,7 @@
                                 <div class="input-group">
                                     <select multiple name="cartype_id[]" id="cartype_id" class="form-control select2">
                                         @foreach(App\Models\Cartype::latest()->get() as $item)
-                                        <option value="{{$item->name}}" {{in_array("$item->name", $car)?"selected":""}}>{{$item->name}}</option>
+                                        <option value="{{$item->name}}" {{in_array($item->name, $car)?"selected":""}}>{{$item->name}}</option>
                                         @endforeach
                                     </select>
                                     <span onclick="PrivateCar(event)" class="btn btn-dark">+</span>
@@ -115,6 +115,13 @@
                                 <label for="driver_address">Driver Address</label>
                                 <input type="text" name="driver_address" id="driver_address" class="form-control" value="{{$data->driver_address}}">
                                 <span class="error-driver_address text-danger error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="number_of_seat">Number Of Seat</label>
+                                <input type="text" name="number_of_seat" id="number_of_seat" class="form-control" value="{{$data->number_of_seat}}">
+                                <span class="error-number_of_seat text-danger error"></span>
                             </div>
                         </div>
                         <div class="col-md-4">

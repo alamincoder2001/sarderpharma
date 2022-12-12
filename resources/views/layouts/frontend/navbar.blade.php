@@ -41,14 +41,21 @@ $contact = \App\Models\Contact::first();
                 <li class="nav-item">
                     <a class="nav-link text-uppercase {{Route::is('ambulance.details')?'activ':''}}" href="{{route('ambulance.details')}}">Ambulance</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link text-uppercase {{Route::is('privatecar.details')?'activ':''}}" href="{{route('privatecar.details')}}">Privatecar</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-uppercase {{Route::is('pathology')?'activ':''}}" href="{{route('pathology')}}">Pathology</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-uppercase {{Route::is('donor')?'activ':''}}" href="{{route('donor')}}">Blood Donor</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-uppercase" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        More Pages
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li class="nav-item">
+                            <a class="nav-link text-uppercase {{Route::is('privatecar.details')?'activ':''}}" href="{{route('privatecar.details')}}">Privatecar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-uppercase {{Route::is('pathology')?'activ':''}}" href="{{route('pathology')}}">Pathology</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-uppercase {{Route::is('donor')?'activ':''}}" href="{{route('donor')}}">Blood Donor</a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-uppercase {{Route::is('aboutus')?'activ':''}}" href="{{route('aboutus')}}">About Us</a>

@@ -55,32 +55,32 @@ class DiagnosticController extends Controller
 
         try {
             $validator = Validator::make($request->all(), [
-                "name" => "required",
-                "username" => "required|unique:diagnostics",
-                "email" => "required|email",
-                "phone" => "required|min:11|max:15",
-                "city_id" => "required",
+                "name"            => "required",
+                "username"        => "required|unique:diagnostics",
+                "email"           => "required|email",
+                "phone"           => "required",
+                "city_id"         => "required",
                 "discount_amount" => "required",
                 "diagnostic_type" => "required",
-                "address" => "required",
+                "address"         => "required",
             ]);
 
             if ($validator->fails()) {
                 return response()->json(["error" => $validator->errors()]);
             } else {
-                $data = new Diagnostic;
-                $data->image = $this->imageUpload($request, 'image', 'uploads/diagnostic') ?? '';
-                $data->name = $request->name;
-                $data->username = $request->username;
-                $data->email = $request->email;
-                $data->password = Hash::make($request->password);
+                $data                  = new Diagnostic;
+                $data->image           = $this->imageUpload($request, 'image', 'uploads/diagnostic') ?? '';
+                $data->name            = $request->name;
+                $data->username        = $request->username;
+                $data->email           = $request->email;
+                $data->password        = Hash::make($request->password);
                 $data->diagnostic_type = $request->diagnostic_type;
-                $data->phone = $request->phone;
+                $data->phone           = implode(",", $request->phone);
                 $data->discount_amount = $request->discount_amount;
-                $data->city_id = $request->city_id;
-                $data->address = $request->address;
-                $data->description = $request->description;
-                $data->map_link = $request->map_link;
+                $data->city_id         = $request->city_id;
+                $data->address         = $request->address;
+                $data->description     = $request->description;
+                $data->map_link        = $request->map_link;
 
                 $data->save();
                 return response()->json("Diagnostic added successfully");
@@ -107,14 +107,14 @@ class DiagnosticController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                "name" => "required",
-                "username" => "required|unique:diagnostics,username," . $request->id,
-                "email" => "required|email",
-                "phone" => "required|min:11|max:15",
-                "city_id" => "required",
+                "name"            => "required",
+                "username"        => "required|unique:diagnostics,username," . $request->id,
+                "email"           => "required|email",
+                "phone"           => "required",
+                "city_id"         => "required",
                 "discount_amount" => "required",
                 "diagnostic_type" => "required",
-                "address" => "required",
+                "address"         => "required",
             ]);
 
             if ($validator->fails()) {
@@ -128,19 +128,19 @@ class DiagnosticController extends Controller
                     }
                     $data->image = $this->imageUpload($request, 'image', 'uploads/diagnostic') ?? '';
                 }
-                $data->name = $request->name;
+                $data->name     = $request->name;
                 $data->username = $request->username;
-                $data->email = $request->email;
+                $data->email    = $request->email;
                 if (!empty($request->password)) {
                     $data->password = Hash::make($request->password);
                 }
                 $data->diagnostic_type = $request->diagnostic_type;
-                $data->phone = $request->phone;
+                $data->phone           = implode(",", $request->phone);
                 $data->discount_amount = $request->discount_amount;
-                $data->city_id = $request->city_id;
-                $data->address = $request->address;
-                $data->description = $request->description;
-                $data->map_link = $request->map_link;
+                $data->city_id         = $request->city_id;
+                $data->address         = $request->address;
+                $data->description     = $request->description;
+                $data->map_link        = $request->map_link;
 
                 $data->update();
                 return response()->json("Diagnostic updated successfully");

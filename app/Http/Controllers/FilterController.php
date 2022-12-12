@@ -56,14 +56,14 @@ class FilterController extends Controller
     }
 
     public function doctor(Request $request)
-    {
+    {    
         try {
             if (!empty($request->doctor_name) && !empty($request->city)) {
-                $data = Doctor::with("city", "time", "department", "hospital", "diagnostic", "chamber")->where('city_id', $request->city)->orWhere('name', "like" . "%" . $request->doctor_name . "%")->orderBy('name')->get();
+                $data = Doctor::with("city", "time", "department", "hospital", "diagnostic", "chamber")->where('city_id', $request->city)->orWhere('name', "like" . "%" . $request->doctor_name . "%")->orderBy('name', 'ASC')->get();
             } else if (!empty($request->doctor_name)) {
-                $data = Doctor::with("city", "time", "department", "hospital", "diagnostic", "chamber")->where('name', 'like', '%' . $request->doctor_name . '%')->orderBy('name')->get();
+                $data = Doctor::with("city", "time", "department", "hospital", "diagnostic", "chamber")->where('name', 'like', '%'.$request->doctor_name.'%')->orderBy('name', 'ASC')->get();
             } else {
-                $data = Doctor::with("city", "time", "department", "hospital", "diagnostic", "chamber")->where("city_id", $request->city)->orderBy("name")->get();
+                $data = Doctor::with("city", "time", "department", "hospital", "diagnostic", "chamber")->where("city_id", $request->city)->orderBy("name", 'ASC')->get();
             }
             if (count($data) !== 0) {
                 return response()->json($data);

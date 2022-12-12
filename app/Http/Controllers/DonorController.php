@@ -4,13 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Donor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class DonorController extends Controller
 {
-    public function index()
+    public function index($blood_group = null)
     {
-        $data = Donor::latest()->get();
+        if ($blood_group == null) {
+            $data = Donor::all();
+        }else{
+            $data = Donor::where("blood_group", $blood_group)->latest()->get();
+        }
         return view("donor", compact("data"));
     }
 

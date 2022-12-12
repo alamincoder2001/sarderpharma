@@ -31,6 +31,9 @@
           <li><a href="javascript:void(0)" id="search-button"><i class="fa fa-search"></i></a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <div id="time" style="background: linear-gradient(45deg, #ff9191, #00783bc9);width: 236px;display: flex;justify-content: center;align-items: center;height: 56px;font-size: 15px;margin-top: -7px;" class="text-white"></div>
+          </li>
           <li class="dropdown user-dropdown">
             <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" type="button" aria-expanded="false"><img src="{{asset(Auth::guard('admin')->user()->image)}}" alt="..." class="rounded-circle"></a>
             <ul class="dropdown-menu">
@@ -39,7 +42,7 @@
               <li><a class="dropdown-item" href="{{route('admin.password')}}"><i class="fa fa-key"></i> Password Setting</a></li>
               <li>
                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                 <i class="fas fa-sign-out-alt"></i> Log Out</a>
+                  <i class="fas fa-sign-out-alt"></i> Log Out</a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                   @csrf
                 </form>

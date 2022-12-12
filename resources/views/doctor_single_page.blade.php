@@ -169,42 +169,16 @@
                 <div class="card" style="box-shadow: 1px 1px 1px 2px #1b6c93ba; height:552px">
                     <div class="card-body">
                         <div class="card-header border-0 text-white" style="background: #035b64 !important;">
-                            <h4 class="fs-6 text-uppercase">Info</h4>
+                            <h4 class="fs-6 text-uppercase">The diseases that are treated</h4>
                         </div>
                         <div class="card-body">
-                            <h5 style="font-size:14px; font-family:cursive;">
-                                @if(count($data->chamber) != 0)
-                                @foreach($data->chamber->take(1) as $chamber)
-                                <i class="fa fa-home"></i> {{$chamber->name}}
-                                @endforeach
-                                @endif
-                                @if($data->hospital_id)
-                                <br>
-                                <i class='fa fa-hospital-o'></i> {{$data->hospital_id?$data->hospital->name:""}}
-                                @endif
-                                @if($data->diagnostic_id)
-                                <br>
-                                <i class="fa fa-plus-square-o"></i> {{$data->diagnostic_id?$data->diagnostic->name:""}}
-                                @endif
-                            </h5>
-                            <div class="clearfix mb-2" style="border-bottom:1px solid #ddd"></div>
+                            <div class="concentration">
+                                <div style="font-size: 13px; font-family:cursive;" id="concentration">{!!$data->concentration!!}</div>
+                            </div>
+                            <hr>
                             <div class="details-status">
                                 <div style="text-align: justify; font-family:cursive;" id="description">{!!$data->description!!}</div>
                             </div>
-                            <div class="clearfix my-2" style="border-bottom:1px solid #ddd"></div>
-                            <div class="concentration">
-                                <h6 style="font-family:cursive; font-weight:bold;">Field of Consultancy:</h6>
-                                <div style="font-size: 13px; font-family:cursive;" id="concentration">{!!$data->concentration!!}</div>
-                            </div>
-                            <div class="clearfix my-2" style="border-bottom:1px solid #ddd"></div>
-                        </div>
-
-                        <div class="form-group text-center">
-                            <button class="btn btn-success w-100 border-0" style="border-radius: 0;padding: 10px;background:#035b64;"><i class="fa fa-money"></i> Consultation Fee</button>
-                        </div>
-                        <div class="d-flex gap-2 mt-2" style="font-family: cursive; font-size:13px;">
-                            <div class="d-flex align-items-center badge px-3 py-2 rounded-pill" style="background: #035b64;border-radius:0;">New Patient: ৳ {{$data->first_fee}}</div>
-                            <div class="d-flex align-items-center badge px-3 py-2 rounded-pill" style="background: #035b64;border-radius:0;">Old Patient: ৳ {{$data->second_fee}}</div>
                         </div>
                     </div>
                 </div>
@@ -213,9 +187,25 @@
                 <div class="card" style="box-shadow: 1px 1px 1px 2px #1b6c93ba; height:552px">
                     <div class="card-body">
                         <div class="card-header border-0 text-white" style="background: #035b64 !important;">
-                            <h4 class="fs-6 text-uppercase">Availability Time</h4>
+                            <h4 class="fs-6 text-uppercase">Availability Time & Location</h4>
                         </div>
                         <div class="row">
+                            <h5 style="font-size:14px; font-family:cursive;">
+                                @if(count($data->chamber) != 0)
+                                @foreach($data->chamber->take(1) as $chamber)
+                                <i class="fa fa-home"></i> {{$chamber->name}}, $chamber->address
+                                @endforeach
+                                @endif
+                                @if($data->hospital_id)
+                                <br>
+                                <i class='fa fa-hospital-o'></i> {{$data->hospital_id?$data->hospital->name.", ".$data->hospital->city->name:""}}{{$data->hospital->discount_amount>0?' ('.$data->hospital->discount_amount.'%)':''}}
+                                @endif
+                                @if($data->diagnostic_id)
+                                <br>
+                                <i class="fa fa-plus-square-o"></i> {{$data->diagnostic_id?$data->diagnostic->name.", ".$data->diagnostic->city->name:""}} {{$data->diagnostic->discount_amount>0?' ('.$data->diagnostic->discount_amount.'%)':''}}
+                                @endif
+                            </h5>
+                            <hr style="margin-bottom: 0;">
                             @foreach($data->time as $day)
                             <div class="col-12">
                                 <div class="card border-0">
@@ -229,15 +219,30 @@
                             </div>
                             @endforeach
                         </div>
-                        <div class="form-group mt-3 d-flex align-items-center justify-content-center">
-                            <button onclick="DoctorAppointment(event)" value="1" class="rounded-pill btn btn-success w-75"><i class="fa fa-edit"></i> Take Appointment</button>
-                        </div>
                     </div>
+                </div>
+            </div>
+            <div class="col-lg-7 col-12 mt-3">
+                <div class="form-group text-center">
+                    <button class="btn btn-success w-100 border-0" style="border-radius: 0;padding: 10px;background:#035b64;"><i class="fa fa-money"></i> Consultation Fee</button>
+                </div>
+                <div class="d-flex gap-2 mt-2" style="font-family: cursive; font-size:13px;">
+                    <div class="d-flex align-items-center badge px-3 py-2 rounded-pill" style="background: #035b64;border-radius:0;">New Patient: ৳ {{$data->first_fee}}</div>
+                    <div class="d-flex align-items-center badge px-3 py-2 rounded-pill" style="background: #035b64;border-radius:0;">Old Patient: ৳ {{$data->second_fee}}</div>
+                </div>
+            </div>
+            <div class="col-lg-5 col-12 mt-3">
+                <div class="form-group d-flex align-items-center justify-content-center">
+                    <button onclick="DoctorAppointment(event)" value="1" class="rounded-pill btn btn-success w-75"><i class="fa fa-edit"></i> Take Appointment</button>
+                </div>
+                <div class="text-center">
+                    <span style="font-size: 22px;font-family: cursive;">Or Make a call</span>
+                    <p style="font-size: 18px;font-family: cursive;">{{$contact->phone}}</p>
                 </div>
             </div>
         </div>
         <div class="row d-flex justify-content-center mt-4">
-            <div class="col-md-6 d-none showDoctorAppointment" style="position: absolute;top:-100px; z-index:99999; left:20%;">
+            <div class="col-md-6 d-none showDoctorAppointment" style="position: absolute;top:190px; z-index:99999; left:20%;">
                 <div class="card p-3" style="background:#f5f5f5;box-shadow:1px 1px 1px 2px #1b6c93ba;">
                     <div class="card-header border-0 text-white d-flex justify-content-between" style="background: #035b64 !important;">
                         <h4 class="fs-6 text-uppercase">Appointment</h4>
@@ -488,6 +493,7 @@
                         }
                     } else {
                         $("#Appointment").trigger('reset')
+                        DoctorAppointmentClose()
                         $.notify(response, "success");
                         Swal.fire(
                             'Thanks your Appointment!',
@@ -603,13 +609,8 @@
 
     function DoctorAppointment(event) {
         $(".showDoctorAppointment").removeClass("d-none")
-        // if (event.target.value == 1) {
-        //     event.target.value = 0
-        // } else {
-        //     event.target.value = 1
-        //     $(".showDoctorAppointment").addClass("d-none")
-        // }
     }
+
     function DoctorAppointmentClose(event) {
         $(".showDoctorAppointment").addClass("d-none")
     }

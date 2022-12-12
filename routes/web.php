@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DonorController;
 use App\Http\Controllers\FilterController;
+use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\TestController;
 use App\Http\Controllers\AppoinmentController;
 use App\Http\Controllers\Auth\LoginController;
@@ -63,7 +64,7 @@ Route::post("/donor-filter", [FilterController::class, "filterdonor"])->name("fi
 
 // =========== Frontend route ========= //
 Route::get("/", [HomeController::class, "index"])->name("website");
-Route::get("/doctor-details", [HomeController::class, "doctor"])->name("doctor.details");
+Route::get("/doctor-details/{id?}", [HomeController::class, "doctor"])->name("doctor.details");
 Route::get("/hospital-details", [HomeController::class, "hospital"])->name("hospital.details");
 Route::get("/diagnostic-details", [HomeController::class, "diagnostic"])->name("diagnostic.details");
 Route::get("/ambulance-details", [HomeController::class, "ambulance"])->name("ambulance.details");
@@ -75,7 +76,7 @@ Route::get("/single-details-ambulance/{id}", [HomeController::class, "singleambu
 Route::get("/single-details-privatecar/{id}", [HomeController::class, "singleprivatecar"])->name("singlepageprivatecar");
 Route::get("/pathology", [HomeController::class, "pathology"])->name("pathology");
 Route::post("/send-prescription", [HomeController::class, "prescription"]);
-Route::get("/donor-list", [DonorController::class, "index"])->name("donor");
+Route::get("/donor-list/{any?}", [DonorController::class, "index"])->name("donor");
 Route::post("/donor-store", [DonorController::class, "store"])->name("donor.store");
 
 // about us route
@@ -209,6 +210,14 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post("/blood-donor/delete", [AdminController::class, "donordestroy"])->name("admin.donor.destroy");
     //prescription
     Route::get("/prescription", [AdminController::class, "showprescription"])->name("admin.prescription.index");
+    Route::post("/delete-prescription", [AdminController::class, "deletePrescription"])->name("admin.prescription.destroy");
+
+    // city add
+    Route::get("/city", [CityController::class, 'index'])->name("city.index");
+    Route::get("/city-get", [CityController::class, 'fetch'])->name("city.get");
+    Route::post("/city", [CityController::class, 'store'])->name("city.store");
+    Route::get("/city-edit/{id}", [CityController::class, 'edit'])->name("city.edit");
+    Route::get("/city-delete/{id}", [CityController::class, 'destroy'])->name("city.destroy");
 
     //user permission
     Route::get('/user', [UserAccessController::class, 'create'])->name('admin.user.create');

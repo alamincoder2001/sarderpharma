@@ -50,9 +50,17 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="phone">Phone</label>
-                                <div class="input-group">
-                                    <p class="btn btn-secondary m-0">+88</p><input type="text" name="phone" id="phone" class="form-control" value="{{$data->phone}}">
+                                <label for="phone">Phone</label><span class="text-danger" onclick="numberAdd(event)"><i class="fa fa-plus"></i></span>
+                                <div class="phoneAdd">
+                                    @php
+                                        $phone = explode(",", $data->phone);
+                                    @endphp
+                                    @foreach($phone as $item)
+                                    <div class="input-group">
+                                        <input type="text" name="phone[]" id="phone" class="form-control" value="{{$item}}">
+                                        <button type="button" class="btn btn-danger removePhone">remove</button>
+                                    </div>
+                                    @endforeach
                                 </div>
                                 <span class="error-phone text-danger error"></span>
                             </div>
@@ -170,6 +178,20 @@
                 }
             })
         })
+    })
+
+    function numberAdd() {
+        var row = `
+            <div class="input-group">
+                <input type="text" id="phone" name="phone[]" class="form-control">
+                <button type="button" class="btn btn-danger removePhone">remove</button>
+            </div>
+        `
+        $(".phoneAdd").append(row)
+    }
+
+    $(document).on("click", ".removePhone", event => {
+        event.target.offsetParent.remove();
     })
 </script>
 @endpush

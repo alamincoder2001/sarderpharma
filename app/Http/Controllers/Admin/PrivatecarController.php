@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class PrivatecarController extends Controller
@@ -40,35 +39,36 @@ class PrivatecarController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                "name" => "required",
-                "email" => "required|email",
-                "phone" => "required|min:11|max:15",
-                "city_id" => "required",
-                "cartype_id" => "required",
-                "address" => "required",
-                "car_license" => "required",
+                "name"           => "required",
+                "email"          => "required|email",
+                "phone"          => "required|min:11|max:15",
+                "city_id"        => "required",
+                "cartype_id"     => "required",
+                "address"        => "required",
+                "car_license"    => "required",
                 "driver_license" => "required",
-                "driver_nid" => "required",
+                "driver_nid"     => "required",
                 "driver_address" => "required",
             ]);
 
             if ($validator->fails()) {
                 return response()->json(["error" => $validator->errors()]);
             } else {
-                $data = new Privatecar;
-                $data->image = $this->imageUpload($request, 'image', 'uploads/privatecar') ?? '';
-                $data->name = $request->name;
-                $data->email = $request->email;
-                $data->cartype_id = implode(",", $request->cartype_id);
-                $data->phone = $request->phone;
-                $data->city_id = $request->city_id;
-                $data->address = $request->address;
-                $data->map_link = $request->map_link;
-                $data->car_license = $request->car_license;
+                $data                 = new Privatecar;
+                $data->image          = $this->imageUpload($request, 'image', 'uploads/privatecar') ?? '';
+                $data->name           = $request->name;
+                $data->email          = $request->email;
+                $data->cartype_id     = implode(",", $request->cartype_id);
+                $data->phone          = $request->phone;
+                $data->city_id        = $request->city_id;
+                $data->address        = $request->address;
+                $data->map_link       = $request->map_link;
+                $data->car_license    = $request->car_license;
                 $data->driver_license = $request->driver_license;
-                $data->driver_nid = $request->driver_nid;
+                $data->driver_nid     = $request->driver_nid;
                 $data->driver_address = $request->driver_address;
-                $data->description = $request->description;
+                $data->number_of_seat = $request->number_of_seat;
+                $data->description    = $request->description;
 
                 $data->save();
                 return response()->json("Privatecar added successfully");
@@ -88,15 +88,15 @@ class PrivatecarController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                "name" => "required",
-                "email" => "required|email",
-                "phone" => "required|min:11|max:15",
-                "city_id" => "required",
-                "cartype_id" => "required",
-                "address" => "required",
-                "car_license" => "required",
+                "name"           => "required",
+                "email"          => "required|email",
+                "phone"          => "required|min:11|max:15",
+                "city_id"        => "required",
+                "cartype_id"     => "required",
+                "address"        => "required",
+                "car_license"    => "required",
                 "driver_license" => "required",
-                "driver_nid" => "required",
+                "driver_nid"     => "required",
                 "driver_address" => "required",
             ]);
 
@@ -111,18 +111,19 @@ class PrivatecarController extends Controller
                     }
                     $data->image = $this->imageUpload($request, 'image', 'uploads/privatecar') ?? '';
                 }
-                $data->name = $request->name;
-                $data->email = $request->email;
-                $data->cartype_id = implode(",", $request->cartype_id);
-                $data->phone = $request->phone;
-                $data->city_id = $request->city_id;
-                $data->address = $request->address;
-                $data->map_link = $request->map_link;
-                $data->car_license = $request->car_license;
+                $data->name           = $request->name;
+                $data->email          = $request->email;
+                $data->cartype_id     = implode(",", $request->cartype_id);
+                $data->phone          = $request->phone;
+                $data->city_id        = $request->city_id;
+                $data->address        = $request->address;
+                $data->map_link       = $request->map_link;
+                $data->car_license    = $request->car_license;
                 $data->driver_license = $request->driver_license;
-                $data->driver_nid = $request->driver_nid;
+                $data->driver_nid     = $request->driver_nid;
                 $data->driver_address = $request->driver_address;
-                $data->description = $request->description;
+                $data->number_of_seat = $request->number_of_seat;
+                $data->description    = $request->description;
 
                 $data->update();
                 return response()->json("Privatecar updated successfully");
@@ -143,7 +144,7 @@ class PrivatecarController extends Controller
 
         try {
             $data = Privatecar::find($request->id);
-            $old = $data->image;
+            $old  = $data->image;
             if (File::exists($old)) {
                 File::delete($old);
             }

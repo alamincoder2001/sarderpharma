@@ -45,7 +45,10 @@
         cursor: pointer;
         text-transform: uppercase;
         font-family: sans-serif;
-
+        transition: all ease-in-out;
+    }
+    .department:hover{
+        background: linear-gradient(201deg, #0694cb, #09581edb) !important;
     }
 
     /* select 2 style */
@@ -78,6 +81,59 @@
         color: #9b9b9b !important;
         line-height: 29px !important;
         padding-left: 20px !important;
+    }
+
+    /* service section design */
+    .card .card-img {
+        width: 110px;
+        margin: auto;
+        height: 100px;
+        background: #23ebff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        box-shadow: 5px -5px 0px 0px #aba6a6;
+    }
+
+    #service .card {
+        padding-top: 15px;
+        color: #7c7c7c;
+        border-radius: 0;
+        transition: 0.1s ease-in-out;
+    }
+
+    #service .card:hover {
+        color: #ff3939;
+        box-shadow: 1px 0px 0px 3px #6c6c6c47 !important;
+    }
+
+    /* blood donor list */
+    .blooddonor .card .card-img {
+        width: 90px;
+        margin: auto;
+        height: 85px;
+        background: #93939305;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0px 4px 0px 1px whitesmoke;
+    }
+
+    .blooddonor .card {
+        padding-top: 15px;
+        background: none;
+        border-radius: 5px;
+        transition: all ease-in-out;
+    }
+
+    .blooddonor .card:hover .card-img {
+        box-shadow: 1px 2px 0px 0px #919191;
+    }
+
+    .blooddonor .card:hover {
+        color: orangered;
+        box-shadow: 1px 1px 1px 1px #7a7a7a;
     }
 </style>
 
@@ -113,7 +169,6 @@
         <span class="visually-hidden">Next</span>
     </button>
 </div>
-
 <section id="search">
     <div class="container">
         <div class="search">
@@ -163,7 +218,6 @@
         </div>
     </div>
 </section>
-
 <!-- header section end -->
 
 <!-- service section -->
@@ -177,77 +231,90 @@
         </div>
     </div>
 </div>
-<section id="service" class="bg-light">
+
+<section id="service">
     <div class="container">
         <div class="service-header text-center">
             <h2 class="text-uppercase">Our Services</h2>
         </div>
         <div class="row d-flex justify-content-center">
-            <div class="col-md-10 col-10 col-sm-10 col-lg-3 mb-5">
-                <div class="service-body">
-                    <h6 class="text-uppercase mt-2">Find Your Doctors</h6>
-                    <h5>BOOK YOUR APPOINTMENT</h5>
-                    <p class="mb-3">Search doctors by name, city, specialty, expertise to book an appointment</p>
-                    <a href="{{route('doctor.details')}}" class="btn text-white text-uppercase">Find doctor</a>
-                    <div class="servic-icon">
-                        <i class="fa fa-user-md"></i>
+            <div class="col-12 col-lg-3 mb-3">
+                <a href="{{route('doctor.details')}}" class="text-decoration-none">
+                    <div class="card border-0">
+                        <div class="card-img">
+                        <img src="{{asset('frontend/img/doctor.png')}}" width="90" />
+                        </div>
+                        <div class="card-body text-center">
+                            <h6 class="text-uppercase">Find Specialist Doctors</h6>
+                            <p>Find specialist doctors any where in Bangladesh</p>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
-            <div class="col-md-10 col-10 col-sm-10 col-lg-3 mb-5">
-                <div class="service-body">
-                    <h6 class="text-uppercase mt-2">FIND YOUR HOSPITAL</h6>
-                    <h5>HOSPITAL AROUND YOU</h5>
-                    <p class="mb-3">Search private and government hospitals to meet your need to know the facilities</p>
-                    <a href="{{route('hospital.details')}}" class="btn text-white text-uppercase">find hospital</a>
-                    <div class="servic-icon">
-                        <i class="fa fa-hospital-o"></i>
+            <div class="col-12 col-lg-3 mb-3">
+                <a href="{{route('hospital.details')}}" class="text-decoration-none">
+                    <div class="card border-0">
+                        <div class="card-img">
+                            <img src="{{asset('frontend/img/hospital.png')}}" width="90" />
+                        </div>
+                        <div class="card-body text-center">
+                            <h6 class="text-uppercase">Find Your Hospital</h6>
+                            <p>Find good hospital any where in Bangladesh</p>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
-            <div class="col-md-10 col-10 col-sm-10 col-lg-3 mb-5">
-                <div class="service-body">
-                    <h6 class="text-uppercase mt-2">FIND DIAGNOSTIC SERVICE</h6>
-                    <h5>GET DIAGNOSTICE SERVICE NEAR YOU</h5>
-                    <p class="mb-3">Search diagnostic near you to get proper investigation report near you to</p>
-                    <a href="{{route('diagnostic.details')}}" class="btn text-white text-uppercase">Find DIAGNOSTIC</a>
-                    <div class="servic-icon">
-                        <i class="fa fa-plus"></i>
+            <div class="col-12 col-lg-3 mb-3">
+                <a href="{{route('diagnostic.details')}}" class="text-decoration-none">
+                    <div class="card border-0">
+                        <div class="card-img">
+                            <img src="{{asset('frontend/img/diagnostic.png')}}" width="90" />
+                        </div>
+                        <div class="card-body text-center">
+                            <h6 class="text-uppercase">Find Your Diagnostic</h6>
+                            <p>Find good diagnostic any where in Bangladesh</p>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
-            <div class="col-md-10 col-10 col-sm-10 col-lg-3 mb-5">
-                <div class="service-body">
-                    <h6 class="text-uppercase mt-2">Find Ambulance Service</h6>
-                    <h5>15 MINUTES QUICK SERVICE</h5>
-                    <p class="mb-3">Get any types of ambulance to reach any hospitals or any corner of Bangladesh</p>
-                    <a href="{{route('ambulance.details')}}" class="btn text-white text-uppercase">Find Ambulance</a>
-                    <div class="servic-icon">
-                        <i class="fa fa-ambulance"></i>
+            <div class="col-12 col-lg-3 mb-3">
+                <a href="{{route('ambulance.details')}}" class="text-decoration-none">
+                    <div class="card border-0">
+                        <div class="card-img">
+                            <img src="{{asset('frontend/img/ambulance.png')}}" width="90" />
+                        </div>
+                        <div class="card-body text-center">
+                            <h6 class="text-uppercase">Find Your Ambulance</h6>
+                            <p>Find ambulance service any where in Bangladesh</p>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
-            <div class="col-md-10 col-10 col-sm-10 col-lg-3 mb-5">
-                <div class="service-body">
-                    <h6 class="text-uppercase mt-2">Find Privatecar Service</h6>
-                    <h5>15 MINUTES QUICK SERVICE</h5>
-                    <p class="mb-3">Get any types of privatecar to reach any hospitals or any corner of Bangladesh</p>
-                    <a href="{{route('privatecar.details')}}" class="btn text-white text-uppercase">Find Privatecar</a>
-                    <div class="servic-icon">
-                        <i class="fa fa-car"></i>
+            <div class="col-12 col-lg-3 mb-3">
+                <a href="{{route('privatecar.details')}}" class="text-decoration-none">
+                    <div class="card border-0">
+                        <div class="card-img">
+                            <img src="{{asset('frontend/img/privatecar.png')}}" width="90" />
+                        </div>
+                        <div class="card-body text-center">
+                            <h6 class="text-uppercase">Find Your Private car</h6>
+                            <p>Find Private car service any where in Bangladesh</p>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
-            <div class="col-md-10 col-10 col-sm-10 col-lg-3 mb-5">
-                <div class="service-body">
-                    <h6 class="text-uppercase mt-2">Find Pathology Service</h6>
-                    <h5>15 MINUTES QUICK SERVICE</h5>
-                    <p class="mb-3">Search pathology and take service</p>
-                    <a href="{{route('pathology')}}" class="btn text-white text-uppercase">Find Pathology</a>
-                    <div class="servic-icon">
-                        <i class="fa fa-stethoscope"></i>
+            <div class="col-12 col-lg-3 mb-3">
+                <a href="{{route('pathology')}}" class="text-decoration-none">
+                    <div class="card border-0">
+                        <div class="card-img">
+                            <img src="{{asset('frontend/img/pathology.png')}}" width="90" />
+                        </div>
+                        <div class="card-body text-center">
+                            <h6 class="text-uppercase">Goto Pathology Page</h6>
+                            <p>Go to Pathology page and Test at low cost</p>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </div>
@@ -255,17 +322,16 @@
 
 <!-- doctor section -->
 
-<section style="padding:55px 0; background: #DDDDDD;">
+<section style="padding:55px 0; background: #f7f7f7;">
     <div class="container">
         <div class="doctor-header">
-            <h2 class="text-uppercase text-center mb-5">Specialist</h2>
+            <h2 class="text-uppercase text-center mb-5">Specialist Wise Doctor</h2>
         </div>
         <div class="row">
             @foreach($departments as $item)
-            <!-- style="background: #002a68;" value="{{$item->id}}" class="department item{{$item->id}}" -->
             <div class="col-6 col-lg-2">
-                <a onclick="departmentWiseDoctor(event, {{$item->id}})">
-                    <div class="card department item{{$item->id}} mb-4">
+                <a href="{{url('/doctor-details', $item->name)}}" class="text-decoration-none">
+                    <div class="card department mb-4">
                         <div class="card-body d-flex align-items-center">
                             <p>{{$item->name}}</p>
                         </div>
@@ -284,132 +350,127 @@
     </div>
 </section>
 
-<!-- our facilitics -->
-<section id="facilities">
-    <div class="container">
-        <div class="facilities-header text-center">
-            <h2 class="text-uppercase">Our facilities</h2>
-            <p class="mb-5">Ea melius ceteros oportere quo, pri habeo viderer facilisi ei</p>
+<!-- all Doctor -->
+<section id="corporate" style="padding: 55px 0;background:#ffffff;">
+    <div class="container blooddonor">
+        <div class="doctor-header">
+            <h2 class="text-uppercase text-center mb-5">Blood Donor</h2>
         </div>
-
-
-        <div class="facilities owl-carousel owl-theme owl-loaded">
-            <div class="item">
-                <a href="{{asset('frontend')}}/img/1.jpg">
-                    <img src="{{asset('frontend')}}/img/1.jpg" alt="">
-                </a>
-            </div>
-            <div class="item">
-                <a href="{{asset('frontend')}}/img/2.jpg">
-                    <img src="{{asset('frontend')}}/img/2.jpg" alt="">
-                </a>
-            </div>
-            <div class="item">
-                <a href="{{asset('frontend')}}/img/3.jpg">
-                    <img src="{{asset('frontend')}}/img/3.jpg" alt="">
-                </a>
-            </div>
-            <div class="item">
-                <a href="{{asset('frontend')}}/img/4.jpg">
-                    <img src="{{asset('frontend')}}/img/4.jpg" alt="">
-                </a>
-            </div>
-            <div class="item">
-                <a href="{{asset('frontend')}}/img/5.jpg">
-                    <img src="{{asset('frontend')}}/img/5.jpg" alt="">
-                </a>
-            </div>
-            <div class="item">
-                <a href="{{asset('frontend')}}/img/6.jpg">
-                    <img src="{{asset('frontend')}}/img/6.jpg" alt="">
-                </a>
-            </div>
-            <div class="item">
-                <a href="{{asset('frontend')}}/img/6.jpg">
-                    <img src="{{asset('frontend')}}/img/6.jpg" alt="">
-                </a>
-            </div>
-            <div class="item">
-                <a href="{{asset('frontend')}}/img/6.jpg">
-                    <img src="{{asset('frontend')}}/img/6.jpg" alt="">
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- testmonial section -->
-<section id="testmonial" style="background: #283290;padding:45px 0;">
-    <h2 class="text-center text-uppercase" style="font-size: 25px;font-weight: revert;color: #ff8a60;">Our Clients Says<span>"</span></h2>
-    <div class="container">
-        <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active carbtn" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" class="carbtn" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" class="carbtn" aria-label="Slide 3"></button>
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3" class="carbtn" aria-label="Slide 4"></button>
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="4" class="carbtn" aria-label="Slide 5"></button>
-            </div>
-            <div class="carousel-inner" style="height: 350px;">
-                <div class="carousel-item active">
-                    <div class="message-body text-center">
-                        <p class="text-light">Some representative placeholder content for the first slide.</p>
-                        <h5 class="text-light">Monalisha Aktar</h5>
-                        <div class="image">
-                            <img src="{{asset('frontend')}}/img/doctor1.png" style="transform: scale(0.9);" width="100%">
+        <div class="row">
+            <div class="col-12 col-lg-3 mb-3">
+                <a href="{{route('donor', 'A+')}}" class="text-decoration-none">
+                    <div class="card border-0">
+                        <div class="card-img">
+                            <img src="{{asset('frontend/img/donor.png')}}" width="90" />
+                        </div>
+                        <div class="card-body text-center">
+                            <h6 class="text-uppercase">A(+)</h6>
+                            <p class="text-uppercase" style="font-style:italic;font-size:10px;">Find A(+) blood donor list</p>
                         </div>
                     </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="message-body text-center">
-                        <p class="text-light">Paragraphs are units of writing larger than a sentence and smaller than a section and generally express a single idea or topic. Proper paragraphing and paragraph writing have several key benefits in medical writing which include organizing the meaning of the text, making the text readable and visually pleasing</p>
-                        <h5 class="text-light">Jahanara Begum</h5>
-                        <div class="image">
-                            <img src="{{asset('frontend')}}/img/doctor2.png" style="transform: scale(0.9);" width="100%">
+                </a>
+            </div>
+            <div class="col-12 col-lg-3 mb-3">
+                <a href="{{route('donor', 'A-')}}" class="text-decoration-none">
+                    <div class="card border-0">
+                        <div class="card-img">
+                            <img src="{{asset('frontend/img/donor.png')}}" width="90" />
+                        </div>
+                        <div class="card-body text-center">
+                            <h6 class="text-uppercase">A(-)</h6>
+                            <p class="text-uppercase" style="font-style:italic;font-size:10px;">Find A(-) blood donor list</p>
                         </div>
                     </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="message-body text-center">
-                        <p class="text-light">Some representative placeholder content for the first slide.</p>
-                        <h5 class="text-light">Shamsunnahar</h5>
-                        <div class="image">
-                            <img src="{{asset('frontend')}}/img/doctor4.png" style="transform: scale(0.9);" width="100%">
+                </a>
+            </div>
+            <div class="col-12 col-lg-3 mb-3">
+                <a href="{{route('donor', 'B+')}}" class="text-decoration-none">
+                    <div class="card border-0">
+                        <div class="card-img">
+                            <img src="{{asset('frontend/img/donor.png')}}" width="90" />
+                        </div>
+                        <div class="card-body text-center">
+                            <h6 class="text-uppercase">B(+)</h6>
+                            <p class="text-uppercase" style="font-style:italic;font-size:10px;">Find B(+) blood donor list</p>
                         </div>
                     </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="message-body text-center">
-                        <p class="text-light">Some representative placeholder content for the first slide.</p>
-                        <h5 class="text-light">Shamsunnahar</h5>
-                        <div class="image">
-                            <img src="{{asset('frontend')}}/img/doctor4.png" style="transform: scale(0.9);" width="100%">
+                </a>
+            </div>
+            <div class="col-12 col-lg-3 mb-3">
+                <a href="{{route('donor', 'B-')}}" class="text-decoration-none">
+                    <div class="card border-0">
+                        <div class="card-img">
+                            <img src="{{asset('frontend/img/donor.png')}}" width="90" />
+                        </div>
+                        <div class="card-body text-center">
+                            <h6 class="text-uppercase">B(-)</h6>
+                            <p class="text-uppercase" style="font-style:italic;font-size:10px;">Find B(-) blood donor list</p>
                         </div>
                     </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="message-body text-center">
-                        <p class="text-light">Some representative placeholder content for the first slide.</p>
-                        <h5 class="text-light">Shamsunnahar</h5>
-                        <div class="image">
-                            <img src="{{asset('frontend')}}/img/doctor4.png" style="transform: scale(0.9);" width="100%">
+                </a>
+            </div>
+            <div class="col-12 col-lg-3 mb-3">
+                <a href="{{route('donor', 'AB+')}}" class="text-decoration-none">
+                    <div class="card border-0">
+                        <div class="card-img">
+                            <img src="{{asset('frontend/img/donor.png')}}" width="90" />
+                        </div>
+                        <div class="card-body text-center">
+                            <h6 class="text-uppercase">AB(+)</h6>
+                            <p class="text-uppercase" style="font-style:italic;font-size:10px;">Find AB(+) blood donor list</p>
                         </div>
                     </div>
-                </div>
+                </a>
+            </div>
+            <div class="col-12 col-lg-3 mb-3">
+                <a href="{{route('donor', 'AB-')}}" class="text-decoration-none">
+                    <div class="card border-0">
+                        <div class="card-img">
+                            <img src="{{asset('frontend/img/donor.png')}}" width="90" />
+                        </div>
+                        <div class="card-body text-center">
+                            <h6 class="text-uppercase">AB(-)</h6>
+                            <p class="text-uppercase" style="font-style:italic;font-size:10px;">Find AB(-) blood donor list</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-12 col-lg-3 mb-3">
+                <a href="{{route('donor', 'O+')}}" class="text-decoration-none">
+                    <div class="card border-0">
+                        <div class="card-img">
+                            <img src="{{asset('frontend/img/donor.png')}}" width="90" />
+                        </div>
+                        <div class="card-body text-center">
+                            <h6 class="text-uppercase">O(+)</h6>
+                            <p class="text-uppercase" style="font-style:italic;font-size:10px;">Find O(+) blood donor list</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-12 col-lg-3 mb-3">
+                <a href="{{route('donor', 'O-')}}" class="text-decoration-none">
+                    <div class="card border-0">
+                        <div class="card-img">
+                            <img src="{{asset('frontend/img/donor.png')}}" width="90" />
+                        </div>
+                        <div class="card-body text-center">
+                            <h6 class="text-uppercase">O(-)</h6>
+                            <p class="text-uppercase" style="font-style:italic;font-size:10px;">Find O(-) blood donor list</p>
+                        </div>
+                    </div>
+                </a>
             </div>
         </div>
     </div>
 </section>
-
 <!-- corporate partner -->
 <section id="corporate" style="padding: 55px 0;background:#ededed;">
     <div class="container">
-        <div class="corporate-header text-center">
-            <h2 style="font-size: 25px;font-weight: revert;color: #7a5c51;" class="text-uppercase">Our Corporate Partner</h2>
-            <p class="mb-5">Ea melius ceteros oportere quo, pri habeo viderer facilisi ei</p>
+        <div class="doctor-header">
+            <h2 class="text-uppercase text-center mb-5">Our Corporate Partner</h2>
         </div>
-
-
+        @if($data["partner"]->count() > 0)
         <div class="corporate owl-carousel owl-theme owl-loaded">
             @foreach($data["partner"] as $item)
             <div class="item">
@@ -417,9 +478,12 @@
             </div>
             @endforeach
         </div>
-
+        @else
+        <p class='text-center'>Not Available Data</p>
+        @endif
     </div>
 </section>
+
 @endsection
 
 
@@ -573,48 +637,21 @@
 
     function Doctor(index, value) {
         var row = `
-                <div class="col-md-6 col-10 col-sm-6 col-lg-4 mb-4">
-                    <div class="card aboutdoctor">
-                        <div class="card-header pl-md-1 pt-md-1 bg-body">
-                            <div class="row">
-                                <div class="col-md-5 col-5 p-md-0">
-                                    <img src="${value.image}" class="card-img-top">
+                <div class="col-12 col-lg-4 mb-3">
+                    <a href="/single-details-doctor/${value.id}" target="_blank" class="text-decoration-none text-secondary" title="${value.name}">
+                        <div class="card" style="border-radius: 0;border: 0;font-family: auto;box-shadow: 0px 0px 8px 0px #bfbfbfbf;height:150px;">
+                            <div class="card-body d-flex" style="padding: 5px;gap: 8px;">
+                                <div class="image" style="border: 1px dotted #ababab;height: 110px;margin-top: 4px;">
+                                    <img height="100%" src="${value.image != 0?location.origin+"/"+value.image:location.origin+'/uploads/nouserimage.png'}" width="100">
                                 </div>
-                                <div class="col-md-7 col-7 mt-md-2 pe-md-0">
-                                    <h5 class="text-uppercase">${value.name}</h5>
-                                    <div class="speciality">
-                                        <span>${value.department.length !=0?value.department[0].specialist.name:""}</span>
-                                    </div>
-                                    <h6 class="text-capitalize">${value.education}</h6>
+                                <div class="info" style="padding-right:5px;">
+                                    <h6>${value.name}</h6>
+                                    <p style="color:#c99913;">${value.department.length > 0 ? value.department[0].specialist.name:''}, ${value.city.name}</p>
+                                    <p style="border-top: 2px dashed #dddddd85;text-align:justify;">${value.education.substring(0, 100)}</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body" style="padding-top: 8px;">
-                            <div class="location mb-1 d-flex justify-content-start align-item-center gap-2">
-                                ${value.chamber.length!=0?'<i class="fa fa-home"></i> <span class="text-uppercase">'+value.chamber[0].name+'</span>':value.hospital_id?'<i class="fa fa-hospital-o"></i> <span class="text-uppercase">'+value.hospital.name+'</span>':'<i class="fa fa-plus-square"></i> <span class="text-uppercase">'+value.diagnostic.name+'</span>'}
-                            </div>
-                            <div class="location d-flex justify-content-start align-item-center gap-2">
-                                <i class="fa fa-map-marker"></i>
-                                <span>
-                                ${value.chamber.length!=0?value.chamber[0].address+", "+value.city.name:value.hospital_id?value.hospital.address+", "+value.city.name:value.diagnostic.address+", "+value.city.name}
-                                </span>
-                            </div>
-                            <div class="available">
-                                <div class="time d-flex align-items-center gap-1">
-                                    <i class="fa fa-clock-o"></i><span class="text-uppercase">Availability:</span>
-                                    
-                                </div>
-                                <ul>
-                                    <li>${value.availability.replaceAll(",", " ").toUpperCase()}</li>
-                                </ul>
-                                <small class="text-uppercase" style="margin-left: 16px;">${moment(value.time.length!=0?value.time[0].from:"", "h:m A").format('LT')} - ${moment(value.time.length!=0?value.time[0].to:"", "h:m A").format('LT')}</small>
-                            </div>
-                        </div>
-                        <div class="card-footer d-flex gap-2">
-                            <a href="/single-details-doctor/${value.id}" target="_blank" class="btn btn-primary btn-sm text-uppercase">View Profile</a>
-                            <a href="/single-details-doctor/${value.id}" target="_blank" class="btn btn-danger btn-sm text-uppercase">Quick Appoinment</a>
-                        </div>
-                    </div>
+                    </a>
                 </div>
             `;
         $(".main-show").append(row)
@@ -739,42 +776,41 @@
 
 
     // departmentwise doctor filter
-    function departmentWiseDoctor(event, id) {
-        $(".department").removeClass("departments")
-        $(".item" + id).addClass("departments")
-        $(".borderShow").removeClass("d-none")
-        $.ajax({
-            url: "{{route('home.filter')}}",
-            method: "POST",
-            data: {
-                department_id: id
-            },
-            beforeSend: () => {
-                $(".addDepartment").html("")
-                $(".Loading1").removeClass("d-none")
-            },
-            success: response => {
-                $.each(response, (index, value) => {
-                    let row = `
-                            <div class="col-md-6 mb-3 col-10 col-sm-10 col-lg-3">
-                                <a class="text-decoration-none" href="/single-details-doctor/${value.doctor.id}">
-                                <div class="card border-0" style="border-radius: 0;box-shadow:0px 0px 15px 0px #c5c1c1;">
-                                        <img src="${value.doctor.image!=0?location.origin+"/"+value.doctor.image:location.origin+'/frontend/nodoctorimage.png'}" class="card-img-top" alt="...">
-                                        <div class="card-body text-center">
-                                            <p style="color:#f59217;font-size: 15px;font-weight: 500;">${value.doctor.name}</p>
-                                            <h5 class="card-title">${value.specialist.name}</h5>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            `;
-                    $(".addDepartment").append(row)
-                })
-            },
-            complete: () => {
-                $(".Loading1").addClass("d-none")
-            }
-        })
-    }
+    // function departmentWiseDoctor(event, id) {
+    //     $(".department").removeClass("departments")
+    //     $(".item" + id).addClass("departments")
+    //     $(".borderShow").removeClass("d-none")
+    //     $.ajax({
+    //         url: "{{route('home.filter')}}",
+    //         method: "POST",
+    //         data: {
+    //             department_id: id
+    //         },
+    //         beforeSend: () => {
+    //             $(".addDepartment").html("")
+    //             $(".Loading1").removeClass("d-none")
+    //         },
+    //         success: response => {
+    //             $.each(response, (index, value) => {
+    //                 let row = `
+    //                         <div class="col-md-6 mb-3 col-10 col-sm-10 col-lg-3">
+    //                             <a class="text-decoration-none" href="/single-details-doctor/${value.doctor.id}">
+    //                             <div class="card" style="height: 275px;border:1px solid #d9d9d9 !important; box-shadow:0px 3px 0px 0px #b9b6b6a3;">
+    //                                     <img src="${value.doctor.image!=0?location.origin+"/"+value.doctor.image:location.origin+'/frontend/nodoctorimage.png'}" class="card-img-top" alt="...">
+    //                                     <div class="card-body text-center">
+    //                                         <p style="color:#f59217;font-size: 13px;font-weight: bold;">${value.doctor.name}</p>
+    //                                     </div>
+    //                                 </div>
+    //                             </a>
+    //                         </div>
+    //                         `;
+    //                 $(".addDepartment").append(row)
+    //             })
+    //         },
+    //         complete: () => {
+    //             $(".Loading1").addClass("d-none")
+    //         }
+    //     })
+    // }
 </script>
 @endpush

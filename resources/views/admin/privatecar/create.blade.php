@@ -118,6 +118,13 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
+                                <label for="number_of_seat">Number Of Seat</label>
+                                <input type="text" name="number_of_seat" id="number_of_seat" class="form-control">
+                                <span class="error-number_of_seat text-danger error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
                                 <label for="image">Privatecar Image</label>
                                 <input type="file" class="form-control" id="image" name="image" onchange="document.querySelector('.img').src = window.URL.createObjectURL(this.files[0])">
                             </div>

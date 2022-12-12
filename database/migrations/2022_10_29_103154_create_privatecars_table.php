@@ -27,6 +27,7 @@ class CreatePrivatecarsTable extends Migration
             $table->string("driver_license")->nullable();
             $table->string("driver_nid")->nullable();
             $table->string("driver_address")->nullable();
+            $table->string("number_of_seat")->nullable();
             $table->string("image")->nullable();
             $table->longText("description")->nullable(); 
             $table->timestamps();

@@ -46,9 +46,11 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="phone">Phone</label>
-                                <div class="input-group">
-                                    <i class="btn btn-secondary">+88</i><input type="text" name="phone" id="phone" class="form-control" placeholder="01737484046">
+                                <label for="phone">Phone</label><span class="text-danger" onclick="numberAdd(event)"><i class="fa fa-plus"></i></span>
+                                <div class="phoneAdd">
+                                    <div class="input-group">
+                                        <input type="text" name="phone[]" id="phone" class="form-control" autocomplete="off">
+                                    </div>
                                 </div>
                                 <span class="error-phone text-danger error"></span>
                             </div>
@@ -136,7 +138,7 @@
             var description = CKEDITOR.instances.description.getData();
             var formdata = new FormData(event.target)
             formdata.append("description", description)
-            
+
             $.ajax({
                 url: "{{route('admin.diagnostic.store')}}",
                 data: formdata,
@@ -159,6 +161,20 @@
                 }
             })
         })
+    })
+
+    function numberAdd() {
+        var row = `
+            <div class="input-group">
+                <input type="text" id="phone" name="phone[]" class="form-control">
+                <button type="button" class="btn btn-danger removePhone">remove</button>
+            </div>
+        `
+        $(".phoneAdd").append(row)
+    }
+
+    $(document).on("click", ".removePhone", event => {
+        event.target.offsetParent.remove();
     })
 </script>
 @endpush
